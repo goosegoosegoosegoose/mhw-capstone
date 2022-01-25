@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import UserContext from "../auth/userContext"
 
 
-const ArmorCard = ({id, name, add, remove}) => {
+const ArmorCard = ({id, name, image, type, add, remove}) => {
   const nav = useNavigate();
   const currentUser = useContext(UserContext);
   const [exists, setExists] = useState(currentUser.armors ? currentUser.armors.includes(id) : false)
@@ -25,9 +25,10 @@ const ArmorCard = ({id, name, add, remove}) => {
 
   return(
     <Card className="my-4" style={{width: '70vw'}}>
+      {image ? <Card.Img style={{cursor: "pointer"}} onClick={handleClick} variant="top" src={image.imageMale} /> : <></>}
       <Card.Body>
         <Card.Title style={{cursor: "pointer"}} onClick={handleClick}>{name}</Card.Title>
-        <Card.Text>yeee</Card.Text>
+        <Card.Text>Slot: {type}</Card.Text>
         {exists ? <Button id={id} data-type="armors" variant="danger" size="sm" onClick={handleRemove}>Have</Button> : <Button id={id} data-type="armors" variant="primary" size="sm" onClick={handleAdd}>Don't Have</Button>}
       </Card.Body>
     </Card>

@@ -35,6 +35,8 @@ const ArmorList = ({add, remove}) => {
           key={armor.id}
           id={armor.id}
           name={armor.name}
+          image={armor.assets}
+          type={armor.type}
           add={add}
           remove={remove}
         />
