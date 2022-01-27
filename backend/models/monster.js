@@ -7,21 +7,41 @@ const {
 } = require("../expressError");
 
 class Monster {
-
-  static async add(id) {
+  static async insert(id, name, type, species, description){
     const duplicateCheck = await db.query(
       `SELECT id
        FROM monsters
        WHERE id = $1`,
     [id]);
+    if (duplicateCheck.rows[0]) return;
+ 
+    await db.query(
+      `INSERT INTO monsters
+       (id, name, type, species, description)
+       VALUES ($1, $2, $3, $4, $5)`,
+    [id, name, type, species, description]);
+  }
 
+  static async add(username, monId) {
+    const preCheck = await db.query(
+      `SELECT username
+       FROM users
+       WHERE username = $1`, [username]);
+    const user = preCheck.rows[0];
+    if (!user) throw new NotFoundError(`No user ${username}`);
+
+    const duplicateCheck = await db.query(
+      `SELECT monId
+       FROM user_monsters
+       WHERE monster_id = $1`,
+    [monId]);
     if (duplicateCheck.rows[0]) throw new BadRequestError(`Duplicate monster`);
 
     const res = await db.query(`
       INSERT INTO monsters
-      (id)
-      VALUES ($1)
-      RETURNING id`,
+      (username, monster_id)
+      VALUES ($1, $2)
+      RETURNING username, monster_id AS "monId"`,
     [id]);
     
     return res.rows[0];
@@ -29,18 +49,19 @@ class Monster {
 
   static async findAll(){
     let res = await db.query(
-                `SELECT id
-                FROM monsters`);
+      `SELECT id, name, type, species, description 
+       FROM monsters`);
     
     return res.rows;    
   }
 
-  static async remove(id) {
+  static async remove(monId) {
     const res = await db.query(
       `DELETE
-       FROM monsters
+       FROM user_monsters
        WHERE id = $1
-       returning id`, [id]);
+       returning id`,
+    [monId]);
     if (!res.rows[0]) throw new NotFoundError(`No monster with id`);
   }
 }

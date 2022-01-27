@@ -10,6 +10,7 @@ const authRoutes = require("./routes/auth");
 const usersRoutes = require("./routes/user");
 const monsterRoutes = require("./routes/monster");
 const armorRoutes = require("./routes/armor");
+const getData = require("./helpers/getData")
 
 const morgan = require("morgan");
 
@@ -24,6 +25,8 @@ app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
 app.use("/monsters", monsterRoutes);
 app.use("/armors", armorRoutes);
+
+getData();
 
 app.use(function (req, res, next) {
   return next(new NotFoundError());

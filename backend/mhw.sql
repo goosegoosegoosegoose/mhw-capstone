@@ -17,6 +17,9 @@ VALUES ('testuser',
         'admin@gmail.com',
         TRUE);
 
+INSERT INTO slots (level)
+VALUES (1), (2), (3), (4);
+
 DROP DATABASE mhw_test;
 CREATE DATABASE mhw_test;
 \c mhw_test

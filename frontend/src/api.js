@@ -51,7 +51,7 @@ class MhwApi {
 
   static async getOne(type, id) {
     let res = await this.request(`${type}/${id}`);
-    return res[0];
+    return res;
   }
 
   static async search(type, header, handle) {
