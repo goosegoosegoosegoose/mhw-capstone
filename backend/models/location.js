@@ -3,7 +3,7 @@
 const db = require("../db");
 
 class Location {
-  static async insert(id, name, zoneCount, camps) {
+  static async create(id, name, zoneCount, camps) {
     const duplicateCheck = await db.query(
       `SELECT id
        FROM locations

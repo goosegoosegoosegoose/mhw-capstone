@@ -7,7 +7,7 @@ const {
 } = require("../expressError");
 
 class Armor {
-  static async insert(id, name, type, rank, rarity, defense, armorSetId, mImg, fImg) {
+  static async create(id, name, type, rank, rarity, defense, armorSetId, mImg, fImg) {
     const duplicateCheck = await db.query(
       `SELECT id
        FROM armors

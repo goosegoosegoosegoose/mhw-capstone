@@ -26,7 +26,7 @@ const getItems = async () => {
   const res = await axios.get(`${url}/items`);
   const items = res.data;
   items.map(i => {
-    item.insert(i.id, i.name, i.description, i.rarity, i.carryLimit, i.value);
+    item.create(i.id, i.name, i.description, i.rarity, i.carryLimit, i.value);
   })
 }
 
@@ -34,7 +34,7 @@ const getArmorSets = async () => {
   const res = await axios.get(`${url}/armor/sets`);
   const sets = res.data;
   sets.map(s => {
-    armorset.insert(s.id, s.name, s.rank);
+    armorset.create(s.id, s.name, s.rank);
     // TODO insert bonus set skills into armorset_skills
   })
 }
@@ -46,7 +46,7 @@ const getArmors = async () => {
     if (!a.assets) {
       a.assets = {"imageMale": null, "imageFemale": null}
     }
-    armor.insert(a.id, a.name, a.type, a.rank, a.rarity, a.defense.base, a.armorSet.id, a.assets.imageMale, a.assets.imageFemale);
+    armor.create(a.id, a.name, a.type, a.rank, a.rarity, a.defense.base, a.armorSet.id, a.assets.imageMale, a.assets.imageFemale);
     // TODO insert into armor_resistances
   })
 }
@@ -55,7 +55,7 @@ const getMonsters = async () => {
   const res = await axios.get(`${url}/monsters`);
   const monsters = res.data;
   monsters.map(m => {
-    monster.insert(m.id, m.name, m.type, m.species, m.description);
+    monster.create(m.id, m.name, m.type, m.species, m.description);
   })
 }
 
@@ -63,7 +63,7 @@ const getLocations = async () => {
   const res = await axios.get(`${url}/locations`);
   const locations = res.data;
   locations.map(i => {
-    location.insert(i.id, i.name, i.zoneCount, JSON.stringify(i.camps));
+    location.create(i.id, i.name, i.zoneCount, JSON.stringify(i.camps));
   })
 }
 
@@ -71,19 +71,19 @@ const getSkills = async () => {
   const res = await axios.get(`${url}/skills`);
   const skills = res.data;
   skills.map(s => {
-    skill.insert(s.id, s.name, s.description);
+    skill.create(s.id, s.name, s.description);
     s.ranks.map(r => {
-      skill.insertLevels(r.id, r.skill, r.level, r.modifiers, r.description)
+      skill.createLevel(r.id, r.skill, r.level, r.modifiers, r.description)
     })
   })
-  // this is inefficient.. nested loop.
+  // nested
 }
 
 const getAilments = async () => {
   const res = await axios.get(`${url}/ailments`);
   const ailments = res.data;
   ailments.map(a => {
-    ailment.insert(a.id, a.name, a.description);
+    ailment.create(a.id, a.name, a.description);
   })
 }
 
@@ -91,8 +91,17 @@ const getCharms = async () => {
   const res = await axios.get(`${url}/charms`);
   const charms = res.data;
   charms.map(c => {
-    charm.insert(c.id, c.name)
-    // TODO insert into m2m charm_levels later
+    c.ranks.map(r => {
+      const charmId = Number(String(c.id) + String(r.level));
+      charm.create(charmId, r.name, r.level, r.rarity, r.crafting.craftable);
+      r.skills.map(async s => {
+        const level = await skill.findLevel(s.skill, s.level);
+        charm.createSkill(charmId, level.id, s.level);
+      });
+      r.crafting.materials.map(m => {
+        charm.createMaterial(charmId, m.item.id, m.quantity)
+      })
+    })
   })
 }
 

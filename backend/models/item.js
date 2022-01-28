@@ -3,7 +3,7 @@
 const db = require("../db");
 
 class Item {
-  static async insert(id, name, description, rarity, carryLimit, value) {
+  static async create(id, name, description, rarity, carryLimit, value) {
     const duplicateCheck = await db.query(
       `SELECT id
        FROM items

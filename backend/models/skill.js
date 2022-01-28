@@ -3,7 +3,7 @@
 const db = require("../db");
 
 class Skill {
-  static async insert(id, name, description) {
+  static async create(id, name, description) {
     const duplicateCheck = await db.query(
       `SELECT id
        FROM skills
@@ -18,7 +18,7 @@ class Skill {
     [id, name, description]);
   }
 
-  static async insertLevels(id, skillId, level, modifiers, description) {
+  static async createLevel(id, skillId, level, modifiers, description) {
     const duplicateCheck = await db.query(
       `SELECT id
        FROM skill_levels
@@ -31,6 +31,16 @@ class Skill {
        (id, skill_id, level, modifiers, description)
        VALUES ($1, $2, $3, $4, $5)`,
     [id, skillId, level, modifiers, description]);
+  }
+
+  static async findLevel(skillId, level) {
+    const res = await db.query(
+      `SELECT id, skill_id, level, modifiers, description
+       FROM skill_levels
+       WHERE skill_id = $1 AND level = $2`,
+    [skillId, level]);
+
+    return res.rows[0]
   }
 }
 

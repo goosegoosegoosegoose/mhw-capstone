@@ -77,10 +77,27 @@ CREATE TABLE monsters (
 
 CREATE TABLE charms (
   id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL
+  name TEXT NOT NULL,
+  level INTEGER,
+  rarity INTEGER,
+  craftable BOOLEAN
 );
 
--- TODO m2m charm_levels with skill level and materials   id, charm_id, skill_id, level, material_id, amount
+CREATE TABLE charm_skills (
+  id SERIAL PRIMARY KEY,
+  charm_id INTEGER REFERENCES charms,
+  skill_level_id INTEGER REFERENCES skill_levels,
+  level INTEGER
+);
+
+CREATE TABLE charm_materials (
+  id SERIAL PRIMARY KEY,
+  charm_id INTEGER REFERENCES charms,
+  item_id INTEGER REFERENCES items,
+  quantity INTEGER
+);
+
+-- TODO charm skills, charm materials, based
 
 -- CREATE TABLE decorations (
 --   id INTEGER PRIMARY KEY,
@@ -129,5 +146,5 @@ CREATE TABLE user_armors (
 CREATE TABLE user_monsters (
   id SERIAL PRIMARY KEY,
   username TEXT REFERENCES users, 
-  monster_id INTEGER
+  monster_id INTEGER REFERENCES monsters
 );

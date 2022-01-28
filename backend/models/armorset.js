@@ -3,7 +3,7 @@
 const db = require("../db");
 
 class ArmorSet {
-  static async insert(id, name, rank) {
+  static async create(id, name, rank) {
     const duplicateCheck = await db.query(
       `SELECT id
        FROM armor_sets

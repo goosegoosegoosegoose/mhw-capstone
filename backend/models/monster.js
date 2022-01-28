@@ -7,7 +7,7 @@ const {
 } = require("../expressError");
 
 class Monster {
-  static async insert(id, name, type, species, description){
+  static async create(id, name, type, species, description){
     const duplicateCheck = await db.query(
       `SELECT id
        FROM monsters
