@@ -46,13 +46,27 @@ CREATE TABLE ailments (
   description TEXT NOT NULL
 );
 
+CREATE TABLE set_bonuses (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL
+);
+
 CREATE TABLE armor_sets (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
-  rank TEXT NOT NULL
+  rank TEXT NOT NULL,
+  set_bonus INTEGER REFERENCES set_bonuses
 );
 
--- TODO m2m armorset skills
+-- by pieces
+CREATE TABLE set_skills (
+  id SERIAL PRIMARY KEY,
+  armor_set_id INTEGER REFERENCES armor_sets,
+  set_bonus_id INTEGER REFERENCES set_bonuses,
+  skill_level_id INTEGER REFERENCES skill_levels,
+  pieces INTEGER,
+  description TEXT
+);
 
 CREATE TABLE armors (
   id INTEGER PRIMARY KEY,
@@ -97,15 +111,13 @@ CREATE TABLE charm_materials (
   quantity INTEGER
 );
 
--- TODO charm skills, charm materials, based
-
--- CREATE TABLE decorations (
---   id INTEGER PRIMARY KEY,
---   slug TEXT NOT NULL,
---   name TEXT NOT NULL,
---   rarity INTEGER NOT NULL,
---   skill_id INTEGER REFERENCES skills
--- );
+CREATE TABLE decorations (
+  id INTEGER PRIMARY KEY,
+  slug TEXT NOT NULL,
+  name TEXT NOT NULL,
+  rarity INTEGER NOT NULL,
+  skill_id INTEGER REFERENCES skills
+);
 
 -- weaposn
 
@@ -119,12 +131,10 @@ CREATE TABLE charm_materials (
 -- TODO m2m resistance(element) armors and monsters
 -- TODO m2m weakness(element) monsters
 -- TODO m2m locations monsters
--- TODO m2m maybe decos and charms with elements
 -- TODO m2m ailments weapons/monsters probably maybe?
 -- TODO m2m monsters rewards(items) with conditions
 -- TODO m2m with ARMOR and SLOTS with what its filled with
 -- decos should reference slots 
--- fuck consumables in terms of interactivity
 
 -- TODO two m2ms between ailments and items (revoery /protection )
 -- wwait maybe four m2ms because skills god dangit

@@ -12,9 +12,9 @@ const ailment = require("../models/ailment")
 const charm = require("../models/charm")
 
 const getData = async () => {
-  getArmorSets();
   getLocations();
   getSkills();
+  getArmorSets();
   getItems();
   getArmors();
   getMonsters();
@@ -33,9 +33,15 @@ const getItems = async () => {
 const getArmorSets = async () => {
   const res = await axios.get(`${url}/armor/sets`);
   const sets = res.data;
-  sets.map(s => {
-    armorset.create(s.id, s.name, s.rank);
-    // TODO insert bonus set skills into armorset_skills
+  sets.map(async s => {
+    if (s.bonus) armorset.createBonus(s.bonus.id, s.bonus.name);
+    armorset.create(s.id, s.name, s.rank, s.bonus ? s.bonus.id : null);
+  });
+  const bonusSets = sets.filter(s => !s.bonus ? false : true);
+  bonusSets.map(s => {
+    s.bonus.ranks.map(r =>{
+      armorset.createSkill(s.id, s.bonus.id, r.skill.id, r.pieces, r.description)
+    });
   })
 }
 
