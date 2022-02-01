@@ -22,6 +22,70 @@ class Monster {
     [id, name, type, species, description]);
   }
 
+  static async createLocation(monId, locId) {
+    const duplicateCheck = await db.query(
+      `SELECT id
+       FROM monster_locations
+       WHERE monster_id = $1 AND location_id = $2`,
+    [monId, locId]);
+    if (duplicateCheck.rows[0]) return;
+
+    await db.query(
+      `INSERT INTO monster_locations
+       (monster_id, location_id)
+       VALUES ($1, $2)`,
+    [monId, locId])
+  }
+
+  static async createWeakness(monId, ele, stars, cond) {
+    const duplicateCheck = await db.query(
+      `SELECT id
+       FROM monster_weaknesses
+       WHERE monster_id = $1 AND element = $2`,
+    [monId, ele]);
+    if (duplicateCheck.rows[0]) return;
+
+    await db.query(
+      `INSERT INTO monster_weaknesses
+       (monster_id, element, stars, condition)
+       VALUES ($1, $2, $3, $4)`,
+    [monId, ele, stars, cond])
+  }
+
+  static async createResistance(monId, ele, cond) {
+    const duplicateCheck = await db.query(
+      `SELECT id
+       FROM monster_resistances
+       WHERE monster_id = $1 AND element = $2`,
+    [monId, ele]);
+    if (duplicateCheck.rows[0]) return;
+
+    await db.query(
+      `INSERT INTO monster_resistances
+       (monster_id, element, condition)
+       VALUES ($1, $2, $3)`,
+    [monId, ele, cond])
+  }
+
+  static async createAilment(monId, ailId) {
+    const duplicateCheck = await db.query(
+      `SELECT id
+       FROM monster_ailments
+       WHERE monster_id = $1 AND ailment_id = $2`,
+    [monId, ailId]);
+    if (duplicateCheck.rows[0]) return;
+
+    await db.query(
+      `INSERT INTO monster_ailments
+       (monster_id, ailment_id)
+       VALUES ($1, $2)`,
+    [monId, ailId])
+  }
+
+  static async createReward(monId, itemId){}
+
+  static async createRewardCondition(monRewardId, type, subtype, rank, quantity, chance){}
+
   static async add(username, monId) {
     const preCheck = await db.query(
       `SELECT username

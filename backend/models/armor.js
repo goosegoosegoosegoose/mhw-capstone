@@ -10,17 +10,47 @@ class Armor {
   static async create(id, name, type, rank, rarity, defense, armorSetId, mImg, fImg) {
     const duplicateCheck = await db.query(
       `SELECT id
-       FROM armors
+       FROM armor
        WHERE id = $1`,
     [id]);
     if (duplicateCheck.rows[0]) return;
 
     // TODO add crafting(materials)
     await db.query(
-      `INSERT INTO armors
+      `INSERT INTO armor
        (id, name, type, rank, rarity, defense, armor_set_id, m_img, f_img)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
     [id, name, type, rank, rarity, defense, armorSetId, mImg, fImg]);
+  }
+
+  static async createSkill(armorId, skillLevelId) {
+    const duplicateCheck = await db.query(
+      `SELECT armor_id, skill_level_id
+       FROM armor_skills
+       WHERE armor_id = $1 AND skill_level_id = $2`,
+    [armorId, skillLevelId]);
+    if (duplicateCheck.rows[0]) return;
+
+    await db.query(
+      `INSERT INTO armor_skills
+       (armor_id, skill_level_id)
+       VALUES ($1, $2)`,
+    [armorId, skillLevelId]);
+  }
+
+  static async createMaterial(armorId, itemId, quantity) {
+    const duplicateCheck = await db.query(
+      `SELECT armor_id, item_id
+       FROM armor_materials
+       WHERE armor_id = $1 AND item_id = $2`,
+    [armorId, itemId]);
+    if (duplicateCheck.rows[0]) return;
+    
+    await db.query(
+      `INSERT INTO armor_materials
+       (armor_id, item_id, quantity)
+       VALUES ($1, $2, $3)`,
+    [armorId, itemId, quantity]);
   }
 
   static async add(username, armorId) {
@@ -33,7 +63,7 @@ class Armor {
 
     const duplicateCheck = await db.query(
       `SELECT id
-       FROM armors
+       FROM armor
        WHERE username = $1 AND armor_id = $2`,
     [
       username, 
@@ -42,7 +72,7 @@ class Armor {
     if (duplicateCheck.rows[0]) throw new BadRequestError(`Duplicate armor`);
 
     await db.query(
-      `INSERT INTO armors
+      `INSERT INTO armor
        (username, armor_id)
        VALUES ($1, $2)`,
     [username, armorId]);
@@ -51,7 +81,7 @@ class Armor {
   static async findAll(){
     let res = await db.query(
       `SELECT armor_id
-       FROM armors
+       FROM armor
        WHERE username = $1`
     [username]);
     
@@ -61,7 +91,7 @@ class Armor {
   static async remove(username, armorId) {
     const res = await db.query(
       `DELETE
-       FROM armors
+       FROM armor
        WHERE username = $1 AND armor_id = $2
        RETURNING armor_id`, 
       [

@@ -8,18 +8,32 @@ const monster = require("../models/monster");
 const location = require("../models/location");
 const item = require("../models/item");
 const skill = require("../models/skill");
-const ailment = require("../models/ailment")
-const charm = require("../models/charm")
+const ailment = require("../models/ailment");
+const charm = require("../models/charm");
+const weapon = require("../models/weapon");
 
 const getData = async () => {
-  getLocations();
   getSkills();
-  getArmorSets();
   getItems();
-  getArmors();
+  getLocations();
+  getArmorSets();
   getMonsters();
   getAilments();
   getCharms();
+  getArmors();
+}
+// remove f_keys for everything, then reinstate in another function?
+
+const getSkills = async () => {
+  const res = await axios.get(`${url}/skills`);
+  const skills = res.data;
+  skills.map(s => {
+    skill.create(s.id, s.name, s.description);
+    s.ranks.map(r => {
+      skill.createLevel(r.id, r.skill, r.level, r.modifiers, r.description)
+    })
+  })
+  // nested
 }
 
 const getItems = async () => {
@@ -33,8 +47,8 @@ const getItems = async () => {
 const getArmorSets = async () => {
   const res = await axios.get(`${url}/armor/sets`);
   const sets = res.data;
-  sets.map(async s => {
-    if (s.bonus) armorset.createBonus(s.bonus.id, s.bonus.name);
+  sets.map(s => {
+    if (s.bonus.id) armorset.createBonus(s.bonus.id, s.bonus.name);
     armorset.create(s.id, s.name, s.rank, s.bonus ? s.bonus.id : null);
   });
   const bonusSets = sets.filter(s => !s.bonus ? false : true);
@@ -54,6 +68,12 @@ const getArmors = async () => {
     }
     armor.create(a.id, a.name, a.type, a.rank, a.rarity, a.defense.base, a.armorSet.id, a.assets.imageMale, a.assets.imageFemale);
     // TODO insert into armor_resistances
+    a.crafting.materials.map(m => {
+      armor.createMaterial(a.id, m.item.id, m.quantity)
+    });
+    a.skills.map(s => {
+      armor.createSkill(a.id, s.id)
+    })
   })
 }
 
@@ -62,6 +82,19 @@ const getMonsters = async () => {
   const monsters = res.data;
   monsters.map(m => {
     monster.create(m.id, m.name, m.type, m.species, m.description);
+    m.locations.map(l => {
+      monster.createLevel(m.id, l.id)
+      // test, im too tired today
+    });
+    m.weaknesses.map(w => {
+      monster.createWeakness(m.id, w.element, w.stars, w.condition)
+    });
+    m.resistances.map(r => {
+      monster.createResistance(m.id, r.element, r.condition)
+    });
+    m.ailments.map(a => {
+      monster.createAilment(m.id, a.id)
+    })
   })
 }
 
@@ -71,18 +104,6 @@ const getLocations = async () => {
   locations.map(i => {
     location.create(i.id, i.name, i.zoneCount, JSON.stringify(i.camps));
   })
-}
-
-const getSkills = async () => {
-  const res = await axios.get(`${url}/skills`);
-  const skills = res.data;
-  skills.map(s => {
-    skill.create(s.id, s.name, s.description);
-    s.ranks.map(r => {
-      skill.createLevel(r.id, r.skill, r.level, r.modifiers, r.description)
-    })
-  })
-  // nested
 }
 
 const getAilments = async () => {
@@ -100,14 +121,91 @@ const getCharms = async () => {
     c.ranks.map(r => {
       const charmId = Number(String(c.id) + String(r.level));
       charm.create(charmId, r.name, r.level, r.rarity, r.crafting.craftable);
-      r.skills.map(async s => {
-        const level = await skill.findLevel(s.skill, s.level);
-        charm.createSkill(charmId, level.id, s.level);
+      r.skills.map(s => {
+        charm.createSkill(charmId, s.id);
       });
       r.crafting.materials.map(m => {
         charm.createMaterial(charmId, m.item.id, m.quantity)
       })
     })
+  })
+}
+
+const getWeapons = () => {
+  const res = await axios.get(`${url}/weapons`);
+  const weapons = res.data;
+  weapons.map(w => {
+    if (w.phial) {
+      weapon.create(
+        w.id, 
+        w.name, 
+        w.type, 
+        w.attack.raw, 
+        w.damageType, 
+        w.attributes, 
+        w.rarity, 
+        w.elderseal, 
+        w.crafting.craftable,
+        w.durability,
+        w.phial
+      )
+    }
+    else if (w.durability) {
+      weapon.create(
+        w.id, 
+        w.name, 
+        w.type, 
+        w.attack.raw, 
+        w.damageType, 
+        w.attributes, 
+        w.rarity, 
+        w.elderseal, 
+        w.crafting.craftable,
+        w.durability
+      )
+    };
+    if (w.coatings) {
+      weapon.create(
+        w.id, 
+        w.name, 
+        w.type, 
+        w.attack.raw, 
+        w.damageType, 
+        w.attributes, 
+        w.rarity, 
+        w.elderseal, 
+        w.crafting.craftable,
+        w.coatings
+      )
+    };
+    if (w.shelling) {
+      weapon.create(
+        w.id, 
+        w.name, 
+        w.type, 
+        w.attack.raw, 
+        w.damageType, 
+        w.attributes, 
+        w.rarity, 
+        w.elderseal, 
+        w.crafting.craftable,
+        w.shelling
+      )      
+    };
+    if (w.ammo){
+      weapon.create(
+        w.id, 
+        w.name, 
+        w.type, 
+        w.attack.raw, 
+        w.damageType, 
+        w.attributes, 
+        w.rarity, 
+        w.elderseal, 
+        w.crafting.craftable,
+        w.ammo
+      )
+    }
   })
 }
 

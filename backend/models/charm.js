@@ -18,7 +18,7 @@ class Charm {
     [id, name, level, rarity, craftable]);
   }
 
-  static async createSkill(charmId, skillLevelId, level) {
+  static async createSkill(charmId, skillLevelId) {
     const duplicateCheck = await db.query(
       `SELECT charm_id, skill_level_id
        FROM charm_skills
@@ -28,12 +28,12 @@ class Charm {
 
     await db.query(
       `INSERT INTO charm_skills
-       (charm_id, skill_level_id, level)
-       VALUES ($1, $2, $3)`,
-    [charmId, skillLevelId, level]);
+       (charm_id, skill_level_id)
+       VALUES ($1, $2)`,
+    [charmId, skillLevelId]);
   }
 
-  static async createMaterial(charmId, itemId, quantity){
+  static async createMaterial(charmId, itemId, quantity) {
     const duplicateCheck = await db.query(
       `SELECT charm_id, item_id
        FROM charm_materials

@@ -10,6 +10,10 @@ CREATE TABLE slots (
   level INTEGER PRIMARY KEY
 );
 
+CREATE TABLE elements (
+  name TEXT PRIMARY KEY
+);
+
 CREATE TABLE locations (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
@@ -35,7 +39,7 @@ CREATE TABLE skills (
 CREATE TABLE skill_levels (
   id INTEGER PRIMARY KEY,
   skill_id INTEGER REFERENCES skills,
-  level INTEGER,
+  level INTEGER NOT NULL,
   modifiers JSON,
   description TEXT
 );
@@ -68,7 +72,7 @@ CREATE TABLE set_skills (
   description TEXT
 );
 
-CREATE TABLE armors (
+CREATE TABLE armor (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
   type TEXT NOT NULL,
@@ -81,6 +85,19 @@ CREATE TABLE armors (
   -- TODO ADD CRAFTING (maybe not? many to many probably yeah yes)
 );
 
+CREATE TABLE armor_skills (
+  id SERIAL PRIMARY KEY,
+  armor_id INTEGER REFERENCES armor,
+  skill_level_id INTEGER REFERENCES skill_levels
+);
+
+CREATE TABLE armor_materials (
+  id SERIAL PRIMARY KEY,
+  armor_id INTEGER REFERENCES armor,
+  item_id INTEGER REFERENCES items,
+  quantity INTEGER NOT NULL
+);
+
 CREATE TABLE monsters (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
@@ -89,19 +106,62 @@ CREATE TABLE monsters (
   description TEXT
 );
 
+CREATE TABLE monsters_locations (
+  id SERIAL PRIMARY KEY,
+  monster_id INTEGER REFERENCES monsters,
+  location_id INTEGER REFERENCES locations
+);
+
+-- TODO m2m weakness(element) monsters
+CREATE TABLE monster_weaknesses (
+  id SERIAL PRIMARY KEY,
+  monster_id INTEGER REFERENCES monsters,
+  element TEXT REFERENCES elements,
+  stars INTEGER NOT NULL,
+  condition TEXT
+);
+-- m2m resistances, m2m ailments, m2m rewards. nice cool nice i can do that yeah
+CREATE TABLE monster_resistances (
+  id SERIAL PRIMARY KEY,
+  monster_id INTEGER REFERENCES monsters,
+  element TEXT REFERENCES elements,
+  condition TEXT
+);
+
+CREATE TABLE monster_ailments (
+  id SERIAL PRIMARY KEY,
+  monster_id INTEGER REFERENCES monsters,
+  ailment_id TEXT REFERENCES ailments
+);
+
+CREATE TABLE monster_rewards (
+  id SERIAL PRIMARY KEY,
+  monster_id INTEGER REFERENCES monsters,
+  item_id INTEGER REFERENCES items
+);
+
+CREATE TABLE monster_reward_conditions (
+  id SERIAL PRIMARY KEY,
+  monster_reward_id INTEGER REFERENCES monster_rewards,
+  from TEXT NOT NULL,
+  subfrom TEXT,
+  rank TEXT NOT NULL,
+  quantity INTEGER NOT NULL,
+  chance INTEGER NOT NULL
+);
+
 CREATE TABLE charms (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
-  level INTEGER,
-  rarity INTEGER,
+  level INTEGER NOT NULL,
+  rarity INTEGER NOT NULL,
   craftable BOOLEAN
 );
 
 CREATE TABLE charm_skills (
   id SERIAL PRIMARY KEY,
   charm_id INTEGER REFERENCES charms,
-  skill_level_id INTEGER REFERENCES skill_levels,
-  level INTEGER
+  skill_level_id INTEGER REFERENCES skill_levels
 );
 
 CREATE TABLE charm_materials (
@@ -119,38 +179,44 @@ CREATE TABLE decorations (
   skill_id INTEGER REFERENCES skills
 );
 
--- weaposn
+-- weaposn mnot done
+CREATE TABLE weapons (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL,
+  attack INTEGER NOT NULL,
+  damage_type TEXT NOT NULL,
+  attributes JSON
+  rarity INTEGER NOT NULL,
+  elderseal TEXT,
+  craftable BOOLEAN,
+  sharpness JSON,
+  coatings JSON,
+  phial JSON,
+  shelling JSON,
+  ammo JSON,
+  img TEXT
+);
+-- TODO m2m element weapons 
+-- TODO crafting wepo (craft or upgrade based on boolean)
 
--- CREATE TABLE ailments_items (
---   id SERIAL PRIMARY KEY,
---   ailment_id INTEGER REFERENCES ailments,
---   item_id INTEGER REFERENCES items
--- );
-
--- TODO m2m element weapons
--- TODO m2m resistance(element) armors and monsters
--- TODO m2m weakness(element) monsters
--- TODO m2m locations monsters
 -- TODO m2m ailments weapons/monsters probably maybe?
 -- TODO m2m monsters rewards(items) with conditions
 -- TODO m2m with ARMOR and SLOTS with what its filled with
 -- decos should reference slots 
 
--- TODO two m2ms between ailments and items (revoery /protection )
--- wwait maybe four m2ms because skills god dangit
-
 -- CREATE TABLE armor_resistances (
 --   id SERIAL PRIMARY KEY,
---   armor_id INTEGER REFERENCES armors,
+--   armor_id INTEGER REFERENCES armor,
 --   element TEXT,
 --   value INTEGER
 -- );
 
 -- USERS
-CREATE TABLE user_armors (
+CREATE TABLE user_armor (
   id SERIAL PRIMARY KEY,
   username TEXT REFERENCES users,
-  armor_id INTEGER REFERENCES armors
+  armor_id INTEGER REFERENCES armor
 );
 
 CREATE TABLE user_monsters (

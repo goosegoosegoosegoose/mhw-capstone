@@ -20,6 +20,9 @@ VALUES ('testuser',
 INSERT INTO slots (level)
 VALUES (1), (2), (3), (4);
 
+INSERT INTO elements (element)
+VALUES ('fire'), ('water'), ('ice'), ('thunder'), ('dragon'), ('blast'), ('poison'), ('sleep'), ('paralysis'), ('stun');
+
 DROP DATABASE mhw_test;
 CREATE DATABASE mhw_test;
 \c mhw_test
