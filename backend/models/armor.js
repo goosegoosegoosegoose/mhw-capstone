@@ -7,7 +7,7 @@ const {
 } = require("../expressError");
 
 class Armor {
-  static async create(id, name, type, rank, rarity, defense, armorSetId, mImg, fImg) {
+  static async create(id, name, type, rank, slots, rarity, defense, armorSetId, mImg, fImg) {
     const duplicateCheck = await db.query(
       `SELECT id
        FROM armor
@@ -15,12 +15,11 @@ class Armor {
     [id]);
     if (duplicateCheck.rows[0]) return;
 
-    // TODO add crafting(materials)
     await db.query(
       `INSERT INTO armor
-       (id, name, type, rank, rarity, defense, armor_set_id, m_img, f_img)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
-    [id, name, type, rank, rarity, defense, armorSetId, mImg, fImg]);
+       (id, name, type, rank, slots, rarity, defense, armor_set_id, m_img, f_img)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+    [id, name, type, rank, slots, rarity, defense, armorSetId, mImg, fImg]);
   }
 
   static async createSkill(armorId, skillLevelId) {

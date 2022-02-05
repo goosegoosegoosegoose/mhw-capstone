@@ -82,9 +82,20 @@ class Monster {
     [monId, ailId])
   }
 
-  static async createReward(monId, itemId){}
+  static async createReward(id, monId, itemId, conditions) {
+    const duplicateCheck = await db.query(
+      `SELECT id
+       FROM monster_rewards
+       WHERE id = $1`,
+    [id]);
+    if (duplicateCheck.rows[0]) return;
 
-  static async createRewardCondition(monRewardId, type, subtype, rank, quantity, chance){}
+    await db.query(
+      `INSERT INTO monster_rewards
+       (id, monster_id, item_id, conditions)
+       VALUES ($1, $2, $3, $4)`,
+    [id, monId, itemId, conditions])
+  }
 
   static async add(username, monId) {
     const preCheck = await db.query(
