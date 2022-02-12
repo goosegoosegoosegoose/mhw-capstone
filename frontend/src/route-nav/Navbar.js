@@ -9,7 +9,7 @@ const NavbarComp = ({logout, loggedIn}) => {
 
   if (!loggedIn) {
     return (
-      <Navbar bg="dark" variant="dark">
+      <Navbar sticky="top" bg="light" variant="light">
         <Navbar.Brand className="mx-4">
           <NavLink to="/">
             Monster Hunter World
@@ -32,52 +32,42 @@ const NavbarComp = ({logout, loggedIn}) => {
   }
 
   return (
-    <Navbar bg="dark" variant="dark">
-      <Navbar.Brand className="mx-4">
-        <NavLink to="/">
-          Monster Hunter World
-        </NavLink>
+    <Navbar sticky="top" bg="light" variant="light">
+      <Navbar.Brand className="mx-4" href="/">
+        Monster Hunter World
       </Navbar.Brand>
       <Nav className="me-auto">
-        <Nav.Link>
-          <NavLink to="/logout" onClick={logout}>
-            Log out {currentUser ? currentUser.username : null }
-          </NavLink>
+      <Nav.Link className="mx-1" href="/monsters">
+          Monsters
         </Nav.Link>
-        <Nav.Link>
-          <NavLink to="/monsters">
-            Monsters
-          </NavLink>
+        <Nav.Link className="mx-1" href="/locations">
+          Locations
         </Nav.Link>
-        <Nav.Link>
-          <NavLink to="/items">
-            Items
-          </NavLink>
+        <Nav.Link className="mx-1" href="/armor-sets">
+          Armor Sets
         </Nav.Link>
-        <Nav.Link>
-          <NavLink to="/weapons">
-            Weapons
-          </NavLink>
+        <Nav.Link className="mx-1" href="/armor">
+          Armor
         </Nav.Link>
-        <Nav.Link>
-          <NavLink to="/armors">
-            Armors
-          </NavLink>
+        <Nav.Link className="mx-1" href="/weapons">
+          Weapons
         </Nav.Link>
-        <Nav.Link>
-          <NavLink to="/armor-sets">
-            Armor Sets
-          </NavLink>
+        <Nav.Link className="mx-1" href="/charms">
+          Charms
         </Nav.Link>
-        <Nav.Link>
-          <NavLink to="/charms">
-            Charms
-          </NavLink>
+        <Nav.Link className="mx-1" href="/decorations">
+          Decorations
         </Nav.Link>
-        <Nav.Link>
-          <NavLink to="/decorations">
-            Decorations
-          </NavLink>
+        <Nav.Link className="mx-1" href="/skills">
+          Skills
+        </Nav.Link>
+        <Nav.Link className="mx-1" href="/elements">
+          Elements
+        </Nav.Link>
+      </Nav>
+      <Nav className="ms-auto">
+        <Nav.Link className="mx-4" href="/logout" onClick={logout}>
+          Log out {currentUser ? currentUser.username : null }
         </Nav.Link>
       </Nav>
     </Navbar>

@@ -52,21 +52,6 @@ class Monster {
     [monId, ele, stars, cond])
   }
 
-  static async createResistance(monId, ele, cond) {
-    const duplicateCheck = await db.query(
-      `SELECT id
-       FROM monster_resistances
-       WHERE monster_id = $1 AND element = $2`,
-    [monId, ele]);
-    if (duplicateCheck.rows[0]) return;
-
-    await db.query(
-      `INSERT INTO monster_resistances
-       (monster_id, element, condition)
-       VALUES ($1, $2, $3)`,
-    [monId, ele, cond])
-  }
-
   static async createAilment(monId, ailId) {
     const duplicateCheck = await db.query(
       `SELECT id
@@ -82,22 +67,136 @@ class Monster {
     [monId, ailId])
   }
 
-  static async createReward(id, monId, itemId, conditions) {
+  static async createMaterial(id, monId, itemId) {
     const duplicateCheck = await db.query(
       `SELECT id
-       FROM monster_rewards
+       FROM monster_materials
        WHERE id = $1`,
     [id]);
     if (duplicateCheck.rows[0]) return;
 
     await db.query(
-      `INSERT INTO monster_rewards
-       (id, monster_id, item_id, conditions)
-       VALUES ($1, $2, $3, $4)`,
-    [id, monId, itemId, conditions])
+      `INSERT INTO monster_materials
+       (id, monster_id, item_id)
+       VALUES ($1, $2, $3)`,
+    [id, monId, itemId])
   }
 
-  static async add(username, monId) {
+  static async createConditions(mmId, type, rank, quant, chance, subtype) {
+    const duplicateCheck = await db.query(
+      `SELECT id
+       FROM monster_material_conditions
+       WHERE monster_material_id = $1 AND type = $2`,
+    [mmId, type]);
+    if (duplicateCheck.rows[0]) return;
+
+    await db.query(
+      `INSERT INTO monster_material_conditions
+       (monster_material_id, type, rank, quantity, chance, subtype)
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+    [mmId, type, rank, quant, chance, subtype])
+  }
+
+  static async updateIcons(id, icon, pic) {
+    await db.query(
+      `UPDATE monsters
+       SET icon = $1 AND pic = $1
+       WHERE id = $3`,
+    [id, icon, pic])
+  }
+
+  static async findAll(search = {}) {
+    const query = `SELECT * FROM monsters`;
+    const filter = Object.keys(search)[0];
+    const value = Object.values(search)[0];
+
+    if (!filter) {
+      const res = await db.query(query);
+      return res.rows;
+    };
+    
+    if (search.name) {
+      const res = await db.query(
+        query +
+        ` WHERE name ILIKE $1`,
+      [`%${value}%`]);
+      return res.rows;
+    };
+
+    const res = await db.query(
+      query +
+      ` WHERE ${filter} = $1`,
+    [value]);
+    return res.rows;
+  }
+
+  static async findMonster(id) {
+    const res = await db.query(
+      `SELECT *
+       FROM monsters
+       WHERE id = $1`,
+    [id]);
+
+    return res.rows[0];
+  }
+
+  static async findLocations(id){
+    const res = await db.query(
+      `SELECT l.id AS id, l.name AS location 
+       FROM monsters AS m 
+       INNER JOIN monster_locations AS ml ON m.id = ml.monster_id 
+       INNER JOIN locations AS l ON ml.location_id = l.id 
+       WHERE m.id = $1`,
+    [id]);
+
+    return res.rows;
+  }
+
+  static async findWeaknesses(id){
+    const res = await db.query(
+      `SELECT e.element AS element, mw.condition AS condition, mw.stars AS stars
+       FROM monsters AS m 
+       INNER JOIN monster_weaknesses AS mw ON m.id = mw.monster_id 
+       INNER JOIN elements AS e ON mw.element = e.element 
+       WHERE m.id = $1
+       ORDER BY stars DESC`,
+    [id]);
+
+    return res.rows;
+  }
+
+  static async findAilments(id){
+    const res = await db.query(
+      `SELECT a.id AS id, a.name AS ailment, a.description AS description
+       FROM monsters AS m 
+       INNER JOIN monster_ailments AS ma ON m.id = ma.monster_id 
+       INNER JOIN ailments AS a ON ma.ailment_id = a.id 
+       WHERE m.id = $1`,
+    [id]);
+
+    return res.rows;
+  }
+
+  static async findMaterials(id){
+    const res = await db.query(
+      `SELECT i.id AS id, 
+              i.name AS material,
+              c.type AS type, 
+              c.rank AS rank, 
+              c.quantity AS quantity, 
+              c.chance AS chance,
+              c.subtype AS subtype
+       FROM monsters AS m 
+       INNER JOIN monster_materials AS mm ON m.id = mm.monster_id 
+       INNER JOIN items AS i ON mm.item_id = i.id
+       INNER JOIN monster_material_conditions AS c ON mm.id = c.monster_material_id
+       WHERE m.id = $1`,
+    [id]);
+
+    return res.rows;
+  }
+
+  static async userAdd(username, monId) {
     const preCheck = await db.query(
       `SELECT username
        FROM users
@@ -113,7 +212,7 @@ class Monster {
     if (duplicateCheck.rows[0]) throw new BadRequestError(`Duplicate monster`);
 
     const res = await db.query(`
-      INSERT INTO monsters
+      INSERT INTO user_monsters
       (username, monster_id)
       VALUES ($1, $2)
       RETURNING username, monster_id AS "monId"`,
@@ -122,15 +221,15 @@ class Monster {
     return res.rows[0];
   }
 
-  static async findAll(){
+  static async userAll(){
     let res = await db.query(
       `SELECT id, name, type, species, description 
-       FROM monsters`);
+       FROM user_monsters`);
     
     return res.rows;    
   }
 
-  static async remove(monId) {
+  static async userRemove(monId) {
     const res = await db.query(
       `DELETE
        FROM user_monsters

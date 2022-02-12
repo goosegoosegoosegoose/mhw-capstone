@@ -3,7 +3,7 @@
 const db = require("../db");
 
 class Weapon {
-  static async create(id, name, type, attack, damageType, slots, attributes, rarity, elderseal, craftable, sharpness, coatings, phial, shelling, ammo, specialAmmo, img) {
+  static async create(id, name, type, attack, affinity, defense, damageType, slots, rarity, elderseal, craftable, sharpness, coatings, phial, shelling, ammo, specialAmmo, img) {
     const duplicateCheck = await db.query(
       `SELECT id
        FROM weapons
@@ -13,9 +13,9 @@ class Weapon {
 
     await db.query(
       `INSERT INTO weapons
-       (id, name, type, attack, damage_type, slots, attributes, rarity, elderseal, craftable, white_sharpness, coatings, phial, shelling, ammo, special_ammo, img)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`,
-    [id, name, type, attack, damageType, slots, attributes, rarity, elderseal, craftable, sharpness, coatings, phial, shelling, ammo, specialAmmo, img]);
+       (id, name, type, attack, affinity, defense, damage_type, slots, rarity, elderseal, craftable, white_sharpness, coatings, phial, shelling, ammo, special_ammo, img)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
+    [id, name, type, attack, affinity, defense, damageType, slots, rarity, elderseal, craftable, sharpness, coatings, phial, shelling, ammo, specialAmmo, img]);
   }
 
   static async createElement(weaponId, element, damage, hidden) {

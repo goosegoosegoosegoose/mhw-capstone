@@ -18,35 +18,77 @@ class ArmorSet {
     [id, name, rank, setBonus]);
   }
 
-  static async createBonus(id, name) {
+  static async createSkill(armorSetId, skillId, pieces) {
     const duplicateCheck = await db.query(
-      `SELECT id
-       FROM set_bonuses
-       WHERE id = $1`,
-    [id]);
-    if (duplicateCheck.rows[0]) return;
-
-    await db.query(
-      `INSERT INTO set_bonuses
-       (id, name)
-       VALUES ($1, $2)`,
-    [id, name]);
-  }
-
-  // pieces as in pieces of armor needed to trigger effect/skill
-  static async createSkill(armorSetId, setBonusId, skillLevelId, pieces, description) {
-    const duplicateCheck = await db.query(
-      `SELECT armor_set_id, set_bonus_id 
+      `SELECT armor_set_id, skill_id 
        FROM set_skills
-       WHERE armor_set_id = $1 AND set_bonus_id = $2`,
-    [armorSetId, setBonusId]);
+       WHERE armor_set_id = $1 AND skill_id = $2`,
+    [armorSetId, skillId]);
     if (duplicateCheck.rows[0]) return;
 
     await db.query(
       `INSERT INTO set_skills
-       (armor_set_id, set_bonus_id, skill_level_id, pieces, description)
-       VALUES ($1, $2, $3, $4, $5)`,
-    [armorSetId, setBonusId, skillLevelId, pieces, description])
+       (armor_set_id, skill_id, pieces)
+       VALUES ($1, $2, $3)`,
+    [armorSetId, skillId, pieces])
+  }
+
+  static async findAll() {
+    const res = await db.query(
+      `SELECT aa.id AS id, 
+              aa.name AS name, 
+              aa.rank AS rank, 
+              aa.set_bonus AS set_bonus, 
+              SUM(a.defense_base) AS total_base,
+              SUM(a.defense_max) AS total_max,
+              SUM(a.defense_augmented) AS total_augmented
+       FROM armor_sets AS aa
+       INNER JOIN armor AS a ON aa.id = a.armor_set_id
+       GROUP BY aa.id
+       ORDER BY aa.id`
+    );
+    return res.rows;
+  }
+
+  static async findArmorSet(id){
+    const res = await db.query(
+      `SELECT aa.id AS id, 
+              aa.name AS name, 
+              aa.rank AS rank, 
+              aa.set_bonus AS set_bonus, 
+              SUM(a.defense_base) AS total_base,
+              SUM(a.defense_max) AS total_max,
+              SUM(a.defense_augmented) AS total_augmented
+      FROM armor_sets AS aa
+      INNER JOIN armor AS a ON aa.id = a.armor_set_id
+      WHERE aa.id = $1
+      GROUP BY aa.id`,
+    [id]);
+
+    return res.rows[0];
+  }
+
+  static async findSkills(id) {
+    const res = await db.query(
+      `SELECT s.id AS id, s.name AS name, s.level AS level, s.description AS description
+       FROM armor_sets AS a
+       INNER JOIN set_skills AS ss ON a.id = ss.armor_set_id
+       INNER JOIN skills AS s ON ss.skill_id = s.id
+       WHERE a.id = $1`,
+    [id]);
+
+    return res.rows;
+  }
+
+  static async findArmor(id) {
+    const res = await db.query(
+      `SELECT a.id AS id, a.name AS name, a.m_img AS m_img, a.f_img AS f_img
+       FROM armor_sets AS aa
+       INNER JOIN armor AS a ON aa.id = a.armor_set_id
+       WHERE aa.id = $1`,
+    [id])
+
+    return res.rows;
   }
 }
 

@@ -10,9 +10,7 @@ class MhwApi {
 
     const url = `${BASE_URL}/${endpoint}`;
     const headers = { Authorization: `Bearer ${MhwApi.token}` };
-    const params = (method === "get")
-        ? data
-        : {};
+    const params = (method === "get") ? data : {};
 
     try {
       return (await axios({ url, method, data, params, headers })).data;
@@ -55,6 +53,10 @@ class MhwApi {
   }
 
   static async search(type, header, handle) {
+    if (handle === "") {
+      let res = await this.request(`${type}`);
+      return res;
+    }
     let res = await this.request(`${type}/?${header}=${handle}`);
     return res;
   }

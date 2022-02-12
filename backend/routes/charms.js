@@ -2,15 +2,14 @@
 
 const jsonschema = require("jsonschema");
 const express = require("express");
-const Armor = require("../models/armor");
+const Charm = require("../models/charm");
 
 const router = new express.Router();
 
 router.get("/", async (req, res, next) => {
-  const q = req.query;
   try {
-    const armor = await Armor.findAll(q);
-    return res.json(armor);
+    const charms = await Charm.findAll();
+    return res.json(charms)
   } catch (err) {
     return next(err);
   }
@@ -20,16 +19,14 @@ router.get("/:id", async (req, res, next) => {
   const id = req.params.id;
   try {
     const result = await Promise.all([
-      Armor.findArmor(id),
-      Armor.findArmorSet(id),
-      Armor.findSkills(id),
-      Armor.findMaterials(id)
-    ]);
-    const armor = result[0];
-    armor.set = result[1];
-    armor.skills = result[2];
-    armor.materials = result[3];
-    return res.json(armor)
+      Charm.findCharm(id),
+      Charm.findSkills(id),
+      Charm.findMaterials(id)
+    ])
+    const charm = result[0];
+    charm.skills = result[1];
+    charm.materials = result[2];
+    return res.json(charm)
   } catch (err) {
     return next(err)
   }
@@ -39,7 +36,7 @@ router.post("/:id/user/:username", async (req, res, next) => {
   const id = req.params.id;
   const username = req.params.username;
   try {
-    await Armor.userAdd(username, id);
+    await Charm.userAdd(username, id);
     return res.status(201).json({ id })
   } catch (err) {
     return next(err);
@@ -50,7 +47,7 @@ router.delete("/:id/user/:username", async (req, res, next) => {
   const id = req.params.id;
   const username = req.params.username
   try {
-    await Armor.userRemove(username, id);
+    await Charm.userRemove(username, id);
     return res.status(200).json({ id })
   } catch (err) {
     return next(err);

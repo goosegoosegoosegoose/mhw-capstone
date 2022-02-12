@@ -2,22 +2,28 @@
 
 const axios = require("axios");
 const url = "https://mhw-db.com";
-const armorset = require("../models/armorset")
-const armor = require("../models/armor");
-const monster = require("../models/monster");
-const location = require("../models/location");
-const item = require("../models/item");
-const skill = require("../models/skill");
-const ailment = require("../models/ailment");
-const charm = require("../models/charm");
-const weapon = require("../models/weapon");
-const decoration = require("../models/decoration");
+const Armorset = require("../models/armorset")
+const Armor = require("../models/armor");
+const Monster = require("../models/monster");
+const Local = require("../models/location");
+const Item = require("../models/item");
+const Skill = require("../models/skill");
+const Ailment = require("../models/ailment");
+const Charm = require("../models/charm");
+const Weapon = require("../models/weapon");
+const Decoration = require("../models/decoration");
 
 const getData = async () => {
-  await Promise.all([getSkills(), getItems(), getLocations(), getArmorSets(), getAilments()]);
+  await Promise.all([
+    getSkills(), 
+    getItems(), 
+    getLocations(), 
+    getArmorSets(), 
+    getAilments()
+  ]);
   getMonsters();
   getCharms();
-  getArmors();
+  getArmor();
   getDecorations();
   getWeapons();
 }
@@ -26,9 +32,8 @@ const getSkills = async () => {
   const res = await axios.get(`${url}/skills`);
   const skills = res.data;
   skills.map(s => {
-    skill.create(s.id, s.name, s.description);
     s.ranks.map(r => {
-      skill.createLevel(r.id, r.skill, r.level, r.modifiers, r.description)
+      Skill.create(r.id, `${s.name} ${r.level}`, r.level, r.description)
     })
   })
 }
@@ -37,7 +42,7 @@ const getItems = async () => {
   const res = await axios.get(`${url}/items`);
   const items = res.data;
   items.map(i => {
-    item.create(i.id, i.name, i.description, i.rarity, i.carryLimit, i.value);
+    Item.create(i.id, i.name, i.description, i.rarity, i.carryLimit, i.value);
   })
 }
 
@@ -46,38 +51,58 @@ const getArmorSets = async () => {
   const sets = res.data;
   await sets.map(s => {
     // TODO fix duplication error?
-    s.bonus ? armorset.createBonus(s.bonus.id, s.bonus.name) : null;
-    armorset.create(s.id, s.name, s.rank, s.bonus ? s.bonus.id : null);
+    Armorset.create(s.id, s.name, s.rank, s.bonus ? s.bonus.name : null);
   });
   const bonusSets = sets.filter(s => !s.bonus ? false : true);
   bonusSets.map(s => {
     s.bonus.ranks.map(r =>{
-      armorset.createSkill(s.id, s.bonus.id, r.skill.id, r.pieces, r.description)
+      Armorset.createSkill(s.id, r.skill.id, r.pieces)
     })
   })
 }
 
-const getArmors = async () => {
+const getArmor = async () => {
   const res = await axios.get(`${url}/armor`);
-  const armors = res.data;
-  await armors.map(a => {
-    if (!a.assets) a.assets = {"imageMale": null, "imageFemale": null};
-    if (a.slots.length === 0) a.slots = {};
-    if (a.slots.length === 1) a.slots = {1: a.slots[0].rank};
-    if (a.slots.length === 2) a.slots = {1: a.slots[0].rank, 2: a.slots[1].rank};
+  const armor = res.data;
+  await armor.map(a => {
+    if (!a.assets) {
+      if (a.type === `head`) {a.assets = {
+        "imageMale": `https://assets.mhw-db.com/armor/9e9e2c421697e3deb8fc8d362a7f2b8f911fa511.7284b9666abcf7560ace82a4e4a72f1d.png`, 
+        "imageFemale": `https://assets.mhw-db.com/armor/a30d7cf3ff696e07e746aeed1f593a90648a435f.a9ff8627de743cb13e3b1fe48461ec0f.png`
+      }};
+      if (a.type === `chest`){a.assets = {
+        "imageMale": `https://assets.mhw-db.com/armor/31274503eeadb6cb37266a2f578db8c92456a984.70b16041b1e6483321cdd0ad72e8ce6f.png`, 
+        "imageFemale": `https://assets.mhw-db.com/armor/fba000594549191b0913b4c839c59fbb82e68aad.3de50440c16c93ece97a084352db1b1b.png`
+      }};
+      if (a.type === `gloves`){a.assets = {
+        "imageMale": `https://assets.mhw-db.com/armor/81dd76d98cd3495e839c7e908bb9219ad3c90a69.177e947ec9ad9ba9148e94390b1e2015.png`, 
+        "imageFemale": `https://assets.mhw-db.com/armor/f3abd35ffa744cb303288816fca163fb96ded57b.97c6607729b27375cd0428fc2f4ae96f.png`
+      }};
+      if (a.type === `waist`){a.assets = {
+        "imageMale": `https://assets.mhw-db.com/armor/9f04b4887ee16b009d6403a676b73b79c51ee191.ef72cb09966c41a20ef3dbea3797f081.png`, 
+        "imageFemale": `https://assets.mhw-db.com/armor/57007ad399fb917a5bf35606b2c4af4ee5db0183.08a38f727ca1cb97d0fbfd02f6ab49cf.png`
+      }};
+      if (a.type === `legs`){a.assets = {
+        "imageMale": `https://assets.mhw-db.com/armor/c5c55c125f9ac5c9c2e074fcf171bdffd20af8e9.f428ae0c7a70bdccec78a78641054669.png`, 
+        "imageFemale": `https://assets.mhw-db.com/armor/abd6311f80de140f81ce35cedd1bd77e3ed59c2b.fc369c2cc3a71c4638bdeecf13643b00.png`
+      }};
+    };
+    if (a.slots.length === 0) a.slots = {1: null, 2: null, 3: null};
+    if (a.slots.length === 1) a.slots = {1: a.slots[0].rank, 2: null, 3: null};
+    if (a.slots.length === 2) a.slots = {1: a.slots[0].rank, 2: a.slots[1].rank, 3: null};
     if (a.slots.length === 3) a.slots = {1: a.slots[0].rank, 2: a.slots[1].rank, 3: a.slots[2].rank};
-    armor.create(a.id, a.name, a.type, a.rank, a.slots, a.rarity, a.defense.base, a.armorSet.id, a.assets.imageMale, a.assets.imageFemale);
+    Armor.create(a.id, a.name, a.type, a.rank, a.slots, a.rarity, a.defense.base, a.defense.max, a.defense.augmented, a.armorSet.id, a.assets.imageMale, a.assets.imageFemale);
   });
-  const armorWithSkills = armors.filter(a => a.skills.length > 0 ? true : false)
+  const armorWithSkills = armor.filter(a => a.skills.length > 0 ? true : false)
   armorWithSkills.map(a => {
     a.skills.map(s => {
-      armor.createSkill(a.id, s.id)
+      Armor.createSkill(a.id, s.id)
     })
   })
-  const armorWithMaterials = armors.filter(a => a.crafting.materials.length > 0 ? true : false)  
+  const armorWithMaterials = armor.filter(a => a.crafting.materials.length > 0 ? true : false)  
   armorWithMaterials.map(a => {
     a.crafting.materials.map(m => {
-      armor.createMaterial(a.id, m.item.id, m.quantity)
+      Armor.createMaterial(a.id, m.item.id, m.quantity)
     })
   })
 }
@@ -86,24 +111,25 @@ const getMonsters = async () => {
   const res = await axios.get(`${url}/monsters`);
   const monsters = res.data;
   await Promise.all(monsters.map(async m => {
-    await monster.create(m.id, m.name, m.type, m.species, m.description);
+    await Monster.create(m.id, m.name, m.type, m.species, m.description);
     m.locations.map(l => {
-      monster.createLocation(m.id, l.id)
+      Monster.createLocation(m.id, l.id)
     });
     m.weaknesses.map(w => {
-      monster.createWeakness(m.id, w.element, w.stars, w.condition)
-    });
-    m.resistances.map(r => {
-      monster.createResistance(m.id, r.element, r.condition)
+      if (!w.condition) w.condition = "always"
+      Monster.createWeakness(m.id, w.element, w.stars, w.condition)
     });
     m.ailments.map(a => {
-      monster.createAilment(m.id, a.id)
+      Monster.createAilment(m.id, a.id)
     });
   }));
-  const monstersWithRewards = monsters.filter(a => a.rewards.length > 0 ? true : false);
-  monstersWithRewards.map(m => {
+  const monstersWithMaterials = monsters.filter(a => a.rewards.length > 0 ? true : false);
+  monstersWithMaterials.map(m => {
     m.rewards.map(r => {
-      monster.createReward(r.id, m.id, r.item.id, r.conditions)
+      Monster.createMaterial(r.id, m.id, r.item.id);
+      r.conditions.map(c => {
+        Monster.createConditions(r.id, c.type, c.rank, c.quantity, c.chance, c.subtype)
+      })
     })
   })
 }
@@ -112,7 +138,7 @@ const getLocations = async () => {
   const res = await axios.get(`${url}/locations`);
   const locations = res.data;
   locations.map(i => {
-    location.create(i.id, i.name, i.zoneCount, JSON.stringify(i.camps));
+    Local.create(i.id, i.name, i.zoneCount, JSON.stringify(i.camps));
   })
 }
 
@@ -120,7 +146,7 @@ const getAilments = async () => {
   const res = await axios.get(`${url}/ailments`);
   const ailments = res.data;
   ailments.map(a => {
-    ailment.create(a.id, a.name, a.description);
+    Ailment.create(a.id, a.name, a.description);
   })
 }
 
@@ -130,12 +156,12 @@ const getCharms = async () => {
   charms.map(c => {
     c.ranks.map(r => {
       const charmId = Number(String(c.id) + String(r.level));
-      charm.create(charmId, r.name, r.level, r.rarity, r.crafting.craftable);
+      Charm.create(charmId, r.name, r.level, r.rarity, r.crafting.craftable);
       r.skills.map(async s => {
-        charm.createSkill(charmId, s.id);
+        Charm.createSkill(charmId, s.id);
       });
       r.crafting.materials.map(m => {
-        charm.createMaterial(charmId, m.item.id, m.quantity)
+        Charm.createMaterial(charmId, m.item.id, m.quantity)
       })
     })
   })
@@ -145,9 +171,9 @@ const getDecorations = async () => {
   const res = await axios.get(`${url}/decorations`);
   const decorations = res.data;
   decorations.map(d => {
-    decoration.create(d.id, d.name, d.rarity, d.slot);
+    Decoration.create(d.id, d.name, d.rarity, d.slot);
     d.skills.map(s => {
-      decoration.createSkill(d.id, s.id)
+      Decoration.createSkill(d.id, s.id)
     })
   })
 }
@@ -157,23 +183,26 @@ const getWeapons = async () => {
   const weapons = res.data;
   weapons.map(w => {
     if (!w.assets) w.assets = {image: null};
-    if (w.slots.length === 0) w.slots = {};
-    if (w.slots.length === 1) w.slots = {1: w.slots[0].rank};
-    if (w.slots.length === 2) w.slots = {1: w.slots[0].rank, 2: w.slots[1].rank};
+    if (w.slots.length === 0) w.slots = {1: null, 2: null, 3: null};
+    if (w.slots.length === 1) w.slots = {1: w.slots[0].rank, 2: null, 3: null};
+    if (w.slots.length === 2) w.slots = {1: w.slots[0].rank, 2: w.slots[1].rank, 3: null};
     if (w.slots.length === 3) w.slots = {1: w.slots[0].rank, 2: w.slots[1].rank, 3: w.slots[2].rank};
+    if (!w.attributes.affinity) w.attributes.affinity = 0;
+    if (!w.attributes.defense) w.attributes.defense = 0;
     const sharp = [];
     if (w.durability) {
       w.durability.map(d => sharp.push(d.white));
     }
     if (w.phial) {
-      weapon.create(
+      Weapon.create(
         w.id, 
         w.name, 
         w.type, 
-        w.attack.raw, 
+        w.attack.raw,
+        w.attributes.affinity,
+        w.attributes.defense,
         w.damageType,
         w.slots,
-        w.attributes,
         w.rarity, 
         w.elderseal, 
         w.crafting.craftable,
@@ -186,14 +215,15 @@ const getWeapons = async () => {
         w.assets.image
       )
     } else if (w.shelling) {
-      weapon.create(
+      Weapon.create(
         w.id, 
         w.name, 
         w.type, 
-        w.attack.raw, 
+        w.attack.raw,
+        w.attributes.affinity,
+        w.attributes.defense,
         w.damageType,
         w.slots,
-        w.attributes,
         w.rarity, 
         w.elderseal, 
         w.crafting.craftable,
@@ -206,14 +236,15 @@ const getWeapons = async () => {
         w.assets.image
       )      
     } else if (w.durability ) {
-      weapon.create(
+      Weapon.create(
         w.id, 
         w.name, 
         w.type, 
-        w.attack.raw, 
+        w.attack.raw,
+        w.attributes.affinity,
+        w.attributes.defense,
         w.damageType,
         w.slots,
-        w.attributes,
         w.rarity, 
         w.elderseal, 
         w.crafting.craftable,
@@ -227,16 +258,17 @@ const getWeapons = async () => {
       )
     };
     if (w.coatings) {
-      weapon.create(
+      Weapon.create(
         w.id, 
         w.name, 
         w.type, 
-        w.attack.raw, 
+        w.attack.raw,
+        w.attributes.affinity,
+        w.attributes.defense,
         w.damageType,
         w.slots,
-        w.attributes,
         w.rarity, 
-        w.elderseal, 
+        w.elderseal,
         w.crafting.craftable,
         null,
         w.coatings,
@@ -248,16 +280,17 @@ const getWeapons = async () => {
       )
     };
     if (w.ammo){
-      weapon.create(
+      Weapon.create(
         w.id, 
         w.name, 
         w.type, 
-        w.attack.raw, 
+        w.attack.raw,
+        w.attributes.affinity,
+        w.attributes.defense,
         w.damageType,
         w.slots,
-        w.attributes,
         w.rarity, 
-        w.elderseal, 
+        w.elderseal,
         w.crafting.craftable,
         null,
         null,
@@ -268,24 +301,24 @@ const getWeapons = async () => {
         w.assets.image
       )
       w.ammo.map(a => {
-        weapon.createAmmo(w.id, a.type, a.capacities)
+        Weapon.createAmmo(w.id, a.type, a.capacities)
       })
     };
     if (w.crafting.craftingMaterials.length > 0) {
       w.crafting.craftingMaterials.map(c => {
-        weapon.createMaterial(w.id, c.item.id, "craft", c.quantity)
+        Weapon.createMaterial(w.id, c.item.id, "craft", c.quantity)
       })
     };
     if (w.crafting.upgradeMaterials.length > 0) {
       w.crafting.upgradeMaterials.map(c => {
-        weapon.createMaterial(w.id, c.item.id, "upgrade", c.quantity)
+        Weapon.createMaterial(w.id, c.item.id, "upgrade", c.quantity)
       })
     }
   });
   const weaponWithElements = weapons.filter(w => w.elements.length > 0 ? true : false);
   weaponWithElements.map(w => {
     w.elements.map(e => {
-      weapon.createElement(w.id, e.type, e.damage, e.hidden);
+      Weapon.createElement(w.id, e.type, e.damage, e.hidden);
     })
   })
 }

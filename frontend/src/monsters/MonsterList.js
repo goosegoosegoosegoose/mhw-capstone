@@ -14,6 +14,11 @@ const MonsterList = () => {
     fetchMonsters();
   }, []);
 
+  const handleClick = async (evt) => {
+    const res = await MhwApi.search("monsters", evt.target.dataset.header, evt.target.dataset.handle);
+    getMonsters(res);
+  }
+
   const getMonsters = (res) => {
     setMonsters([...res])
   };
@@ -21,7 +26,7 @@ const MonsterList = () => {
   if (monsters.length === 0) {
     return (
       <div className="container text-center">
-        <SearchForm type="monsters" header="q" get={getMonsters} />
+        <SearchForm type="monsters" header="name" get={getMonsters} />
         <p>Sorry, no results were found!</p>
       </div>
     )
@@ -29,15 +34,16 @@ const MonsterList = () => {
 
   return (
     <div className="container text-center">
-      <SearchForm type="monsters" header="q" get={getMonsters} />
-      {monsters.map(monster => 
-        <MonsterCard
-          key={monster.id}
-          id={monster.id}
-          name={monster.name}
-          type={monster.type}
-        />
-      )}
+      <SearchForm type="monsters" header="name" get={getMonsters} />
+      <div className="row justify-content-center">
+        {monsters.map(m => 
+          <MonsterCard
+            key={m.id}
+            id={m.id}
+            name={m.name}
+          />
+        )}
+      </div>
     </div>
   )
 };

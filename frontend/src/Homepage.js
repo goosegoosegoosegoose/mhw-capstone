@@ -18,8 +18,8 @@ const Homepage = () => {
   }
 
   return (
-    <div className="container" style={{ backgroundImage: `url("https://i.redd.it/xdcvxl1mz4531.png")`}}>
-      map blurry I need to add buttons somehow?
+    <div className="container justify-content-center">
+      <div>Welcome to my app</div>
     </div>
   )
 

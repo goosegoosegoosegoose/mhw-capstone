@@ -60,23 +60,35 @@ const App = () => {
     setCurrentUser({...currentUser, ...res});
   };
 
-  const add = async (evt) => {
-    const id = evt.target.id;
-    const type = evt.target.dataset.type;
-    console.log(currentUser);
+  const add = async (id, type) => {
     const res = await MhwApi.add(type, currentUser.username, id);
-    setCurrentUser({...currentUser, [type]: [...currentUser[type], res]});
+    setCurrentUser({...currentUser, [type]: [...currentUser[type], Number(res.id)]});
   }
 
-  const remove = async (evt) => {
-    const id = evt.target.id;
-    const type = evt.target.dataset.type;
-    await MhwApi.remove(type, currentUser.username, id);
+  const remove = async (id, type) => {
+    const res = await MhwApi.remove(type, currentUser.username, id);
+    currentUser[type] = currentUser[type].filter(i => i === Number(res.id) ? false : true);
     setCurrentUser({...currentUser, [type]: [...currentUser[type]]});
-    
   }
 
-  // username is unidentified, type is "submit", prob should use dataset
+  const plus = async (id) => {
+    const res = await MhwApi.add("decorations", currentUser.username, id);
+    if (!currentUser.decorations[id]) {
+      setCurrentUser({...currentUser, "decorations": {...currentUser.decorations, [res.id]:1}})
+    } else {
+      setCurrentUser({...currentUser, "decorations": {...currentUser.decorations, [res.id]:currentUser.decorations[res.id] + 1}})
+    }
+  }
+
+  const minus = async (id) => {
+    const res = await MhwApi.remove("decorations", currentUser.username, id);
+    if (currentUser.decorations[id] === 1) {
+      delete currentUser.decorations[id];
+      setCurrentUser({...currentUser, "decorations": {...currentUser.decorations}})
+    } else {
+      setCurrentUser({...currentUser, "decorations": {...currentUser.decorations, [res.id]:currentUser.decorations[res.id] - 1}})
+    }
+  }
 
   return (
     <BrowserRouter>
@@ -88,15 +100,20 @@ const App = () => {
           loggedIn={loggedIn}
           edit={edit}
         />
-        <Routes 
-          login={login}
-          logout={logout}
-          signup={signup}
-          loggedIn={loggedIn}
-          edit={edit}
-          add={add}
-          remove={remove}
-        />
+        <div>
+          {/* TODO backgroundColor style */}
+          <Routes 
+            login={login}
+            logout={logout}
+            signup={signup}
+            loggedIn={loggedIn}
+            edit={edit}
+            add={add}
+            remove={remove}
+            plus={plus}
+            minus={minus}
+          />
+        </div>
       </UserContext.Provider>
     </BrowserRouter>
   )

@@ -7,10 +7,17 @@ const { NotFoundError } = require("./expressError");
 
 const { authenticateJWT } = require("./middleware/auth");
 const authRoutes = require("./routes/auth");
-const usersRoutes = require("./routes/user");
-const monsterRoutes = require("./routes/monster");
+const usersRoutes = require("./routes/users");
+const monsterRoutes = require("./routes/monsters");
+const locationRoutes = require("./routes/locations");
+const armorSetRoutes = require("./routes/armorsets");
 const armorRoutes = require("./routes/armor");
-const getData = require("./helpers/getData")
+
+const charmRoutes = require("./routes/charms");
+const decorationRoutes = require("./routes/decorations");
+const skillRoutes = require("./routes/skills");
+const elementRoutes = require("./routes/elements");
+const getData = require("./helpers/getData");
 
 const morgan = require("morgan");
 
@@ -24,8 +31,14 @@ app.use(authenticateJWT);
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
 app.use("/monsters", monsterRoutes);
-app.use("/armors", armorRoutes);
+app.use("/locations", locationRoutes);
+app.use("/armorsets", armorSetRoutes);
+app.use("/armor", armorRoutes);
 
+app.use("/charms", charmRoutes);
+app.use("/decorations", decorationRoutes);
+app.use("/skills", skillRoutes);
+app.use("/elements", elementRoutes);
 getData();
 
 app.use(function (req, res, next) {

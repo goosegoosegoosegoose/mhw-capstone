@@ -33,14 +33,7 @@ CREATE TABLE items (
 CREATE TABLE skills (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
-  description TEXT NOT NULL
-);
-
-CREATE TABLE skill_levels (
-  id INTEGER PRIMARY KEY,
-  skill_id INTEGER REFERENCES skills INITIALLY DEFERRED,
   level INTEGER NOT NULL,
-  modifiers JSON,
   description TEXT
 );
 
@@ -50,26 +43,19 @@ CREATE TABLE ailments (
   description TEXT NOT NULL
 );
 
-CREATE TABLE set_bonuses (
-  id INTEGER PRIMARY KEY,
-  name TEXT NOT NULL
-);
-
 CREATE TABLE armor_sets (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
   rank TEXT NOT NULL,
-  set_bonus INTEGER REFERENCES set_bonuses INITIALLY DEFERRED
+  set_bonus TEXT
 );
 
 -- by pieces
 CREATE TABLE set_skills (
   id SERIAL PRIMARY KEY,
   armor_set_id INTEGER REFERENCES armor_sets INITIALLY DEFERRED,
-  set_bonus_id INTEGER REFERENCES set_bonuses INITIALLY DEFERRED,
-  skill_level_id INTEGER REFERENCES skill_levels INITIALLY DEFERRED,
-  pieces INTEGER,
-  description TEXT
+  skill_id INTEGER REFERENCES skills INITIALLY DEFERRED,
+  pieces INTEGER
 );
 
 CREATE TABLE armor (
@@ -79,8 +65,10 @@ CREATE TABLE armor (
   rank TEXT NOT NULL,
   slots JSON,
   rarity INTEGER NOT NULL,
-  defense INTEGER NOT NULL,
-  armor_set_id INTEGER references armor_sets INITIALLY DEFERRED,
+  defense_base INTEGER NOT NULL,
+  defense_max INTEGER NOT NULL,
+  defense_augmented INTEGER NOT NULL,
+  armor_set_id INTEGER REFERENCES armor_sets INITIALLY DEFERRED,
   m_img TEXT, 
   f_img TEXT
 );
@@ -88,7 +76,7 @@ CREATE TABLE armor (
 CREATE TABLE armor_skills (
   id SERIAL PRIMARY KEY,
   armor_id INTEGER REFERENCES armor INITIALLY DEFERRED,
-  skill_level_id INTEGER REFERENCES skill_levels INITIALLY DEFERRED
+  skill_id INTEGER REFERENCES skills INITIALLY DEFERRED
 );
 
 CREATE TABLE armor_materials (
@@ -120,24 +108,26 @@ CREATE TABLE monster_weaknesses (
   condition TEXT
 );
 
-CREATE TABLE monster_resistances (
-  id SERIAL PRIMARY KEY,
-  monster_id INTEGER REFERENCES monsters INITIALLY DEFERRED,
-  element TEXT REFERENCES elements,
-  condition TEXT
-);
-
 CREATE TABLE monster_ailments (
   id SERIAL PRIMARY KEY,
   monster_id INTEGER REFERENCES monsters INITIALLY DEFERRED,
   ailment_id INTEGER REFERENCES ailments INITIALLY DEFERRED
 );
 
-CREATE TABLE monster_rewards (
+CREATE TABLE monster_materials (
   id INTEGER PRIMARY KEY,
   monster_id INTEGER REFERENCES monsters INITIALLY DEFERRED,
-  item_id INTEGER REFERENCES items INITIALLY DEFERRED,
-  conditions JSON ARRAY
+  item_id INTEGER REFERENCES items INITIALLY DEFERRED
+);
+
+CREATE TABLE monster_material_conditions (
+  id SERIAL PRIMARY KEY,
+  monster_material_id INTEGER REFERENCES monster_materials INITIALLY DEFERRED,
+  type TEXT NOT NULL,
+  rank TEXT NOT NULL,
+  quantity INTEGER NOT NULL,
+  chance INTEGER NOT NULL,
+  subtype TEXT
 );
 
 CREATE TABLE charms (
@@ -145,13 +135,14 @@ CREATE TABLE charms (
   name TEXT NOT NULL,
   level INTEGER NOT NULL,
   rarity INTEGER NOT NULL,
+  -- depreciated delete craftable
   craftable BOOLEAN
 );
 
 CREATE TABLE charm_skills (
   id SERIAL PRIMARY KEY,
   charm_id INTEGER REFERENCES charms INITIALLY DEFERRED,
-  skill_level_id INTEGER REFERENCES skill_levels INITIALLY DEFERRED
+  skill_id INTEGER REFERENCES skills INITIALLY DEFERRED
 );
 
 CREATE TABLE charm_materials (
@@ -171,7 +162,7 @@ CREATE TABLE decorations (
 CREATE TABLE decoration_skills (
   id SERIAL PRIMARY KEY,
   decoration_id INTEGER REFERENCES decorations INITIALLY DEFERRED,
-  skill_level_id INTEGER REFERENCES skill_levels INITIALLY DEFERRED
+  skill_id INTEGER REFERENCES skills INITIALLY DEFERRED
 );
 
 CREATE TABLE weapons (
@@ -179,9 +170,10 @@ CREATE TABLE weapons (
   name TEXT NOT NULL,
   type TEXT NOT NULL,
   attack INTEGER NOT NULL,
+  affinity INTEGER,
+  defense INTEGER,
   damage_type TEXT,
   slots JSON,
-  attributes JSON,
   rarity INTEGER NOT NULL,
   elderseal TEXT,
   craftable BOOLEAN,
@@ -224,16 +216,40 @@ CREATE TABLE user_armor (
   id SERIAL PRIMARY KEY,
   username TEXT REFERENCES users,
   armor_id INTEGER REFERENCES armor,
-  slot1 INTEGER REFERENCES decorations,
-  slot2 INTEGER REFERENCES decorations,
-  slot3 INTEGER REFERENCES decorations,
-  slot1_in BOOLEAN,
-  slot2_in BOOLEAN,
-  slot3_in BOOLEAN
+  slot1 INTEGER REFERENCES slots,
+  slot2 INTEGER REFERENCES slots,
+  slot3 INTEGER REFERENCES slots,
+  slot1_in INTEGER REFERENCES decorations,
+  slot2_in INTEGER REFERENCES decorations,
+  slot3_in INTEGER REFERENCES decorations
+);
+
+CREATE TABLE user_weapons (
+  id SERIAL PRIMARY KEY,
+  username TEXT REFERENCES users ON UPDATE CASCADE,
+  weapon_id INTEGER REFERENCES weapons,
+  slot1 INTEGER REFERENCES slots,
+  slot2 INTEGER REFERENCES slots,
+  slot3 INTEGER REFERENCES slots,
+  slot1_in INTEGER REFERENCES decorations,
+  slot2_in INTEGER REFERENCES decorations,
+  slot3_in INTEGER REFERENCES decorations
+);
+
+CREATE TABLE user_charms (
+  id SERIAL PRIMARY KEY,
+  username TEXT REFERENCES users ON UPDATE CASCADE,
+  charm_id INTEGER REFERENCES charms
+);
+
+CREATE TABLE user_decorations (
+  id SERIAL PRIMARY KEY,
+  username TEXT REFERENCES users ON UPDATE CASCADE,
+  decoration_id INTEGER REFERENCES decorations
 );
 
 CREATE TABLE user_monsters (
   id SERIAL PRIMARY KEY,
-  username TEXT REFERENCES users, 
+  username TEXT REFERENCES users ON UPDATE CASCADE, 
   monster_id INTEGER REFERENCES monsters
 );

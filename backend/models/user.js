@@ -103,16 +103,27 @@ class User {
     if (!user) throw new NotFoundError(`No user: ${username}`);
 
     const userArmorRes = await db.query(
-      `SELECT a.armor_id
-       FROM armors AS a
-       WHERE a.username = $1`,
-      [username]);
-    user.armors = userArmorRes.rows.map(a => a.armor_id);
-    // 
-    // 
-    // HEEEEEEY DO THAT FOR EVERY TABLE!!!!
-    // 
-    // 
+      `SELECT armor_id
+       FROM user_armor
+       WHERE username = $1`,
+    [username]);
+    user.armor = userArmorRes.rows.map(a => a.armor_id);
+   
+    const userCharmsRes = await db.query(
+      `SELECT charm_id
+       FROM user_charms
+       WHERE username = $1`,
+    [username]);
+    user.charms = userCharmsRes.rows.map(c => c.charm_id);
+
+    const userDecorationsRes = await db.query(
+      `SELECT decoration_id, COUNT(decoration_id) as count
+       FROM user_decorations
+       WHERE username = $1
+       GROUP BY decoration_id`,
+    [username]);
+    user.decorations = {};
+    userDecorationsRes.rows.map(d => user.decorations[d.decoration_id] = Number(d.count));
 
     return user;
   }

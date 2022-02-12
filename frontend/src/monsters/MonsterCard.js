@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 
-const MonsterCard = ({id, name, type}) => {
+const MonsterCard = ({id, name}) => {
   const nav = useNavigate();
 
   const handleClick = () => {
@@ -11,9 +11,8 @@ const MonsterCard = ({id, name, type}) => {
   }
 
   return(
-    <Card className="my-4" style={{width: '70vw', cursor: "pointer"}} onClick={handleClick}>
+    <Card className="my-3 mx-3 col-sm-3" style={{cursor: "pointer"}} onClick={handleClick}>
       <Card.Title>{name}</Card.Title>
-      <Card.Text>{type}</Card.Text>
     </Card>
   )
 }

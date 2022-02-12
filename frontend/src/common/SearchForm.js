@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import MhwApi from "../api";
 import { Button, Row } from "react-bootstrap"
 
@@ -10,12 +10,12 @@ const SearchForm = ({ type, header, get }) => {
     get(res);
   }
 
-  const handleChange = evt => {
+  const handleChange = (evt) => {
     const { value } = evt.target;
     setFormData(value);
   };
 
-  const handleSubmit = evt => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
     search(formData);
     setFormData("");
@@ -23,7 +23,7 @@ const SearchForm = ({ type, header, get }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Row>
+      <Row className="my-3">
         <div className="input-group col-2">
           <input
             className="form-control"
@@ -31,7 +31,7 @@ const SearchForm = ({ type, header, get }) => {
             placeholder="Enter search"
             onChange={handleChange}
           />
-          <Button type="submit" variant="primary" size="sm">Submit</Button>
+          <Button className="mx-1" type="submit" variant="primary" size="sm">Submit</Button>
         </div>
       </Row>
     </form>
