@@ -324,11 +324,9 @@ class User {
       `SELECT d.id AS id, 
               d.name AS name, 
               d.slot AS slot,
-              s.name AS skill
+              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills
        FROM user_decorations AS ud
        INNER JOIN decorations AS d ON ud.decoration_id = d.id
-       INNER JOIN decoration_skills AS ds ON ud.decoration_id = ds.decoration_id
-       INNER JOIN skills AS s ON ds.skill_id = s.id
        WHERE ud.username = $1 AND d.slot = 1`,
     [username]);
     gear.decorations["1"] = decoLevel1Res.rows;
@@ -337,11 +335,9 @@ class User {
       `SELECT d.id AS id, 
               d.name AS name, 
               d.slot AS slot,
-              s.name AS skill
+              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills
        FROM user_decorations AS ud
        INNER JOIN decorations AS d ON ud.decoration_id = d.id
-       INNER JOIN decoration_skills AS ds ON ud.decoration_id = ds.decoration_id
-       INNER JOIN skills AS s ON ds.skill_id = s.id
        WHERE ud.username = $1 AND d.slot = 2`,
     [username]);
     gear.decorations["2"] = decoLevel2Res.rows
@@ -350,11 +346,9 @@ class User {
       `SELECT d.id AS id, 
               d.name AS name, 
               d.slot AS slot,
-              s.name AS skill
+              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills
        FROM user_decorations AS ud
        INNER JOIN decorations AS d ON ud.decoration_id = d.id
-       INNER JOIN decoration_skills AS ds ON ud.decoration_id = ds.decoration_id
-       INNER JOIN skills AS s ON ds.skill_id = s.id
        WHERE ud.username = $1 AND d.slot = 3`,
     [username]);
     gear.decorations["3"] = decoLevel3Res.rows
