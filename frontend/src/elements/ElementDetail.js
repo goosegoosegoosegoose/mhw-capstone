@@ -3,8 +3,9 @@ import { Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from "@material-table/core";
+import ToggleButton from "../common/ToggleButton";
 
-const ElementDetail = () => {
+const ElementDetail = ({add, remove}) => {
   const [element, setElement] = useState({});
   const { ele } = useParams();
   const nav = useNavigate();
@@ -63,16 +64,27 @@ const ElementDetail = () => {
       <h1 className="m-4">{element.element.toUpperCase()} element</h1>
       <div className="container">
         <MaterialTable 
-          title={`Weapons with ${element.element}`}
+          title={`Weapons with ${element.element} damage`}
           columns={wep_columns} 
           data={element.weapons}
           onRowClick={(event, data) => {
-            nav(`/weapons/${data.id}`)
+            nav(`/weapons/w/${data.id}`)
           }}
+          actions={[
+            rowData => ({
+              icon:()=><ToggleButton id={Number(rowData.id)} type="weapons" spacing="mx-3 my-3" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
+              onClick:()=>{}
+            })
+          ]}
           options={{
             pageSize:10,
             search:true,
             filtering:true
+          }}
+          localization={{
+            header: {
+              actions: 'Have?'
+            }
           }}
         />
       </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const ElementCard = ({ele}) => {
+const ElementCard = ({ele, img}) => {
   const nav = useNavigate();
 
   const handleClick = () => {
@@ -10,9 +10,14 @@ const ElementCard = ({ele}) => {
   }
 
   return (
-    <Card className="my-3 mx-3 col-lg-5" style={{cursor: "pointer"}} onClick={handleClick}>
+    <Card className="my-3 mx-3 col-lg-2" style={{cursor: "pointer"}} onClick={handleClick}>
+      <div className="row justify-content-center">
+        <div className="col-sm-8 pt-2 mt-2">
+          {img ? <Card.Img variant="top" src={img} /> : <></>}
+        </div>
+      </div>
       <Card.Body>
-        <Card.Title>{ele}</Card.Title>
+        <Card.Title>{ele.toUpperCase()}</Card.Title>
       </Card.Body>
     </Card>
   )

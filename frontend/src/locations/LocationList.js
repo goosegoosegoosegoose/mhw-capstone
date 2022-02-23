@@ -31,15 +31,16 @@ const LocationList = () => {
   return (
     <div className="container text-center">
       <SearchForm type="locations" header="name" get={getLocations} />
-        <div className="row justify-content-center">
-          {locations.map(l => 
-            <LocationCard className="col-sm-6"
-              key={l.id}
-              id={l.id}
-              name={l.name}
-            />
-          )}
-        </div>
+      <div className="row justify-content-center">
+        {locations.map(l => 
+          <LocationCard className="col-sm-6"
+            key={l.id}
+            id={l.id}
+            name={l.name}
+            icon={l.icon}
+          />
+        )}
+      </div>
     </div>
   )
 }

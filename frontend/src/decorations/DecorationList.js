@@ -10,15 +10,16 @@ const DecorationList = ({plus, minus}) => {
   const [decos, setDecos] = useState([]);
   const nav = useNavigate();
   const columns = [
-    {title:"Name", field:"name", filtering:false, width:"20%"},
-    {title:"Slot", field:"slot", searchable:false, width:"30%",
+    {title:"Name", field:"name", filtering:false},
+    {title:"Slot", field:"slot", searchable:false,
       lookup:{
         1:1,
         2:2,
-        3:3
+        3:3,
+        4:4
       }
     },
-    {title:"Rarity", field:"rarity", searchable:false, width:"30%",
+    {title:"Rarity", field:"rarity", searchable:false,
       lookup:{
         5:5,
         6:6,
@@ -74,14 +75,7 @@ const DecorationList = ({plus, minus}) => {
         options={{
           pageSize:10,
           search:true,
-          filtering:true,
-          tableLayout: "fixed",
-          actionsColumnIndex:-1,
-          actionsCellStyle: {    
-            display: 'flex',
-            justifyContent: 'center',
-            width: '100%'
-          }
+          filtering:true
         }}
         localization={{
           header: {

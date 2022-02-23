@@ -64,7 +64,7 @@ class Decoration {
   static async userAll(){
     let res = await db.query(
       `SELECT decoration_id
-       FROM decorations
+       FROM user_decorations
        WHERE username = $1`,
     [username]);
     return res.rows;    

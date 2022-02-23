@@ -3,6 +3,7 @@
 const jsonschema = require("jsonschema");
 const express = require("express");
 const Monster = require("../models/monster");
+const { ensureCorrectUserOrAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
@@ -39,7 +40,7 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/:id/user/:username", async (req, res, next) => {
   const id = req.params.id;
-  const username = req.query.username;
+  const username = req.params.username;
   try {
     await Monster.userAdd(username, id);
     return res.json({ id });
@@ -58,9 +59,10 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/:id/user/:username", async (req, res, next) => {
+router.post("/:id/user/:username", ensureCorrectUserOrAdmin, async (req, res, next) => {
   const id = req.params.id;
   const username = req.params.username;
+  console.log("hit");
   try {
     await Monster.userAdd(username, id);
     return res.status(201).json({ id })
@@ -69,7 +71,7 @@ router.post("/:id/user/:username", async (req, res, next) => {
   }
 });
 
-router.delete("/:id/user/:username", async (req, res, next) => {
+router.delete("/:id/user/:username", ensureCorrectUserOrAdmin, async (req, res, next) => {
   const id = req.params.id;
   const username = req.params.username
   try {

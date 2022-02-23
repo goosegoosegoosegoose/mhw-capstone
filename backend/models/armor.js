@@ -53,7 +53,8 @@ class Armor {
   }
 
   static async findAll(search = {}) {
-    const query = `SELECT * FROM armor`;
+    const query = `SELECT id, name, m_img, f_img
+                   FROM armor`;
     const filter = Object.keys(search)[0];
     const value = Object.values(search)[0];
 
@@ -125,7 +126,7 @@ class Armor {
   static async userAll(){
     let res = await db.query(
       `SELECT armor_id
-       FROM armor
+       FROM user_armor
        WHERE username = $1`
     [username]);
     return res.rows;    
@@ -158,9 +159,9 @@ class Armor {
     
     await db.query(
       `INSERT INTO user_armor
-       (username, armor_id, slot1, slot2, slot3)
-       VALUES ($1, $2, $3, $4, $5)`,
-    [username, armorId, slots[`1`], slots[`2`], slots[`3`]]);
+       (username, armor_id, slots)
+       VALUES ($1, $2, $3)`,
+    [username, armorId, slots]);
   }
 
   static async userRemove(username, armorId) {

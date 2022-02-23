@@ -7,8 +7,9 @@ const Element = require("../models/element")
 const router = new express.Router();
 
 router.get("/", async (req, res, next) => {
+  const q = req.query
   try {
-    const elements = await Element.findAll();
+    const elements = await Element.findAll(q);
     return res.json(elements);
   } catch (err) {
     return next(err);

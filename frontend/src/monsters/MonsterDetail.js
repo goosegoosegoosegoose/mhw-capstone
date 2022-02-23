@@ -2,13 +2,14 @@ import React, {useState, useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from "@material-table/core";
+import ToggleButton from "../common/ToggleButton";
 
-const MonsterDetail = () => {
+const MonsterDetail = ({add, remove}) => {
   const [monster, setMonster] = useState({});
   const { id } = useParams();
   const nav = useNavigate();
   let locationCount = 0;
-  const weak_columns = [
+  const weakColumns = [
     {title:"Element", field:"element"},
     {title:"Stars", field:"stars",
       lookup:{
@@ -19,7 +20,7 @@ const MonsterDetail = () => {
     },
     {title:"Condition", field:"condition", searchable:false}
   ];
-  const mat_columns = [
+  const matColumns = [
     {title:"Material", field:"material", filtering:false},
     {title:"From", field:"type", searchable:false,
       lookup:{
@@ -61,55 +62,65 @@ const MonsterDetail = () => {
 
   return (
     <div className="container">
-      <h1 className="m-1">{monster.name}</h1>
-      <div className="m-3">
-        <p>Species: {monster.species}</p>
-        <p>Type: {monster.type}</p>
-        <p>Spawns in {monster.locations.map(l => {
-          locationCount++;
-          if (locationCount === monster.locations.length) {
-            return <span key={l.id}><a href={`/locations/${l.id}`}>{l.location}</a>.</span>
-          }
-          return <span key={l.id}><a href={`/locations/${l.id}`}>{l.location}</a>, </span>
-        })} </p>
-        <p>{monster.description}</p>
-        <div className="row">
-          {monster.ailments.length >0 ? <div>
-            Could inflict:
-            <ul>
-              {monster.ailments.map(a => 
-                <li key={a.id}>{a.ailment}: {a.description}</li>
-              )}
-            </ul>
-          </div> : <div className="mb-3">Monster has no offensive ailments</div>}
+      <div className="row d-flex align-items-center">
+        <div className="col-sm-6">
+          <div className="d-flex">
+            <h1 className="m-1">{monster.name}</h1>
+            <ToggleButton id={Number(id)} type="weapons" spacing="m-3" add={add} remove={remove} label1="Un-hunt?" label2="Hunted?"/>
+          </div>
+          <div className="m-3">
+            <p>Species: {monster.species}</p>
+            <p>Type: {monster.type}</p>
+            <p>Spawns in {monster.locations.map(l => {
+              locationCount++;
+              if (locationCount === monster.locations.length) {
+                return <span key={l.id}><a href={`/locations/${l.id}`}>{l.location}</a>.</span>
+              }
+              return <span key={l.id}><a href={`/locations/${l.id}`}>{l.location}</a>, </span>
+            })} </p>
+            <p>{monster.description}</p>
+            <div className="row">
+              {monster.ailments.length >0 ? <div>
+                Could inflict:
+                <ul>
+                  {monster.ailments.map(a => 
+                    <li key={a.id}>{a.ailment}: {a.description}</li>
+                  )}
+                </ul>
+              </div> : <div className="mb-3">Monster has no offensive ailments</div>}
+            </div>
+          </div>
         </div>
-        <div className="row m-1">
-          <MaterialTable 
-            title="Weak to"
-            columns={weak_columns} 
-            data={monster.weaknesses}
-            onRowClick={(event, data) => {
-              nav(`/elements/${data.element}`)
-            }}
-            options={{
-              pageSize:5,
-              search:false,
-              filtering:false
-            }}
-          />
+        <div className="col-sm-6">
+          <img src={monster.img} className="img-fluid"/>
         </div>
-        <div className="row m-1 justify-content-center">
-          {monster.materials.length > 0 ? <MaterialTable 
-            title="Material rewards"
-            columns={mat_columns} 
-            data={monster.materials}
-            options={{
-              pageSize:6,
-              search:true,
-              filtering:true
-            }}
-          /> : <h4 className="m-5">No material info provided</h4>}
-        </div>
+      </div>
+      <div className="row m-1">
+        <MaterialTable 
+          title="Weak to"
+          columns={weakColumns} 
+          data={monster.weaknesses}
+          onRowClick={(event, data) => {
+            nav(`/elements/${data.element}`)
+          }}
+          options={{
+            pageSize:5,
+            search:false,
+            filtering:false
+          }}
+        />
+      </div>
+      <div className="row m-1 justify-content-center">
+        {monster.materials.length > 0 ? <MaterialTable 
+          title="Material rewards"
+          columns={matColumns} 
+          data={monster.materials}
+          options={{
+            pageSize:6,
+            search:true,
+            filtering:true
+          }}
+        /> : <h4 className="m-5">No material info provided</h4>}
       </div>
     </div>
   )

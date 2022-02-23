@@ -35,9 +35,9 @@ const SkillList = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container my-2">
       <MaterialTable
-        title=""
+        title="Skill Levels"
         columns={columns} 
         data={skills}
         onRowClick={(event, data) => {

@@ -12,7 +12,7 @@ const monsterRoutes = require("./routes/monsters");
 const locationRoutes = require("./routes/locations");
 const armorSetRoutes = require("./routes/armorsets");
 const armorRoutes = require("./routes/armor");
-
+const weaponRoutes = require("./routes/weapons");
 const charmRoutes = require("./routes/charms");
 const decorationRoutes = require("./routes/decorations");
 const skillRoutes = require("./routes/skills");
@@ -34,7 +34,7 @@ app.use("/monsters", monsterRoutes);
 app.use("/locations", locationRoutes);
 app.use("/armorsets", armorSetRoutes);
 app.use("/armor", armorRoutes);
-
+app.use("/weapons", weaponRoutes);
 app.use("/charms", charmRoutes);
 app.use("/decorations", decorationRoutes);
 app.use("/skills", skillRoutes);

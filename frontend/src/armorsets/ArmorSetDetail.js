@@ -8,7 +8,7 @@ import ArmorCard from "../armor/ArmorCard";
 const ArmorSetDetail = ({add, remove}) => {
   const [armorSet, setArmorSet] = useState({});
   const { id } = useParams();
-  const skill_columns = [
+  const skillColumns = [
     {title:"Skill", field:"name", width:"15%"},
     {title:"Level", field:"level", width:"7%"},
     {title:"Description", field:"description"}
@@ -53,7 +53,7 @@ const ArmorSetDetail = ({add, remove}) => {
           <div className="container my-2">
             <MaterialTable
               title="Skills"
-              columns={skill_columns} 
+              columns={skillColumns} 
               data={armorSet.skills}
               options={{
                 pageSize:3,

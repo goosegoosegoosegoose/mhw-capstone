@@ -39,7 +39,8 @@ const ArmorSetList = () =>{
 
   return (
     <div className="container">
-      <MaterialTable 
+      <MaterialTable
+        title="Armor Sets" 
         columns={columns} 
         data={armorSets}
         onRowClick={(event, data) => {

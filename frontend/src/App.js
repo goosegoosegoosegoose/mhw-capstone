@@ -10,11 +10,11 @@ const App = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [username, setUsername] = useState(localStorage.getItem("username"));
   const [currentUser, setCurrentUser] = useState({});
-  const [loggedIn, setLoggedIn] = useState(token !== null ? true : false);
+  const [loggedIn, setLoggedIn] = useState(token !== "null" ? true : false);
 
   useEffect(() => {
     const getNewUserInfo = async () => {
-      const res = await MhwApi.getUser(username);
+      const res = await MhwApi.getCurrentUser(username);
       setCurrentUser({...currentUser, ...res.user});
     };
     if (username !== null) {
@@ -22,9 +22,9 @@ const App = () => {
     }
     return;
   }, [token, username]);
-  
-  console.log(currentUser);
 
+  console.log(currentUser);
+  
   const login = async (data) => {
     const res = await MhwApi.login(data);
     localStorage.setItem("username", data.username);
@@ -99,12 +99,12 @@ const App = () => {
           signup={signup}
           loggedIn={loggedIn}
           edit={edit}
+          name={currentUser.username}
         />
         <div>
           {/* TODO backgroundColor style */}
           <Routes 
             login={login}
-            logout={logout}
             signup={signup}
             loggedIn={loggedIn}
             edit={edit}

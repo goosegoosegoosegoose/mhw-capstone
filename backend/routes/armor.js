@@ -3,6 +3,7 @@
 const jsonschema = require("jsonschema");
 const express = require("express");
 const Armor = require("../models/armor");
+const { ensureCorrectUserOrAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
@@ -35,7 +36,7 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/:id/user/:username", async (req, res, next) => {
+router.post("/:id/user/:username", ensureCorrectUserOrAdmin, async (req, res, next) => {
   const id = req.params.id;
   const username = req.params.username;
   try {
@@ -46,7 +47,7 @@ router.post("/:id/user/:username", async (req, res, next) => {
   }
 });
 
-router.delete("/:id/user/:username", async (req, res, next) => {
+router.delete("/:id/user/:username", ensureCorrectUserOrAdmin, async (req, res, next) => {
   const id = req.params.id;
   const username = req.params.username
   try {

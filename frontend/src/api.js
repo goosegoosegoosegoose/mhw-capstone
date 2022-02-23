@@ -28,8 +28,18 @@ class MhwApi {
     return res;
   }
 
-  static async getUser(username) {
+  static async getCurrentUser(username) {
     let res = await this.request(`users/${username}`);
+    return res;
+  }
+
+  static async getUser(username) {
+    let res = await this.request(`users/${username}/all`);
+    return res;
+  }
+
+  static async getGear(username) {
+    let res = await this.request(`users/${username}/gear`);
     return res;
   }
 
@@ -51,7 +61,7 @@ class MhwApi {
     let res = await this.request(`${type}/${id}`);
     return res;
   }
-
+  
   static async search(type, header, handle) {
     if (handle === "") {
       let res = await this.request(`${type}`);

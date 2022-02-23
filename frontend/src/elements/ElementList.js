@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
 import MhwApi from "../api";
+import SearchForm from "../common/SearchForm";
 import ElementCard from "./ElementCard";
 
 const ElementList = () => {
@@ -15,6 +14,10 @@ const ElementList = () => {
     fetchElements()
   }, []);
 
+  const getElements = (res) => {
+    setElements([...res])
+  }
+
   if (!elements) {
     return (
       <div className="container text-center">
@@ -25,11 +28,13 @@ const ElementList = () => {
 
   return (
     <div className="container text-center">
+      <SearchForm type="elements" header="element" get={getElements} />
       <div className="row justify-content-center">
         {elements.map(e => 
           <ElementCard
             key={e.element}
             ele={e.element}
+            img={e.img}
           />
         )}
       </div>

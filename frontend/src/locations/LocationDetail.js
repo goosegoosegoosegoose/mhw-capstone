@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import MhwApi from "../api";
 import MonsterCard from "../monsters/MonsterCard";
 
-const LocationDetail = () => {
+const LocationDetail = ({add, remove}) => {
   const [location, setLocation] = useState({});
-  // const nav = useNavigate();
   const { id } = useParams();
 
   useEffect(function fetchLocationWhenMounted () {
@@ -27,6 +25,7 @@ const LocationDetail = () => {
     <div className="container">
       <h1 className="m-1">{location.name}</h1>
       <p className="m-1 mt-3">Zone Count: {location.zone_count}</p>
+      Camps:
       <ul>
         {location.camps.map(c => 
           <li key={c.id}>{c.name}</li>
@@ -34,19 +33,30 @@ const LocationDetail = () => {
       </ul>
       {location.monsters.length > 0 ? 
       <div>
-        <p>Monsters that spawn here:</p>
+        <h4>Monsters that spawn here:</h4>
         <div className="text-center">
-          <div className="row">
+          <div className="row justify-content-center">
             {location.monsters.map(m => 
               <MonsterCard
                 key={m.id}
                 id={m.id}
                 name={m.name}
+                icon={m.icon}
+                add={add}
+                remove={remove}
               />
             )}
           </div>
         </div>
       </div> : <h4>No spawns, just summons</h4>}
+      <h4 className="mt-4 mb-2">Images:</h4>
+      <div className="row justify-content-center">
+        {location.imgs.map(i => 
+          <div className="col-sm-6">
+            <img src={i} className="img-responsive img-fluid my-2"/>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

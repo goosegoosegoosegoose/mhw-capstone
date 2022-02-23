@@ -1,7 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import UserContext from "../auth/userContext";
 import MhwApi from "../api";
 import MaterialTable from '@material-table/core';
 import ToggleButton from "../common/ToggleButton";
@@ -9,7 +7,7 @@ import ToggleButton from "../common/ToggleButton";
 const ArmorDetail = ({add, remove}) => {
   const [armor, setArmor] = useState({});
   const { id } = useParams();
-  const mat_columns = [
+  const matColumns = [
     {title:"Material", field:"material", width:"15%"},
     {title:"Quantity", field:"quantity", width:"10%"},
     {title:"Description", field:"description"},
@@ -31,30 +29,36 @@ const ArmorDetail = ({add, remove}) => {
 
   return (
     <div className="container">
-      <img src={armor.m_img} />
-      <img src={armor.f_img} />
-      <div className="row">
-        <div className="col-sm-12 d-flex">
-          <h1 className="my-1">{armor.name}</h1>
-          <ToggleButton id={Number(id)} type="armor" spacing="mx-3 my-3" add={add} remove={remove}/>
+      <div className="row d-flex align-items-center">
+        <div className="col-sm-6">
+          <div className="d-flex my-3">
+            <h1 className="my-1">{armor.name}</h1>
+            <ToggleButton id={Number(id)} type="armor" spacing="mx-3 my-3" add={add} remove={remove} label1="Sell?" label2="Craft?"/>
+          </div>
+          <p>Base defense value is {armor.defense_base}.</p>
+          <p>Max upgraded defense value is {armor.defense_max}.</p>
+          <p>Augmented defense value is {armor.defense_augmented}.</p>
+          <p>Part of the <a href={`/armor-sets/${armor.set.id}`}>{armor.set.name}</a> Set.</p>
+          <p>Rank: {armor.rank}</p>
+          <p>Rarity: {armor.rarity}</p>
+          {Object.keys(armor.slots).length > 0 ?
+            <p>
+              Slots: | {Object.entries(armor.slots).map(([key, value]) => {
+                return ` ${value} level ${key} slots |`
+              })}
+            </p>
+          : null}
         </div>
+        <div className="col-sm-6">
+          <img src={armor.m_img} className="img-fluid" />
+          <img src={armor.f_img} className="img-fluid" />
+        </div>     
       </div>
-      <p>Base defense value is {armor.defense}</p>
-      <p>Part of the {armor.set.name} Set</p>
-      <p>Rank: {armor.rank}</p>
-      <p>Rarity: {armor.rarity}</p>
-      {Object.keys(armor.slots).length > 0 ?
-        <p>
-          Slots: | {Object.entries(armor.slots).map(([key, value]) => {
-            return ` Level ${value} |`
-          })}
-        </p>
-      : null}
       {armor.materials.length > 0 ? 
         <div>
           <MaterialTable
             title="Crafting Materials"
-            columns={mat_columns} 
+            columns={matColumns} 
             data={armor.materials}
             options={{
               pageSize:5,
@@ -63,8 +67,7 @@ const ArmorDetail = ({add, remove}) => {
             }}
           />
         </div> 
-      : null}
-      
+      : null}  
     </div>
   )
 }

@@ -10,17 +10,17 @@ const CharmList = ({add, remove}) =>{
   const [charms, setCharms] = useState([]);
   const nav = useNavigate();
   const columns = [
-    {title:"Name", field:"name", filtering:false, width:"20%"},
-    {title:"Level", field:"level", searhable:false, width:"33%",
+    {title:"Name", field:"name", filtering:false},
+    {title:"Level", field:"level", searhable:false,
       lookup:{
         1:1,
-        2:3,
+        2:2,
         3:3,
         4:4,
         5:5
       }
     },
-    {title:"Rarity", field:"rarity", searchable:false, width:"33%",
+    {title:"Rarity", field:"rarity", searchable:false,
       lookup:{
         1:1,
         2:2,
@@ -65,21 +65,14 @@ const CharmList = ({add, remove}) =>{
         }}
         actions={[
           rowData => ({
-            icon:()=><ToggleButton id={rowData.id} type="charms" spacing="my-1 mt-auto" add={add} remove={remove}/>,
+            icon:()=><ToggleButton id={rowData.id} type="charms" spacing="my-1 mt-auto" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
             onClick:()=>{}
           })
         ]}
         options={{
           pageSize:10,
           search:true,
-          filtering:true,
-          tableLayout: "fixed",
-          actionsColumnIndex:-1,
-          actionsCellStyle: {    
-            display: 'flex',
-            justifyContent: 'center',
-            width: '100%'
-          }
+          filtering:true
         }}
         localization={{
           header: {

@@ -3,7 +3,7 @@
 const db = require("../db");
 
 class Charm {
-  static async create(id, name, level, rarity, craftable) {
+  static async create(id, name, level, rarity) {
     const duplicateCheck = await db.query(
       `SELECT id
        FROM charms
@@ -13,9 +13,9 @@ class Charm {
 
     await db.query(
       `INSERT INTO charms
-       (id, name, level, rarity, craftable)
-       VALUES ($1, $2, $3, $4, $5)`,
-    [id, name, level, rarity, craftable]);
+       (id, name, level, rarity)
+       VALUES ($1, $2, $3, $4)`,
+    [id, name, level, rarity]);
   }
 
   static async createSkill(charmId, skillId) {
@@ -90,7 +90,7 @@ class Charm {
   static async userAll(){
     let res = await db.query(
       `SELECT charm_id
-       FROM charms
+       FROM user_charms
        WHERE username = $1`,
     [username]);
     return res.rows;    

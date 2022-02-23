@@ -32,7 +32,7 @@ const ArmorCard = ({id, name, mImg, fImg, add, remove}) => {
       </div>
       <Card.Body className="d-flex flex-column">
         <Card.Title style={{cursor: "pointer"}} onClick={handleClick}>{name}</Card.Title>
-        <ToggleButton id={id} type="armor" spacing="my-1 mt-auto" add={add} remove={remove}/>
+        <ToggleButton id={id} type="armor" spacing="my-1 mt-auto" add={add} remove={remove} label1="Sell?" label2="Craft?"/>
       </Card.Body>
     </Card>
   )

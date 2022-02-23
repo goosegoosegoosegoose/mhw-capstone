@@ -3,7 +3,7 @@
 const jsonschema = require("jsonschema");
 
 const express = require("express");
-const { ensureCorrectUserOrAdmin, ensureAdmin } = require("../middleware/auth");
+const { ensureCorrectUserOrAdmin, ensureAdmin, ensureLoggedIn } = require("../middleware/auth");
 const { BadRequestError } = require("../expressError");
 const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
@@ -73,6 +73,24 @@ router.get("/:username", ensureCorrectUserOrAdmin, async function (req, res, nex
     return res.json({ user });
   } catch (err) {
     return next(err);
+  }
+});
+
+router.get("/:username/all", async function (req, res, next) {
+  try {
+    const user = await User.getAll(req.params.username);
+    return res.json(user)
+  } catch (err) {
+    return next(err)
+  }
+});
+
+router.get("/:username/gear", async function (req, res, next) {
+  try {
+    const gear = await User.getGear(req.params.username);
+    return res.json(gear)
+  } catch (err) {
+    return next(err)
   }
 });
 

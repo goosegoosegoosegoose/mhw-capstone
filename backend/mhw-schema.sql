@@ -7,27 +7,29 @@ CREATE TABLE users (
 );
 
 CREATE TABLE slots (
-  level INTEGER PRIMARY KEY
+  level INTEGER PRIMARY KEY,
+  img TEXT
 );
 
 CREATE TABLE elements (
-  element TEXT PRIMARY KEY
+  element TEXT PRIMARY KEY,
+  img TEXT
 );
 
 CREATE TABLE locations (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
   zone_count INTEGER NOT NULL,
-  camps JSON
+  camps JSON,
+  icon TEXT,
+  imgs TEXT[]
 );
 
 CREATE TABLE items (
   id INTEGER PRIMARY KEY,
   name TEXT UNIQUE NOT NULL,
   description TEXT,
-  rarity INTEGER NOT NULL,
-  carry_limit INTEGER,
-  value INTEGER
+  rarity INTEGER NOT NULL
 );
 
 CREATE TABLE skills (
@@ -91,7 +93,9 @@ CREATE TABLE monsters (
   name TEXT NOT NULL,
   type TEXT NOT NULL,
   species TEXT,
-  description TEXT
+  description TEXT,
+  icon TEXT,
+  img TEXT
 );
 
 CREATE TABLE monster_locations (
@@ -134,9 +138,7 @@ CREATE TABLE charms (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
   level INTEGER NOT NULL,
-  rarity INTEGER NOT NULL,
-  -- depreciated delete craftable
-  craftable BOOLEAN
+  rarity INTEGER NOT NULL
 );
 
 CREATE TABLE charm_skills (
@@ -156,7 +158,7 @@ CREATE TABLE decorations (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
   rarity INTEGER NOT NULL,
-  slot INTEGER NOT NULL
+  slot INTEGER REFERENCES slots INITIALLY DEFERRED
 );
 
 CREATE TABLE decoration_skills (
@@ -165,10 +167,15 @@ CREATE TABLE decoration_skills (
   skill_id INTEGER REFERENCES skills INITIALLY DEFERRED
 );
 
+CREATE TABLE weapon_types (
+  type TEXT PRIMARY KEY,
+  img TEXT
+);
+
 CREATE TABLE weapons (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
-  type TEXT NOT NULL,
+  type TEXT REFERENCES weapon_types INITIALLY DEFERRED,
   attack INTEGER NOT NULL,
   affinity INTEGER,
   defense INTEGER,
@@ -176,21 +183,54 @@ CREATE TABLE weapons (
   slots JSON,
   rarity INTEGER NOT NULL,
   elderseal TEXT,
-  craftable BOOLEAN,
-  -- white sharpness per handicraft level
-  white_sharpness INTEGER[],
-  coatings TEXT[],
-  phial JSON,
-  shelling JSON,
-  ammo BOOLEAN,
+  img TEXT,
+  icon TEXT
+);
+
+CREATE TABLE weapon_sharpness (
+  id SERIAL PRIMARY KEY,
+  weapon_id INTEGER REFERENCES weapons INITIALLY DEFERRED,
+    -- white sharpness per handicraft level
+  white_sharpness INTEGER[]
+);
+
+CREATE TABLE weapon_coatings (
+  id SERIAL PRIMARY KEY,
+  weapon_id INTEGER REFERENCES weapons INITIALLY DEFERRED,
+  coatings TEXT[]
+);
+
+CREATE TABLE weapon_phials (
+  id SERIAL PRIMARY KEY,
+  weapon_id INTEGER REFERENCES weapons INITIALLY DEFERRED,
+  phial_type TEXT NOT NULL,
+  phial_damage INTEGER
+);
+
+CREATE TABLE weapon_shelling (
+  id SERIAL PRIMARY KEY,
+  weapon_id INTEGER REFERENCES weapons INITIALLY DEFERRED,
+  shelling_type TEXT NOT NULL,
+  shelling_level INTEGER NOT NULL
+);
+
+CREATE TABLE weapon_boosts (
+  id SERIAL PRIMARY KEY,
+  weapon_id INTEGER REFERENCES weapons INITIALLY DEFERRED,
+  boost_type TEXT
+);
+
+CREATE TABLE weapon_gunspecs (
+  id SERIAL PRIMARY KEY,
+  weapon_id INTEGER REFERENCES weapons INITIALLY DEFERRED, 
   special_ammo TEXT,
-  img TEXT
+  deviation TEXT
 );
 
 CREATE TABLE weapon_ammo (
   id SERIAL PRIMARY KEY,
   weapon_id INTEGER REFERENCES weapons INITIALLY DEFERRED,
-  type TEXT,
+  ammo_type TEXT NOT NULL,
   capacities INTEGER[]
 );
 
@@ -214,42 +254,32 @@ CREATE TABLE weapon_materials (
 -- USERS --------------
 CREATE TABLE user_armor (
   id SERIAL PRIMARY KEY,
-  username TEXT REFERENCES users,
+  username TEXT REFERENCES users ON UPDATE CASCADE ON DELETE CASCADE,
   armor_id INTEGER REFERENCES armor,
-  slot1 INTEGER REFERENCES slots,
-  slot2 INTEGER REFERENCES slots,
-  slot3 INTEGER REFERENCES slots,
-  slot1_in INTEGER REFERENCES decorations,
-  slot2_in INTEGER REFERENCES decorations,
-  slot3_in INTEGER REFERENCES decorations
+  slots JSON
 );
 
 CREATE TABLE user_weapons (
   id SERIAL PRIMARY KEY,
-  username TEXT REFERENCES users ON UPDATE CASCADE,
+  username TEXT REFERENCES users ON UPDATE CASCADE ON DELETE CASCADE,
   weapon_id INTEGER REFERENCES weapons,
-  slot1 INTEGER REFERENCES slots,
-  slot2 INTEGER REFERENCES slots,
-  slot3 INTEGER REFERENCES slots,
-  slot1_in INTEGER REFERENCES decorations,
-  slot2_in INTEGER REFERENCES decorations,
-  slot3_in INTEGER REFERENCES decorations
+  slots JSON
 );
 
 CREATE TABLE user_charms (
   id SERIAL PRIMARY KEY,
-  username TEXT REFERENCES users ON UPDATE CASCADE,
+  username TEXT REFERENCES users ON UPDATE CASCADE ON DELETE CASCADE,
   charm_id INTEGER REFERENCES charms
 );
 
 CREATE TABLE user_decorations (
   id SERIAL PRIMARY KEY,
-  username TEXT REFERENCES users ON UPDATE CASCADE,
+  username TEXT REFERENCES users ON UPDATE CASCADE ON DELETE CASCADE,
   decoration_id INTEGER REFERENCES decorations
 );
 
 CREATE TABLE user_monsters (
   id SERIAL PRIMARY KEY,
-  username TEXT REFERENCES users ON UPDATE CASCADE, 
+  username TEXT REFERENCES users ON UPDATE CASCADE ON DELETE CASCADE, 
   monster_id INTEGER REFERENCES monsters
 );

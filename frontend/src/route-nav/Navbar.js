@@ -4,27 +4,21 @@ import UserContext from "../auth/userContext";
 import { Container, Navbar, Nav } from "react-bootstrap";
 
 
-const NavbarComp = ({logout, loggedIn}) => {
+const NavbarComp = ({logout, loggedIn, name}) => {
   const currentUser = useContext(UserContext);
 
   if (!loggedIn) {
     return (
       <Navbar sticky="top" bg="light" variant="light">
-        <Navbar.Brand className="mx-4">
-          <NavLink to="/">
-            Monster Hunter World
-          </NavLink>
+        <Navbar.Brand className="mx-4" href="/">
+          Monster Hunter World
         </Navbar.Brand>
-        <Nav className="me-auto"> 
-          <Nav.Link> 
-            <NavLink to="/signup">
-              Sign up
-            </NavLink>
+        <Nav className="ms-auto"> 
+          <Nav.Link className="mx-1" href="/signup"> 
+            Sign up
           </Nav.Link> 
-          <Nav.Link> 
-            <NavLink to="/login">
-              Login
-            </NavLink>
+          <Nav.Link className="ms-1 me-4" href="/login"> 
+            Login
           </Nav.Link> 
         </Nav>
       </Navbar>
@@ -37,7 +31,7 @@ const NavbarComp = ({logout, loggedIn}) => {
         Monster Hunter World
       </Navbar.Brand>
       <Nav className="me-auto">
-      <Nav.Link className="mx-1" href="/monsters">
+        <Nav.Link className="mx-1" href="/monsters">
           Monsters
         </Nav.Link>
         <Nav.Link className="mx-1" href="/locations">
@@ -66,7 +60,13 @@ const NavbarComp = ({logout, loggedIn}) => {
         </Nav.Link>
       </Nav>
       <Nav className="ms-auto">
-        <Nav.Link className="mx-4" href="/logout" onClick={logout}>
+        <Nav.Link href={`/gearing/${name}`}>
+          Gearing
+        </Nav.Link>
+        <Nav.Link href={`/profile/${name}`}>
+          Profile
+        </Nav.Link>
+        <Nav.Link className="mx-4" href="/" onClick={logout}>
           Log out {currentUser ? currentUser.username : null }
         </Nav.Link>
       </Nav>

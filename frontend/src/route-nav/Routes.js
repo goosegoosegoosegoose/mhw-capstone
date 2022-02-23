@@ -19,12 +19,19 @@ import SkillList from "../skills/SkillList";
 import SkillDetail from "../skills/SkillDetail";
 import DecorationList from "../decorations/DecorationList";
 import DecorationDetail from "../decorations/DecorationDetail";
+import WeaponTypeList from "../weapons/WeaponTypesList";
+import WeaponList from "../weapons/WeaponList";
+import WeaponDetail from "../weapons/WeaponDetail";
+import ProfileForm from "../auth/ProfileForm";
+import ProfilePage from "../user/ProfilePage";
+import GearingPage from "../user/GearingPage";
 
-const RoutesComp = ({login, logout, signup, loggedIn, edit, add, remove, plus, minus}) => {
+const RoutesComp = ({login, signup, loggedIn, edit, add, remove, plus, minus, name}) => {
 
   if (!loggedIn) {
     return (
       <Routes>
+        <Route path="/" element={<Homepage />} />
         <Route 
           path="/login" 
           element={<LoginForm login={login}/>}
@@ -43,12 +50,14 @@ const RoutesComp = ({login, logout, signup, loggedIn, edit, add, remove, plus, m
       <Route path="/monsters" element={<MonsterList add={add} remove={remove}/>}/>
       <Route path="/monsters/:id" element={<MonsterDetail add={add} remove={remove}/>}/>
       <Route path="/locations" element={<LocationList />}/>
-      <Route path="/locations/:id" element={<LocationDetail />}/>
+      <Route path="/locations/:id" element={<LocationDetail add={add} remove={remove}/>}/>
       <Route path="/armor-sets" element={<ArmorSetList />}/>
       <Route path="/armor-sets/:id" element={<ArmorSetDetail add={add} remove={remove}/>}/>
       <Route path="/armor" element={<ArmorList add={add} remove={remove}/>}/>
       <Route path="/armor/:id" element={<ArmorDetail add={add} remove={remove}/>}/>
-      <Route path="/weapons" />
+      <Route path="/weapons" element={<WeaponTypeList />}/>
+      <Route path="/weapons/:type" element={<WeaponList add={add} remove={remove}/>}/>
+      <Route path="/weapons/w/:id" element={<WeaponDetail add={add} remove={remove}/>}/>
       <Route path="/charms" element={<CharmList add={add} remove={remove}/>}/>
       <Route path="/charms/:id" element={<CharmDetail add={add} remove={remove}/>}/>
       <Route path="/decorations" element= {<DecorationList plus={plus} minus={minus}/>}/>
@@ -56,8 +65,10 @@ const RoutesComp = ({login, logout, signup, loggedIn, edit, add, remove, plus, m
       <Route path="/skills" element={<SkillList />}/>
       <Route path="/skills/:id" element={<SkillDetail add={add} remove={remove}/>}/>
       <Route path="/elements" element={<ElementList />}/>
-      <Route path="/elements/:ele" element={<ElementDetail />}/>
-      <Route path="/logout" />
+      <Route path="/elements/:ele" element={<ElementDetail add={add} remove={remove}/>}/>
+      <Route path="/users/edit" element={<ProfileForm edit={edit}/>}/>
+      <Route path="/profile/:username" element={<ProfilePage add={add} remove={remove} plus={plus} minus={minus} name={name}/>}/>
+      <Route path="/gearing/:username" element={<GearingPage />} />
     </Routes>
   )
 }

@@ -3,11 +3,20 @@
 const db = require("../db");
 
 class Element {
-  static async findAll() {
+  static async findAll(search={}) {
+    if (!search.element){
+      const res = await db.query(
+        `SELECT *
+        FROM elements`
+      );
+      return res.rows;
+    }
+    
     const res = await db.query(
       `SELECT *
-       FROM elements`
-    );
+       FROM elements
+       WHERE element ILIKE $1`,
+    [`%${search.element}%`]);
     return res.rows;
   }
 

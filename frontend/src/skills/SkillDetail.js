@@ -8,16 +8,16 @@ const SkillDetail = ({add, remove}) => {
   const [skill, setSkill] = useState({});
   const { id } = useParams();
   const nav = useNavigate();
-  const set_columns = [
+  const setColumns = [
     {title:"Armor Set", field:"name"},
     {title:"Pieces Needed", field:"pieces"}
   ];
-  const charm_columns = [
+  const charmColumns = [
     {title:"Charm", field:"name"},
     {title:"Level", field:"level"},
     {title:"Rarity", field:"rarity"}
   ];
-  const deco_columns = [
+  const decoColumns = [
     {title:"Decoration", field:"name"},
     {title:"Rarity", field:"rarity"},
     {title:"Slot", field:"slot"}
@@ -66,7 +66,7 @@ const SkillDetail = ({add, remove}) => {
           {skill.armorSets.length > 0 ?
             <MaterialTable
               title="Armor with skill"
-              columns={set_columns} 
+              columns={setColumns} 
               data={skill.armorSets}
               onRowClick={(event, data) => {
                 nav(`/armor-sets/${data.id}`)
@@ -84,7 +84,7 @@ const SkillDetail = ({add, remove}) => {
           {skill.decorations.length > 0 ?
             <MaterialTable
               title="Charms with skill"
-              columns={charm_columns} 
+              columns={charmColumns} 
               data={skill.charms}
               onRowClick={(event, data) => {
                 nav(`/charms/${data.id}`)
@@ -102,7 +102,7 @@ const SkillDetail = ({add, remove}) => {
           {skill.decorations.length > 0 ?
             <MaterialTable
               title="Decorations with skill"
-              columns={deco_columns} 
+              columns={decoColumns} 
               data={skill.decorations}
               onRowClick={(event, data) => {
                 nav(`/decorations/${data.id}`)

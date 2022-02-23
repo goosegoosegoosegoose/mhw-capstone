@@ -2,33 +2,45 @@
 
 const jsonschema = require("jsonschema");
 const express = require("express");
-const Charm = require("../models/charm");
+const Weapon = require("../models/weapon");
 const { ensureCorrectUserOrAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
 router.get("/", async (req, res, next) => {
+  const q = req.query;
   try {
-    const charms = await Charm.findAll();
-    return res.json(charms)
+    const types = await Weapon.findTypes(q);
+    return res.json(types)
   } catch (err) {
-    return next(err);
+    return next(err)
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:type", async (req, res, next) => {
+  const type = req.params.type;
+  const q = req.query;
+  try {
+    const weapons = await Weapon.findOneType(type, q)
+    return res.json(weapons);
+  } catch(err) {
+    return next(err)
+  }
+});
+
+router.get("/w/:id", async (req, res, next) => {
   const id = req.params.id;
   try {
     const result = await Promise.all([
-      Charm.findCharm(id),
-      Charm.findSkills(id),
-      Charm.findMaterials(id)
-    ])
-    const charm = result[0];
-    charm.skills = result[1];
-    charm.materials = result[2];
-    return res.json(charm)
-  } catch (err) {
+      Weapon.findWeapon(id),
+      Weapon.findElements(id),
+      Weapon.findMaterials(id)
+    ]);
+    const weapon = result[0];
+    weapon.elements = result[1];
+    weapon.materials = result[2];
+    res.json(weapon)
+  } catch (err){
     return next(err)
   }
 });
@@ -37,7 +49,7 @@ router.post("/:id/user/:username", ensureCorrectUserOrAdmin, async (req, res, ne
   const id = req.params.id;
   const username = req.params.username;
   try {
-    await Charm.userAdd(username, id);
+    await Weapon.userAdd(username, id);
     return res.status(201).json({ id })
   } catch (err) {
     return next(err);
@@ -48,7 +60,7 @@ router.delete("/:id/user/:username", ensureCorrectUserOrAdmin, async (req, res, 
   const id = req.params.id;
   const username = req.params.username
   try {
-    await Charm.userRemove(username, id);
+    await Weapon.userRemove(username, id);
     return res.status(200).json({ id })
   } catch (err) {
     return next(err);

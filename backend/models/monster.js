@@ -97,13 +97,21 @@ class Monster {
     [mmId, type, rank, quant, chance, subtype])
   }
 
-  static async updateIcons(id, icon, pic) {
+  static async updateAsset(id, icon, img) {
+    const preCheck = await db.query(
+      `SELECT icon
+       FROM monsters
+       WHERE icon = $1`,
+    [icon]);
+    if (preCheck.rows[0]) return;
+
     await db.query(
       `UPDATE monsters
-       SET icon = $1 AND pic = $1
+       SET icon = $1, img = $2
        WHERE id = $3`,
-    [id, icon, pic])
+    [icon, img, id])
   }
+
 
   static async findAll(search = {}) {
     const query = `SELECT * FROM monsters`;
@@ -111,21 +119,23 @@ class Monster {
     const value = Object.values(search)[0];
 
     if (!filter) {
-      const res = await db.query(query);
+      const res = await db.query(query + ` ORDER BY id`);
       return res.rows;
     };
     
     if (search.name) {
       const res = await db.query(
         query +
-        ` WHERE name ILIKE $1`,
+        ` WHERE name ILIKE $1
+         ORDER BY id`,
       [`%${value}%`]);
       return res.rows;
     };
 
     const res = await db.query(
       query +
-      ` WHERE ${filter} = $1`,
+      ` WHERE ${filter} = $1
+       ORDER BY id`,
     [value]);
     return res.rows;
   }
@@ -134,7 +144,8 @@ class Monster {
     const res = await db.query(
       `SELECT *
        FROM monsters
-       WHERE id = $1`,
+       WHERE id = $1
+       ORDER BY id`,
     [id]);
 
     return res.rows[0];
@@ -205,18 +216,17 @@ class Monster {
     if (!user) throw new NotFoundError(`No user ${username}`);
 
     const duplicateCheck = await db.query(
-      `SELECT monId
+      `SELECT monster_id
        FROM user_monsters
-       WHERE monster_id = $1`,
-    [monId]);
+       WHERE username = $1 AND monster_id = $2`,
+    [username, monId]);
     if (duplicateCheck.rows[0]) throw new BadRequestError(`Duplicate monster`);
 
     const res = await db.query(`
       INSERT INTO user_monsters
       (username, monster_id)
-      VALUES ($1, $2)
-      RETURNING username, monster_id AS "monId"`,
-    [id]);
+      VALUES ($1, $2)`,
+    [username, monId]);
     
     return res.rows[0];
   }
@@ -229,13 +239,13 @@ class Monster {
     return res.rows;    
   }
 
-  static async userRemove(monId) {
+  static async userRemove(username, monId) {
     const res = await db.query(
       `DELETE
        FROM user_monsters
-       WHERE id = $1
-       returning id`,
-    [monId]);
+       WHERE username = $1 AND monster_id = $2
+       RETURNING monster_id`,
+    [username, monId]);
     if (!res.rows[0]) throw new NotFoundError(`No monster with id`);
   }
 }

@@ -15,6 +15,12 @@ const MinusButton = ({id, spacing, minus}) => {
   const handleMinus = () => {
     minus(id)
   }
+  
+  if (!currentUser) {
+    return (
+      <Button className={spacing} variant="danger" size="sm" onClick={handleMinus} disabled>-1</Button>
+    )
+  }
 
   return (
     <>

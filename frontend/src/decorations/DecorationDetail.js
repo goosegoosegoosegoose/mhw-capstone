@@ -10,7 +10,7 @@ const DecorationDetail = ({plus, minus}) => {
   const [decoration, setDecoration] = useState({});
   const { id } = useParams();
   const nav = useNavigate();
-  const skill_columns = [
+  const skillColumns = [
     {title:"Skill", field:"name", width:"15%"},
     {title:"Level", field:"level", width:"10%"},
     {title:"Description", field:"description"}
@@ -43,7 +43,7 @@ const DecorationDetail = ({plus, minus}) => {
       <div className="container my-5">
         <MaterialTable
           title="Skill(s)"
-          columns={skill_columns} 
+          columns={skillColumns} 
           data={decoration.skills}
           onRowClick={(event, data) => {
             nav(`/skills/${data.id}`)

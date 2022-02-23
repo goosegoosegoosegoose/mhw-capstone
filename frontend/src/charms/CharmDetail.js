@@ -8,12 +8,12 @@ const CharmDetail = ({add, remove}) => {
   const [charm, setCharm] = useState({});
   const { id } = useParams();
   const nav = useNavigate();
-  const skill_columns = [
+  const skillColumns = [
     {title:"Skill", field:"name", width:"15%"},
     {title:"Level", field:"level", width:"10%"},
     {title:"Description", field:"description"}
   ];
-  const mat_columns = [
+  const matColumns = [
     {title:"Material", field:"name", width:"15%"},
     {title:"Quantity", field:"quantity", width:"10%"},
     {title:"Description", field:"description"},
@@ -37,12 +37,12 @@ const CharmDetail = ({add, remove}) => {
     <div className="container">
       <div className="col-sm-12 d-flex">
         <h1 className="m-3">{charm.name}</h1>
-        <ToggleButton id={Number(id)} type="charms" spacing="mx-1 my-4" add={add} remove={remove}/>
+        <ToggleButton id={Number(id)} type="charms" spacing="mx-1 my-4" add={add} remove={remove} label1="Sell?" label2="Craft?"/>
       </div>
       <div className="container my-5">
         <MaterialTable
           title="Skills"
-          columns={skill_columns} 
+          columns={skillColumns} 
           data={charm.skills}
           onRowClick={(event, data) => {
             nav(`/skills/${data.id}`)
@@ -58,7 +58,7 @@ const CharmDetail = ({add, remove}) => {
       <div className="container my-2">
         <MaterialTable
           title="Materials needed to craft"
-          columns={mat_columns} 
+          columns={matColumns} 
           data={charm.materials}
           options={{
             pageSize:5,
