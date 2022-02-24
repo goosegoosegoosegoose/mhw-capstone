@@ -21,7 +21,7 @@ const ArmorCard = ({id, name, mImg, fImg, add, remove}) => {
   }
 
   return (
-    <Card className="my-2 mx-1 col-sm-2">
+    <Card className="my-2 mx-1 col-sm-2" bg="dark">
       <div className="row">
         <div className="col-sm-6 pt-2 mt-2">
           {mImg ? <Card.Img style={{cursor: "pointer"}} onClick={handleClick} variant="top" src={mImg} /> : <></>}

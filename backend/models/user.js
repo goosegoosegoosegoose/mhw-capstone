@@ -311,11 +311,10 @@ class User {
     gear.weapons = weaponsRes.rows;
    
     const charmsRes = await db.query(
-      `SELECT c.id AS id, c.name AS name, s.name AS skill_name
+      `SELECT c.id AS id, c.name AS name,
+                          (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN charm_skills AS cs ON s.id = cs.skill_id WHERE cs.charm_id = uc.charm_id) AS skills
        FROM user_charms AS uc
        INNER JOIN charms AS c ON uc.charm_id = c.id
-       INNER JOIN charm_skills AS cs ON uc.charm_id = cs.charm_id
-       INNER JOIN skills AS s ON cs.skill_id = s.id
        WHERE uc.username = $1`,
     [username]);
     gear.charms = charmsRes.rows;

@@ -87,7 +87,7 @@ const MonsterDetail = ({add, remove}) => {
                     <li key={a.id}>{a.ailment}: {a.description}</li>
                   )}
                 </ul>
-              </div> : <div className="mb-3">Monster has no offensive ailments</div>}
+              </div> : <div className="mb-3">{monster.name}s have no offensive ailments.</div>}
             </div>
           </div>
         </div>

@@ -49,8 +49,7 @@ const LocationDetail = ({add, remove}) => {
           </div>
         </div>
       </div> : <h4>No spawns, just summons</h4>}
-      <h4 className="mt-4 mb-2">Images:</h4>
-      <div className="row justify-content-center">
+      <div className="row justify-content-center mt-5">
         {location.imgs.map(i => 
           <div className="col-sm-6">
             <img src={i} className="img-responsive img-fluid my-2"/>

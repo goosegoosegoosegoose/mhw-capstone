@@ -17,7 +17,7 @@ const WeaponTypeCard = ({type, img}) => {
   }
 
   return (
-    <Card className="my-3 mx-3 col-lg-3" style={{cursor: "pointer"}} onClick={handleClick}>
+    <Card className="my-3 mx-3 col-lg-3" style={{cursor: "pointer"}} onClick={handleClick} bg="dark">
       <div className="row justify-content-center">
         <div className="col-sm-8 pt-2 mt-2">
           {img ? <Card.Img variant="top" src={img} /> : <></>}

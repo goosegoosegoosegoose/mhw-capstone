@@ -9,7 +9,8 @@ const GearingPage = () => {
   const [equipped, setEquipped] = useState({weapon: {slots:{1: 0, 2: 0, 3: 0, 4: 0}}, head: {slots:{1: 0, 2: 0, 3: 0, 4: 0}}, chest: {slots:{1: 0, 2: 0, 3: 0, 4: 0}}, gloves: {slots:{1: 0, 2: 0, 3: 0, 4: 0}}, waist: {slots:{1: 0, 2: 0, 3: 0, 4: 0}}, legs: {slots:{1: 0, 2: 0, 3: 0, 4: 0}}, charm: {}});
   const [decoSlots, setDecoSlots] = useState({1: 0, 2: 0, 3: 0, 4: 0});
   const [maxed, setMaxed] = useState({1:{count:0, full:false}, 2:{count:0, full:false}, 3:{count:0, full:false}, 4:{count:0, full:false}});
-  const [skills, setSkills] = useState({})
+  const [skills, setSkills] = useState({});
+  const [lastCharm, setLastCharm] = useState({skills: [null, null], levels: [0, 0], length:0});
 
 
   useEffect(function fetchGearWhenMounted() {
@@ -21,18 +22,86 @@ const GearingPage = () => {
   }, []);
 
   useEffect(() => {
+    if (equipped.weapon.id) {
+      document.getElementById("weaponDefault").disabled = true;
+    }
+    if (equipped.head.id) {
+      document.getElementById("headDefault").disabled = true;
+    }
+    if (equipped.chest.id) {
+      document.getElementById("chestDefault").disabled = true;
+    }
+    if (equipped.gloves.id) {
+      document.getElementById("glovesDefault").disabled = true;
+    }
+    if (equipped.waist.id) {
+      document.getElementById("waistDefault").disabled = true;
+    }
+    if (equipped.legs.id) {
+      document.getElementById("legsDefault").disabled = true;
+    }
+    if (equipped.charm.id) {
+      document.getElementById("charmDefault").disabled = true;
+    }
     const one = equipped.weapon.slots["1"] + equipped.head.slots["1"] + equipped.chest.slots["1"] + equipped.gloves.slots["1"] + equipped.waist.slots["1"] + equipped.legs.slots["1"];
     const two = equipped.weapon.slots["2"] + equipped.head.slots["2"] + equipped.chest.slots["2"] + equipped.gloves.slots["2"] + equipped.waist.slots["2"] + equipped.legs.slots["2"];
     const three = equipped.weapon.slots["3"] + equipped.head.slots["3"] + equipped.chest.slots["3"] + equipped.gloves.slots["3"] + equipped.waist.slots["3"] + equipped.legs.slots["3"];
     const four = equipped.weapon.slots["4"] + equipped.head.slots["4"] + equipped.chest.slots["4"] + equipped.gloves.slots["4"] + equipped.waist.slots["4"] + equipped.legs.slots["4"];
-    setDecoSlots({"1":one, "2":two, "3":three, "4":four});
-  }, [equipped])
+    setDecoSlots({1:one, 2:two, 3:three, 4:four});
+  }, [equipped]);
+
+  useEffect(() =>{
+    if (equipped.weapon.attack && equipped.head.defense_base && equipped.chest.defense_base && equipped.gloves.defense_base && equipped.waist.defense_base && equipped.legs.defense_base){
+      for (let j=1;j<5;j++) {
+        if (decoSlots[j] > maxed[j].count) {
+          setMaxed(a => ({...a, [j]: {...a[j], full:false}}))
+        }
+        if (decoSlots[j] <=  maxed[j].count) {
+          setMaxed(a => ({...a, [j]: {...a[j], full:true}}))
+        }
+      }
+    }
+  }, [decoSlots]);
 
   const handleChange = evt => {
     const { name, value } = evt.target;
+    const val = JSON.parse(value);
+    const skillArr = [];
+    const levelArr = [];
+    if (name === "charm") {
+      const s = val.skills;
+      for (let i=0;i<s.length;i++){
+        let skill = s[i].slice(0, -2);
+        let level = Number(s[i].slice(-1, s[i].length));
+        skillArr.push(skill);
+        levelArr.push(level);
+        if (!skills[skill]) {
+          if (lastCharm.skills[i]) {
+            if (skills[lastCharm.skills[i]] === lastCharm.levels[i]) {
+              for (let k=0;k<lastCharm.length;k++){
+                delete skills[lastCharm.skills[k]];
+              }
+              setSkills(a => ({...a, [skill]: skills[skill] + level}))
+            } else {
+              for (let k=0;k<lastCharm.length;k++){
+                setSkills(a => ({...a, [lastCharm.skills[k]]: skills[lastCharm.skills[k]] - lastCharm.levels[k]}))
+              }
+              setSkills(a => ({...a, [skill]: level}))
+            }
+          }
+          setSkills(a => ({...a, [skill]: level}))
+        } else {
+          for (let k=0;k<lastCharm.length;k++){
+            setSkills(a => ({...a, [lastCharm.skills[k]]: skills[lastCharm.skills[k]] - lastCharm.levels[k]}))
+          }
+          setSkills(a => ({...a, [skill]: skills[skill] + level}))
+        }
+      }
+      setLastCharm({skills: skillArr, levels: levelArr, length: val.skills.length})
+    }
     setEquipped(eq => ({
       ...eq,
-      [name]: JSON.parse(value)
+      [name]: val
     }));
   }
 
@@ -75,7 +144,7 @@ const GearingPage = () => {
 
   if (!gear.weapons) {
     return (
-      <h1>Loading..</h1>
+      <h1>Loading.. please refresh</h1>
     )
   }
 
@@ -88,7 +157,7 @@ const GearingPage = () => {
             <Form.Group className="mb-2">
               <Form.Label htmlFor="weapon">Weapon</Form.Label>
               <select className="form-control" name="weapon" onChange={handleChange}>
-                <option value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
+                <option id="weaponDefault" value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
                   Choose weapon
                 </option>
                 {gear.weapons.map((a,i) => 
@@ -99,7 +168,7 @@ const GearingPage = () => {
             <Form.Group className="my-2">
               <Form.Label htmlFor="head">Head</Form.Label>
               <select className="form-control" name="head" onChange={handleChange}>
-                <option value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
+                <option id="headDefault" value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
                   Choose helm
                 </option>
                 {gear.head.map((a,i) => 
@@ -110,7 +179,7 @@ const GearingPage = () => {
             <Form.Group className="my-2">
               <Form.Label htmlFor="chest">Chest</Form.Label>
               <select className="form-control" name="chest" onChange={handleChange}>
-                <option value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
+                <option id="chestDefault" value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
                   Choose chestpiece
                 </option>                
                 {gear.chest.map((a,i) => 
@@ -121,7 +190,7 @@ const GearingPage = () => {
             <Form.Group className="my-2">
               <Form.Label htmlFor="gloves">Gloves</Form.Label>
               <select className="form-control" name="gloves" onChange={handleChange}>
-                <option value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
+                <option id="glovesDefault" value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
                   Choose gauntlets
                 </option>
                 {gear.gloves.map((a,i) => 
@@ -132,7 +201,7 @@ const GearingPage = () => {
             <Form.Group className="my-2">
               <Form.Label htmlFor="waist">Waist</Form.Label>
               <select className="form-control" name="waist" onChange={handleChange}>
-                <option value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
+                <option id="waistDefault" value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
                   Choose coil
                 </option>
                 {gear.waist.map((a,i) => 
@@ -143,7 +212,7 @@ const GearingPage = () => {
             <Form.Group className="my-2">
               <Form.Label htmlFor="legs">Legs</Form.Label>
               <select className="form-control" name="legs" onChange={handleChange}>
-                <option value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
+                <option id="legsDefault" value={JSON.stringify({slots:{1: 0, 2: 0, 3: 0, 4: 0}})} defaultValue>
                   Choose chausses
                 </option>
                 {gear.legs.map((a,i) => 
@@ -153,14 +222,21 @@ const GearingPage = () => {
             </Form.Group>
             <Form.Group className="my-2">
               <Form.Label htmlFor="charm">Charm</Form.Label>
-              <select className="form-control" name="charm" onChange={handleChange}>
-                <option value={JSON.stringify({})} defaultValue>
+              {equipped.weapon.attack && equipped.head.defense_base && equipped.chest.defense_base && equipped.gloves.defense_base && equipped.waist.defense_base && equipped.legs.defense_base ?
+                <select className="form-control" name="charm" onChange={handleChange}>
+                <option id="charmDefault" value={JSON.stringify({})} defaultValue>
                   Choose charm
                 </option>
                 {gear.charms.map((a,i) => 
                   <option key={i} value={JSON.stringify(a)}>{a.name}</option>
                 )}
-              </select>
+                </select>
+              : <select className="form-control" name="charm" style={{background: "gray"}} disabled>
+                <option defaultValue>
+                  Please choose weapon and armor
+                </option>
+                </select>
+              }
             </Form.Group>                             
           </Form>
         </div>         
@@ -215,46 +291,39 @@ const GearingPage = () => {
       </div>
       {equipped.weapon.attack && equipped.head.defense_base && equipped.chest.defense_base && equipped.gloves.defense_base && equipped.waist.defense_base && equipped.legs.defense_base
         ? <div className="row">
-          {decoSlots["1"] > 0 ? 
+
             <div className="col-sm-3">
               <Form>
-                <h6 className="my-2">Level 1 Decorations <br/>({decoSlots["1"]} slots available)</h6>
+                <h6 className="my-2">Level 1 Decorations <br/>({decoSlots["1"] - maxed["1"].count} slots available)</h6>
                 {gear.decorations["1"].map((d,i) => (
-                  <Form.Check key={i} id={i + d.id} type="checkbox" name="1" value={JSON.stringify(d.skills)} label={d.name} onClick={handleCheck} disabled={maxed["1"].full && !document.getElementById(i + d.id).checked ? true : false} /> 
+                  <Form.Check key={i} id={`${d.id}${i}1`} className="box" type="checkbox" name="1" value={JSON.stringify(d.skills)} label={d.name} onClick={handleCheck} disabled={maxed["1"].full && !document.getElementById(`${d.id}${i}1`).checked ? true : false} /> 
                 ))}
               </Form>
             </div>
-          : null}
-          {decoSlots["2"] > 0 ? 
             <div className="col-sm-3">
               <Form>
-                <h6 className="my-2">Level 2 Decorations <br/>({decoSlots["2"]} slots available)</h6>
+                <h6 className="my-2">Level 2 Decorations <br/>({decoSlots["2"] - maxed["2"].count} slots available)</h6>
                 {gear.decorations["2"].map((d,i) => (
-                  <Form.Check key={i} id={i + d.id} type="checkbox" name="2" value={JSON.stringify(d.skills)} label={d.name} onClick={handleCheck} disabled={maxed["2"].full && !document.getElementById(i + d.id).checked ? true : false} /> 
+                  <Form.Check key={i} id={`${d.id}${i}2`} className="box" type="checkbox" name="2" value={JSON.stringify(d.skills)} label={d.name} onClick={handleCheck} disabled={maxed["2"].full && !document.getElementById(`${d.id}${i}2`).checked ? true : false} /> 
                 ))}
               </Form>
             </div>
-          : null} 
-          {decoSlots["3"] > 0 ? 
             <div className="col-sm-3">
               <Form>
-                <h6 className="my-2">Level 3 Decorations <br/>({decoSlots["3"]} slots available)</h6>
+                <h6 className="my-2">Level 3 Decorations <br/>({decoSlots["3"] - maxed["3"].count} slots available)</h6>
                 {gear.decorations["3"].map((d,i) => (
-                  <Form.Check key={i} id={i + d.id} type="checkbox" name="3" value={JSON.stringify(d.skills)} label={d.name} onClick={handleCheck} disabled={maxed["3"].full && !document.getElementById(i + d.id).checked ? true : false} /> 
+                  <Form.Check key={i} id={`${d.id}${i}3`} className="box" type="checkbox" name="3" value={JSON.stringify(d.skills)} label={d.name} onClick={handleCheck} disabled={maxed["3"].full && !document.getElementById(`${d.id}${i}3`).checked ? true : false} /> 
                 ))}
               </Form>
             </div>
-          : null}
-          {decoSlots["4"] > 0 ? 
             <div className="col-sm-3">
               <Form>
                 <h6 className="my-2">Level 4 Decorations <br/>({decoSlots["4"] - maxed["4"].count} slots available)</h6>
                 {gear.decorations["4"].map((d,i) => (
-                  <Form.Check key={i} id={i + d.id} type="checkbox" name="4" value={JSON.stringify(d.skills)} label={d.name} onClick={handleCheck} disabled={maxed["4"].full && !document.getElementById(i + d.id).checked ? true : false} /> 
+                  <Form.Check key={i} id={`${d.id}${i}4`} className="box" type="checkbox" name="4" value={JSON.stringify(d.skills)} label={d.name} onClick={handleCheck} disabled={maxed["4"].full && !document.getElementById(`${d.id}${i}4`).checked ? true : false} /> 
                 ))}
               </Form> 
             </div>
-          : null} 
         </div>
       : <h2 className="my-4">Select weapon + armor to gain access to decoration slots</h2>}
     </div>
