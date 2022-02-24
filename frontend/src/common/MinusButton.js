@@ -24,8 +24,8 @@ const MinusButton = ({id, spacing, minus}) => {
 
   return (
     <>
-      {exists ? <Button className={spacing} variant="danger" size="sm" onClick={handleMinus}>-1</Button>
-      : <Button className={spacing} variant="danger" size="sm" onClick={handleMinus} disabled>-1</Button>}
+      {exists ? <Button className={spacing} variant="light" size="sm" onClick={handleMinus}>-1</Button>
+      : <Button className={spacing} variant="light" size="sm" onClick={handleMinus} disabled>-1</Button>}
     </>
   )
 }

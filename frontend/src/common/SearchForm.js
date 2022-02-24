@@ -31,7 +31,7 @@ const SearchForm = ({ type, header, get }) => {
             placeholder="Enter search"
             onChange={handleChange}
           />
-          <Button className="mx-1" type="submit" variant="primary" size="sm">Submit</Button>
+          <Button className="mx-1" type="submit" variant="dark" size="sm">Submit</Button>
         </div>
       </Row>
     </form>

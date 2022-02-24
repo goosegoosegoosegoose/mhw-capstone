@@ -14,21 +14,18 @@ const ElementList = () => {
     fetchElements()
   }, []);
 
-  const getElements = (res) => {
-    setElements([...res])
-  }
-
   if (!elements) {
     return (
       <div className="container text-center">
-        <p>Loading</p>
+        <h1>Elements</h1>
+        <p>Loading...</p>
       </div>
     )
   }
 
   return (
     <div className="container text-center">
-      <SearchForm type="elements" header="element" get={getElements} />
+      <h1>Elements</h1>
       <div className="row justify-content-center">
         {elements.map(e => 
           <ElementCard

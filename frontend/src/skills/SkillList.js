@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from '@material-table/core';
+import { ThemeProvider, createTheme } from "@material-ui/core";
 
 const SkillList = () => {
   const [skills, setSkills] = useState([]);
@@ -11,12 +12,17 @@ const SkillList = () => {
     {title:"Level", field:"level", searhable:false, width:"10%",
       lookup:{
         1:1,
-        2:3,
+        2:2,
         3:3
       }
     },
     {title:"Description", field:"description", searchable:false}
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchSkillsWhenMounted() {
     async function fetchSkills() {
@@ -35,21 +41,23 @@ const SkillList = () => {
   }
 
   return (
-    <div className="container my-2">
-      <MaterialTable
-        title="Skill Levels"
-        columns={columns} 
-        data={skills}
-        onRowClick={(event, data) => {
-          nav(`/skills/${data.id}`)
-        }}
-        options={{
-          pageSize:10,
-          search:true,
-          filtering:true,
-          tableLayout:"fixed"
-        }}
-      />
+    <div className="container">
+      <ThemeProvider theme={theme}>
+        <MaterialTable
+          title="Skill Levels"
+          columns={columns} 
+          data={skills}
+          onRowClick={(event, data) => {
+            nav(`/skills/${data.id}`)
+          }}
+          options={{
+            pageSize:10,
+            search:true,
+            filtering:true,
+            tableLayout:"fixed"
+          }}
+        />
+      </ThemeProvider>
     </div>
   )
 }

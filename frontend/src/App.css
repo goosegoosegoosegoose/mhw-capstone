@@ -1,10 +1,20 @@
-/* .App {
-  text-align: center;
-} */
-
 div.container {
   background-color: #000000e5;
   color: #ffffffb4;
   padding: 2rem;
+  min-height: 100vh;
 }
 
+div.whole {
+  background-image: url("bg.png");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+a:link {
+  color: white
+}
+
+a:visited {
+  color: white
+}

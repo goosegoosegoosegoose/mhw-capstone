@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from '@material-table/core';
+import { ThemeProvider, createTheme } from "@material-ui/core";
 import PlusButton from "../common/PlusButton";
 import MinusButton from "../common/MinusButton";
 import DecoCounter from "../common/DecoCounter";
@@ -32,6 +33,11 @@ const DecorationList = ({plus, minus}) => {
       }
     }
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchDecosWhenMounted() {
     async function fetchDecos() {
@@ -51,38 +57,40 @@ const DecorationList = ({plus, minus}) => {
 
   return (
     <div className="container">
-      <MaterialTable
-        title="Decorations"
-        columns={columns} 
-        data={decos}
-        onRowClick={(event, data) => {
-          nav(`/decorations/${data.id}`)
-        }}
-        actions={[
-          rowData => ({
-            icon:()=><DecoCounter id={rowData.id} c="mb-1"/>,
-            onClick:()=>{}
-          }),
-          rowData => ({
-            icon:()=><PlusButton id={rowData.id} spacing="my-1 mt-auto" plus={plus} />,
-            onClick:()=>{}
-          }),
-          rowData => ({
-            icon:()=><MinusButton id={rowData.id} spacing="my-1 mt-auto" minus={minus} />,
-            onClick:()=>{}
-          })
-        ]}
-        options={{
-          pageSize:10,
-          search:true,
-          filtering:true
-        }}
-        localization={{
-          header: {
-            actions: 'Amount in Inventory'
-          }
-        }}
-      />
+      <ThemeProvider theme={theme}>
+        <MaterialTable
+          title="Decorations"
+          columns={columns} 
+          data={decos}
+          onRowClick={(event, data) => {
+            nav(`/decorations/${data.id}`)
+          }}
+          actions={[
+            rowData => ({
+              icon:()=><DecoCounter id={rowData.id} c="mb-1"/>,
+              onClick:()=>{}
+            }),
+            rowData => ({
+              icon:()=><PlusButton id={rowData.id} spacing="my-1 mt-auto" plus={plus} />,
+              onClick:()=>{}
+            }),
+            rowData => ({
+              icon:()=><MinusButton id={rowData.id} spacing="my-1 mt-auto" minus={minus} />,
+              onClick:()=>{}
+            })
+          ]}
+          options={{
+            pageSize:10,
+            search:true,
+            filtering:true
+          }}
+          localization={{
+            header: {
+              actions: 'Amount in Inventory'
+            }
+          }}
+        />
+      </ThemeProvider>
     </div>
   )
 }

@@ -2,8 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from '@material-table/core';
-import UserContext from "../auth/userContext";
-import { Button } from "react-bootstrap";
+import { ThemeProvider, createTheme } from "@material-ui/core";
 import ToggleButton from "../common/ToggleButton";
 
 const CharmList = ({add, remove}) =>{
@@ -37,6 +36,11 @@ const CharmList = ({add, remove}) =>{
       }
     }
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchCharmsWhenMounted() {
     async function fetchCharms() {
@@ -56,30 +60,32 @@ const CharmList = ({add, remove}) =>{
 
   return (
     <div className="container">
-      <MaterialTable
-        title="Charms"
-        columns={columns} 
-        data={charms}
-        onRowClick={(event, data) => {
-          nav(`/charms/${data.id}`)
-        }}
-        actions={[
-          rowData => ({
-            icon:()=><ToggleButton id={rowData.id} type="charms" spacing="my-1 mt-auto" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
-            onClick:()=>{}
-          })
-        ]}
-        options={{
-          pageSize:10,
-          search:true,
-          filtering:true
-        }}
-        localization={{
-          header: {
-            actions: 'Have?'
-          }
-        }}
-      />
+      <ThemeProvider theme={theme}>
+        <MaterialTable
+          title="Charms"
+          columns={columns} 
+          data={charms}
+          onRowClick={(event, data) => {
+            nav(`/charms/${data.id}`)
+          }}
+          actions={[
+            rowData => ({
+              icon:()=><ToggleButton id={rowData.id} type="charms" spacing="my-1 mt-auto" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
+              onClick:()=>{}
+            })
+          ]}
+          options={{
+            pageSize:10,
+            search:true,
+            filtering:true
+          }}
+          localization={{
+            header: {
+              actions: 'Have?'
+            }
+          }}
+        />
+      </ThemeProvider>
     </div>
   )
 }

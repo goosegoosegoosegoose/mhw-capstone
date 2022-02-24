@@ -28,23 +28,23 @@ const MonsterList = ({add, remove}) => {
     <div>
       <div>
         Size:
-        <Button className="m-1" data-header="type" data-handle="small" type="button" variant="primary" size="sm" onClick={handleClick}>Small</Button>
-        <Button className="m-1" data-header="type" data-handle="large" type="button" variant="primary" size="sm" onClick={handleClick}>Large</Button>
+        <Button className="m-1" data-header="type" data-handle="small" type="button" variant="dark" size="sm" onClick={handleClick}>Small</Button>
+        <Button className="m-1" data-header="type" data-handle="large" type="button" variant="dark" size="sm" onClick={handleClick}>Large</Button>
       </div>
       <div>
         Species:
-        <Button className="m-1" data-header="species" data-handle="bird wyvern" type="button" variant="primary" size="sm" onClick={handleClick}>Bird Wyverns</Button>
-        <Button className="m-1" data-header="species" data-handle="brute wyvern" type="button" variant="primary" size="sm" onClick={handleClick}>Brute Wyverns</Button>
-        <Button className="m-1" data-header="species" data-handle="fanged wyvern" type="button" variant="primary" size="sm" onClick={handleClick}>Fanged Wyverns</Button>
-        <Button className="m-1" data-header="species" data-handle="flying wyvern" type="button" variant="primary" size="sm" onClick={handleClick}>Flying Wyverns</Button>
-        <Button className="m-1" data-header="species" data-handle="piscine wyvern" type="button" variant="primary" size="sm" onClick={handleClick}>Piscine Wyverns</Button>
-        <Button className="m-1" data-header="species" data-handle="fanged beast" type="button" variant="primary" size="sm" onClick={handleClick}>Fanged Beast</Button>
-        <Button className="m-1" data-header="species" data-handle="elder dragon" type="button" variant="primary" size="sm" onClick={handleClick}>Elder Dragons</Button>
-        <Button className="m-1" data-header="species" data-handle="relict" type="button" variant="primary" size="sm" onClick={handleClick}>Relicts</Button>
-        <Button className="m-1" data-header="species" data-handle="herbivore" type="button" variant="primary" size="sm" onClick={handleClick}>Herbivores</Button>
-        <Button className="m-1" data-header="species" data-handle="wingdrake" type="button" variant="primary" size="sm" onClick={handleClick}>Wingdrakes</Button>
-        <Button className="m-1" data-header="species" data-handle="neopteron" type="button" variant="primary" size="sm" onClick={handleClick}>Neopterons</Button>
-        <Button className="m-1" data-header="species" data-handle="fish" type="button" variant="primary" size="sm" onClick={handleClick}>Fish</Button>
+        <Button className="m-1" data-header="species" data-handle="bird wyvern" type="button" variant="dark" size="sm" onClick={handleClick}>Bird Wyverns</Button>
+        <Button className="m-1" data-header="species" data-handle="brute wyvern" type="button" variant="dark" size="sm" onClick={handleClick}>Brute Wyverns</Button>
+        <Button className="m-1" data-header="species" data-handle="fanged wyvern" type="button" variant="dark" size="sm" onClick={handleClick}>Fanged Wyverns</Button>
+        <Button className="m-1" data-header="species" data-handle="flying wyvern" type="button" variant="dark" size="sm" onClick={handleClick}>Flying Wyverns</Button>
+        <Button className="m-1" data-header="species" data-handle="piscine wyvern" type="button" variant="dark" size="sm" onClick={handleClick}>Piscine Wyverns</Button>
+        <Button className="m-1" data-header="species" data-handle="fanged beast" type="button" variant="dark" size="sm" onClick={handleClick}>Fanged Beast</Button>
+        <Button className="m-1" data-header="species" data-handle="elder dragon" type="button" variant="dark" size="sm" onClick={handleClick}>Elder Dragons</Button>
+        <Button className="m-1" data-header="species" data-handle="relict" type="button" variant="dark" size="sm" onClick={handleClick}>Relicts</Button>
+        <Button className="m-1" data-header="species" data-handle="herbivore" type="button" variant="dark" size="sm" onClick={handleClick}>Herbivores</Button>
+        <Button className="m-1" data-header="species" data-handle="wingdrake" type="button" variant="dark" size="sm" onClick={handleClick}>Wingdrakes</Button>
+        <Button className="m-1" data-header="species" data-handle="neopteron" type="button" variant="dark" size="sm" onClick={handleClick}>Neopterons</Button>
+        <Button className="m-1" data-header="species" data-handle="fish" type="button" variant="dark" size="sm" onClick={handleClick}>Fish</Button>
       </div>
     </div>
   )
@@ -52,15 +52,17 @@ const MonsterList = ({add, remove}) => {
   if (monsters.length === 0) {
     return (
       <div className="container text-center">
+        <h1>Monsters</h1>
         <SearchForm type="monsters" header="name" get={getMonsters} />
         {filters}
-        <p>Sorry, no results were found!</p>
+        <p>Sorry, no results were found! Please re-submit to refresh.</p>
       </div>
     )
   }
 
   return (
     <div className="container text-center">
+      <h1>Monsters</h1>
       <SearchForm type="monsters" header="name" get={getMonsters} />
       {filters}
       <div className="row justify-content-center">

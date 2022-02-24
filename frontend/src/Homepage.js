@@ -8,7 +8,7 @@ const Homepage = () => {
 
   if (!user) {
     return (
-      <div className="container text-center" style={{ backgroundImage: `url("https://store-images.s-microsoft.com/image/apps.60377.67926658307646239.e8130cbd-e4b6-4c78-9fe9-424eb8a64ab1.78a5c2e6-56b7-4d89-9637-cb1f1e24a0b7?mode=scale&q=90&h=1080&w=1920")`}}>
+      <div className="container text-center">
       <h1><b>MHW App</b></h1>
         <p>Sign up or login to gain access</p><br/>
         <button onClick={nav("/login")}>Log in</button>
@@ -18,11 +18,10 @@ const Homepage = () => {
   }
 
   return (
-    <div className="container justify-content-center">
+    <div className="container justify-content-center text-center">
       <div>Welcome to my app</div>
     </div>
   )
-
 }
 
 export default Homepage;

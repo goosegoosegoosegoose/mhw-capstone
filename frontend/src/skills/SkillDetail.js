@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import MhwApi from "../api";
 import ArmorCard from "../armor/ArmorCard";
 import MaterialTable from "@material-table/core";
+import { ThemeProvider, createTheme } from "@material-ui/core";
 
 const SkillDetail = ({add, remove}) => {
   const [skill, setSkill] = useState({});
@@ -22,6 +23,11 @@ const SkillDetail = ({add, remove}) => {
     {title:"Rarity", field:"rarity"},
     {title:"Slot", field:"slot"}
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchSkillWhenMounted() {
     async function fetchSkill() {
@@ -62,60 +68,62 @@ const SkillDetail = ({add, remove}) => {
         </div>
       : <h4 className="m-5">No armor with skill</h4>}
       <div className="row justify-content-center">
-        <div className="my-4 col-sm-4">
-          {skill.armorSets.length > 0 ?
-            <MaterialTable
-              title="Armor with skill"
-              columns={setColumns} 
-              data={skill.armorSets}
-              onRowClick={(event, data) => {
-                nav(`/armor-sets/${data.id}`)
-              }}
-              options={{
-                pageSize:2,
-                search:false,
-                filtering:false,
-                tableLayout:"fixed"
-              }}
-            />
-          : <h4 className="m-5">No armor sets with skill</h4>}
-        </div>
-        <div className="my-4 col-sm-4">
-          {skill.decorations.length > 0 ?
-            <MaterialTable
-              title="Charms with skill"
-              columns={charmColumns} 
-              data={skill.charms}
-              onRowClick={(event, data) => {
-                nav(`/charms/${data.id}`)
-              }}
-              options={{
-                pageSize:2,
-                search:false,
-                filtering:false,
-                tableLayout:"fixed"
-              }}
-            />
-          : <h4 className="m-5">No charms with skill</h4>}
-        </div>
-        <div className="my-4 col-sm-4">
-          {skill.decorations.length > 0 ?
-            <MaterialTable
-              title="Decorations with skill"
-              columns={decoColumns} 
-              data={skill.decorations}
-              onRowClick={(event, data) => {
-                nav(`/decorations/${data.id}`)
-              }}
-              options={{
-                pageSize:2,
-                search:false,
-                filtering:false,
-                tableLayout:"fixed"
-              }}
-            />
-          : <h4 className="m-5">No decorations with skill</h4>}
-        </div>
+        <ThemeProvider theme={theme}>
+          <div className="my-4 col-sm-4">
+            {skill.armorSets.length > 0 ?
+              <MaterialTable
+                title="Armor with skill"
+                columns={setColumns} 
+                data={skill.armorSets}
+                onRowClick={(event, data) => {
+                  nav(`/armor-sets/${data.id}`)
+                }}
+                options={{
+                  pageSize:2,
+                  search:false,
+                  filtering:false,
+                  tableLayout:"fixed"
+                }}
+              />
+            : <h4 className="m-5">No armor sets with skill</h4>}
+          </div>
+          <div className="my-4 col-sm-4">
+            {skill.decorations.length > 0 ?
+              <MaterialTable
+                title="Charms with skill"
+                columns={charmColumns} 
+                data={skill.charms}
+                onRowClick={(event, data) => {
+                  nav(`/charms/${data.id}`)
+                }}
+                options={{
+                  pageSize:2,
+                  search:false,
+                  filtering:false,
+                  tableLayout:"fixed"
+                }}
+              />
+            : <h4 className="m-5">No charms with skill</h4>}
+          </div>
+          <div className="my-4 col-sm-4">
+            {skill.decorations.length > 0 ?
+              <MaterialTable
+                title="Decorations with skill"
+                columns={decoColumns} 
+                data={skill.decorations}
+                onRowClick={(event, data) => {
+                  nav(`/decorations/${data.id}`)
+                }}
+                options={{
+                  pageSize:2,
+                  search:false,
+                  filtering:false,
+                  tableLayout:"fixed"
+                }}
+              />
+            : <h4 className="m-5">No decorations with skill</h4>}
+          </div>
+        </ThemeProvider>
       </div>
     </div>
   )

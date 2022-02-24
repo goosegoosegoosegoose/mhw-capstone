@@ -22,14 +22,16 @@ const LocationList = () => {
   if (locations.length === 0) {
     return (
       <div className="container text-center">
+        <h1>Locations</h1>        
         <SearchForm type="locations" header="name" get={getLocations} />
-        <p>Sorry, no results were found!</p>
+        <p>Sorry, no results were found! Please re-submit to refresh.</p>
       </div>
     )
   }
 
   return (
     <div className="container text-center">
+      <h1>Locations</h1>
       <SearchForm type="locations" header="name" get={getLocations} />
       <div className="row justify-content-center">
         {locations.map(l => 

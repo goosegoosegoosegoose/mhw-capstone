@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from "@material-table/core";
+import { ThemeProvider, createTheme } from "@material-ui/core";
 import ArmorCard from "../armor/ArmorCard";
 
 const ArmorSetDetail = ({add, remove}) => {
   const [armorSet, setArmorSet] = useState({});
   const { id } = useParams();
+  const nav = useNavigate();
   const skillColumns = [
     {title:"Skill", field:"name", width:"15%"},
     {title:"Level", field:"level", width:"7%"},
     {title:"Description", field:"description"}
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchArmorSetWhenMounted () {
     async function fetchArmorSet() {
@@ -49,21 +55,28 @@ const ArmorSetDetail = ({add, remove}) => {
             />
           )}
         </div>
-        {armorSet.skills.length > 0 ? 
-          <div className="container my-2">
-            <MaterialTable
-              title="Skills"
-              columns={skillColumns} 
-              data={armorSet.skills}
-              options={{
-                pageSize:3,
-                search:false,
-                filtering:false,
-                tableLayout:"fixed"
-              }}
-            />
-          </div> 
-        : <h4 className="mt-5">No skills</h4>}
+
+          {armorSet.skills.length > 0 ? 
+            <div className="container my-2">
+              <ThemeProvider theme={theme}>
+                <MaterialTable
+                  title="Skills"
+                  columns={skillColumns} 
+                  data={armorSet.skills}
+                  onRowClick={(event, data) => {
+                    nav(`/skills/${data.id}`)
+                  }}
+                  options={{
+                    pageSize:3,
+                    search:false,
+                    filtering:false,
+                    tableLayout:"fixed"
+                  }}
+                />
+              </ThemeProvider>
+            </div> 
+          : <h4 className="mt-5">No skills</h4>}
+
       </div>
     </div>
   )

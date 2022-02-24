@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from '@material-table/core';
+import { ThemeProvider, createTheme } from "@material-ui/core";
 import ToggleButton from "../common/ToggleButton";
 
 const WeaponDetail = ({add, remove}) => {
@@ -29,6 +30,11 @@ const WeaponDetail = ({add, remove}) => {
     {title:"Quantity", field:"quantity", width:"10%"},
     {title:"Description", field:"description"},
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchWeaponWhenMounted () {
     async function fetchWeapon() {
@@ -102,50 +108,52 @@ const WeaponDetail = ({add, remove}) => {
           })}
         </p>
       : null}
-      {weapon.white_sharpness ? 
-        <div className="row m-1">
-          <p><b>*Sharpness is influenced by the <a href="/skills/142">Handicraft</a> skill up to level 5.</b></p>
-          <MaterialTable
-            title = "White Sharpness"
-            columns={sharpColumns} 
-            data={a.sharpness}
-            options={{
-              pageSize:6,
-              search:false,
-              filtering:false
-            }}
-          />
-        </div> 
-      : null}
-      {weapon.ammo ? 
-        <div className="row m-1">
-          <p><b>*Capacities are influenced by the <a href="/skills/187">Capacity Boost</a> skill.</b></p>
-          <MaterialTable
-            title = "Ammo Types"
-            columns={ammoColumns} 
-            data={weapon.ammo}
-            options={{
-              pageSize:5,
-              search:true,
-              filtering:false
-            }}
-          />
-        </div> 
-      : null}
-      {weapon.materials.length > 0 ? 
-        <div className="row m-1">
-          <MaterialTable
-            title="Crafting Materials"
-            columns={matColumns} 
-            data={weapon.materials}
-            options={{
-              pageSize:5,
-              search:false,
-              filtering:false
-            }}
-          />
-        </div> 
-      : null}
+      <ThemeProvider theme={theme}>
+        {weapon.white_sharpness ? 
+          <div className="row m-1">
+            <p><b>*Sharpness is influenced by the <a href="/skills/142">Handicraft</a> skill up to level 5.</b></p>
+            <MaterialTable
+              title = "White Sharpness"
+              columns={sharpColumns} 
+              data={a.sharpness}
+              options={{
+                pageSize:6,
+                search:false,
+                filtering:false
+              }}
+            />
+          </div> 
+        : null}
+        {weapon.ammo ? 
+          <div className="row m-1">
+            <p><b>*Capacities are influenced by the <a href="/skills/187">Capacity Boost</a> skill.</b></p>
+            <MaterialTable
+              title = "Ammo Types"
+              columns={ammoColumns} 
+              data={weapon.ammo}
+              options={{
+                pageSize:5,
+                search:true,
+                filtering:false
+              }}
+            />
+          </div> 
+        : null}
+        {weapon.materials.length > 0 ? 
+          <div className="row m-1">
+            <MaterialTable
+              title="Crafting Materials"
+              columns={matColumns} 
+              data={weapon.materials}
+              options={{
+                pageSize:5,
+                search:false,
+                filtering:false
+              }}
+            />
+          </div> 
+        : null}
+      </ThemeProvider>
     </div>
   )
 }

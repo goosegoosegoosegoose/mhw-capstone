@@ -103,7 +103,6 @@ const App = () => {
           name={currentUser.username}
         />
         <div>
-          {/* TODO backgroundColor style */}
           <Routes 
             login={login}
             signup={signup}

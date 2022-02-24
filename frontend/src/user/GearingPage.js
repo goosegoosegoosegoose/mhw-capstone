@@ -249,7 +249,7 @@ const GearingPage = () => {
               <div><p><b>Element</b>: {equipped.weapon.element[0]}({equipped.weapon.hidden[0] ? "hidden" : "visible"})</p><p><b>Elemental Damage</b>: {equipped.weapon.element_damage[0]}</p></div> : 
               <div><p><b>Elements</b>: {equipped.weapon.element[0]}({equipped.weapon.hidden[0] ? "hidden" : "visible"}) & {equipped.weapon.element[1]}({equipped.weapon.hidden[1] ? "hidden" : "visible"})</p><p><b>Elemental Damage</b>: {equipped.weapon.element_damage[0]} & {equipped.weapon.element_damage[1]}</p></div>) : null) : null}
             {equipped.weapon ? (equipped.weapon.damage_type ? <p><b>Damage type</b>: {equipped.weapon.damage_type}</p> : null) : null}
-            {equipped.weapon ? (equipped.weapon.white_sharpness ? <p><b>White Sharpness Values</b>: |{equipped.weapon.white_sharpness.map((s,i) => <span key={i}>|  {s}  |</span>)}| (by handicraft level left to right)</p> : null) : null}
+            {equipped.weapon ? (equipped.weapon.white_sharpness ? <div><b>White Sharpness Values</b>: <ul>{equipped.weapon.white_sharpness.map((s,i) => <li key={i}>{s}</li>)}</ul> By handicraft level top to bottom ascending</div> : null) : null}
             {equipped.weapon ? (equipped.weapon.coatings ? <p><b>Arrow Coatings</b>: |{equipped.weapon.coatings.map((c,i) => <span key={i}>|  {c}  |</span>)}|</p> : null) : null}
             {equipped.weapon ? (equipped.weapon.phials ? <div><p><b>Phial Type</b>: {equipped.weapon.phial_type}</p><p><b>Phial Damage</b>: {equipped.weapon.phial_damage}</p></div> : null) : null}
             {equipped.weapon ? (equipped.weapon.boost_type ? <p><b>Kinsect Boost Type</b>: {equipped.weapon.boost_type}</p> : null) : null}

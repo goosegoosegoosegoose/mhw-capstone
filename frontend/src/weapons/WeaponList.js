@@ -119,20 +119,20 @@ const WeaponList = ({add, remove}) => {
     {type !== "heavy-bowgun" && type !== "light-bowgun" ?
       <div>
         Elderseal: 
-        <Button className="m-1" data-header="elderseal" data-handle="low" type="button" variant="primary" size="sm" onClick={handleClick}>Low</Button>
-        <Button className="m-1" data-header="elderseal" data-handle="high" type="button" variant="primary" size="sm" onClick={handleClick}>High</Button>
+        <Button className="m-1" data-header="elderseal" data-handle="low" type="button" variant="dark" size="sm" onClick={handleClick}>Low</Button>
+        <Button className="m-1" data-header="elderseal" data-handle="high" type="button" variant="dark" size="sm" onClick={handleClick}>High</Button>
       </div>
     : null}
     <div>
       Rarity: 
-      <Button className="m-1" data-header="rarity" data-handle="1" type="button" variant="primary" size="sm" onClick={handleClick}>1</Button>
-      <Button className="m-1" data-header="rarity" data-handle="2" type="button" variant="primary" size="sm" onClick={handleClick}>2</Button>
-      <Button className="m-1" data-header="rarity" data-handle="3" type="button" variant="primary" size="sm" onClick={handleClick}>3</Button>
-      <Button className="m-1" data-header="rarity" data-handle="4" type="button" variant="primary" size="sm" onClick={handleClick}>4</Button>
-      <Button className="m-1" data-header="rarity" data-handle="5" type="button" variant="primary" size="sm" onClick={handleClick}>5</Button>
-      <Button className="m-1" data-header="rarity" data-handle="6" type="button" variant="primary" size="sm" onClick={handleClick}>6</Button>
-      <Button className="m-1" data-header="rarity" data-handle="7" type="button" variant="primary" size="sm" onClick={handleClick}>7</Button>
-      <Button className="m-1" data-header="rarity" data-handle="8" type="button" variant="primary" size="sm" onClick={handleClick}>8</Button>
+      <Button className="m-1" data-header="rarity" data-handle="1" type="button" variant="dark" size="sm" onClick={handleClick}>1</Button>
+      <Button className="m-1" data-header="rarity" data-handle="2" type="button" variant="dark" size="sm" onClick={handleClick}>2</Button>
+      <Button className="m-1" data-header="rarity" data-handle="3" type="button" variant="dark" size="sm" onClick={handleClick}>3</Button>
+      <Button className="m-1" data-header="rarity" data-handle="4" type="button" variant="dark" size="sm" onClick={handleClick}>4</Button>
+      <Button className="m-1" data-header="rarity" data-handle="5" type="button" variant="dark" size="sm" onClick={handleClick}>5</Button>
+      <Button className="m-1" data-header="rarity" data-handle="6" type="button" variant="dark" size="sm" onClick={handleClick}>6</Button>
+      <Button className="m-1" data-header="rarity" data-handle="7" type="button" variant="dark" size="sm" onClick={handleClick}>7</Button>
+      <Button className="m-1" data-header="rarity" data-handle="8" type="button" variant="dark" size="sm" onClick={handleClick}>8</Button>
       </div> 
     </div>
   );
@@ -140,15 +140,17 @@ const WeaponList = ({add, remove}) => {
   if (weapons.length === 0) {
     return (
       <div className="container text-center">
+        <h1>Weapons</h1>
         <SearchForm type={`weapons/${type}`} header="name" get={getWeapons} />
         {filters}
-        <p className="mt-5">Sorry, no results were found! Resubmit to refresh.</p>
+        <p className="mt-5">Sorry, no results were found! Please re-submit to refresh.</p>
       </div>
     )
   }
 
   return (
     <div className="container text-center">
+      <h1>Weapons</h1>
       <SearchForm type={`weapons/${type}`} header="name" get={getWeapons} />
       {filters}
       <div className="row justify-content-center">

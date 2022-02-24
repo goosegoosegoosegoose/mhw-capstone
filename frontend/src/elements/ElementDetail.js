@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from "@material-table/core";
+import { ThemeProvider, createTheme } from "@material-ui/core";
 import ToggleButton from "../common/ToggleButton";
 
 const ElementDetail = ({add, remove}) => {
@@ -44,6 +44,11 @@ const ElementDetail = ({add, remove}) => {
       }
     }
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchElementWhenMounted() {
     async function fetchElement() {
@@ -63,30 +68,32 @@ const ElementDetail = ({add, remove}) => {
     <div className="container">
       <h1 className="m-4">{element.element.toUpperCase()} element</h1>
       <div className="container">
-        <MaterialTable 
-          title={`Weapons with ${element.element} damage`}
-          columns={wep_columns} 
-          data={element.weapons}
-          onRowClick={(event, data) => {
-            nav(`/weapons/w/${data.id}`)
-          }}
-          actions={[
-            rowData => ({
-              icon:()=><ToggleButton id={Number(rowData.id)} type="weapons" spacing="mx-3 my-3" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
-              onClick:()=>{}
-            })
-          ]}
-          options={{
-            pageSize:10,
-            search:true,
-            filtering:true
-          }}
-          localization={{
-            header: {
-              actions: 'Have?'
-            }
-          }}
-        />
+        <ThemeProvider theme={theme}>
+          <MaterialTable 
+            title={`Weapons with ${element.element} damage`}
+            columns={wep_columns} 
+            data={element.weapons}
+            onRowClick={(event, data) => {
+              nav(`/weapons/w/${data.id}`)
+            }}
+            actions={[
+              rowData => ({
+                icon:()=><ToggleButton id={Number(rowData.id)} type="weapons" spacing="mx-3 my-3" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
+                onClick:()=>{}
+              })
+            ]}
+            options={{
+              pageSize:10,
+              search:true,
+              filtering:true
+            }}
+            localization={{
+              header: {
+                actions: 'Have?'
+              }
+            }}
+          />
+        </ThemeProvider>
       </div>
     </div>
   )

@@ -28,7 +28,7 @@ const ToggleButton = ({id, type, spacing, add, remove, label1, label2}) => {
 
   return (
     <>
-      {exists ? <Button className={spacing} variant="success" size="sm" onClick={handleRemove}>{label1}</Button> : <Button className={spacing} variant="danger" size="sm" onClick={handleAdd}>{label2}</Button>}
+      {exists ? <Button className={spacing} variant="info" style={{color: "#ffffff"}} size="sm" onClick={handleRemove}>{label1}</Button> : <Button className={spacing} variant="light" size="sm" onClick={handleAdd}>{label2}</Button>}
     </>
   )
 }

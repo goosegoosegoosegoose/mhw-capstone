@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from '@material-table/core';
+import { ThemeProvider, createTheme } from "@material-ui/core";
 import ToggleButton from "../common/ToggleButton";
 import PlusButton from "../common/PlusButton";
 import MinusButton from "../common/MinusButton";
@@ -65,6 +66,11 @@ const ProfilePage = ({add, remove, plus, minus}) => {
       }
     }
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchUserWhenMounted() {
     async function fetchUser() {
@@ -89,66 +95,68 @@ const ProfilePage = ({add, remove, plus, minus}) => {
         <h4>{user.email}</h4>
       </div>
       <div className="row justify-content-center my-4">
-        <div className="col-sm-6">
-          <MaterialTable
-            title="Charms"
-            columns={charm_col} 
-            data={user.charms}
-            onRowClick={(event, data) => {
-              nav(`/charms/${data.id}`)
-            }}
-            actions={[
-              rowData => ({
-                icon:()=><ToggleButton id={rowData.id} type="charms" spacing="my-1 mt-auto" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
-                onClick:()=>{}
-              })
-            ]}
-            options={{
-              pageSize:10,
-              search:true,
-              filtering:true
-            }}
-            localization={{
-              header: {
-                actions: 'Have?'
-              }
-            }}
-          />
-        </div>
-        <div className="col-sm-6">
-          <MaterialTable
-            title="Decorations"
-            columns={deco_col} 
-            data={user.decorations}
-            onRowClick={(event, data) => {
-              nav(`/decorations/${data.id}`)
-            }}
-            actions={[
-              rowData => ({
-                icon:()=><DecoCounter id={rowData.id} c="mb-1"/>,
-                onClick:()=>{}
-              }),
-              rowData => ({
-                icon:()=><PlusButton id={rowData.id} spacing="my-1 mt-auto" plus={plus} />,
-                onClick:()=>{}
-              }),
-              rowData => ({
-                icon:()=><MinusButton id={rowData.id} spacing="my-1 mt-auto" minus={minus} />,
-                onClick:()=>{}
-              })
-            ]}
-            options={{
-              pageSize:10,
-              search:true,
-              filtering:true
-            }}
-            localization={{
-              header: {
-                actions: 'Amount in Inventory'
-              }
-            }}
-          />
-        </div>
+        <ThemeProvider theme={theme}>
+          <div className="col-sm-6">
+            <MaterialTable
+              title="Charms"
+              columns={charm_col} 
+              data={user.charms}
+              onRowClick={(event, data) => {
+                nav(`/charms/${data.id}`)
+              }}
+              actions={[
+                rowData => ({
+                  icon:()=><ToggleButton id={rowData.id} type="charms" spacing="my-1 mt-auto" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
+                  onClick:()=>{}
+                })
+              ]}
+              options={{
+                pageSize:10,
+                search:true,
+                filtering:true
+              }}
+              localization={{
+                header: {
+                  actions: 'Have?'
+                }
+              }}
+            />
+          </div>
+          <div className="col-sm-6">
+            <MaterialTable
+              title="Decorations"
+              columns={deco_col} 
+              data={user.decorations}
+              onRowClick={(event, data) => {
+                nav(`/decorations/${data.id}`)
+              }}
+              actions={[
+                rowData => ({
+                  icon:()=><DecoCounter id={rowData.id} c="mb-1"/>,
+                  onClick:()=>{}
+                }),
+                rowData => ({
+                  icon:()=><PlusButton id={rowData.id} spacing="my-1 mt-auto" plus={plus} />,
+                  onClick:()=>{}
+                }),
+                rowData => ({
+                  icon:()=><MinusButton id={rowData.id} spacing="my-1 mt-auto" minus={minus} />,
+                  onClick:()=>{}
+                })
+              ]}
+              options={{
+                pageSize:10,
+                search:true,
+                filtering:true
+              }}
+              localization={{
+                header: {
+                  actions: 'Amount in Inventory'
+                }
+              }}
+            />
+          </div>
+        </ThemeProvider>
         <div className="row d-flex justify-content-center my-3">
           <h4 className="mt-4">Weapons</h4>
           {user.weapons.map(w => 

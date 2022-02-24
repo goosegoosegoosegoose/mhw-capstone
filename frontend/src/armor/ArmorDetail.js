@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from '@material-table/core';
+import { ThemeProvider, createTheme } from "@material-ui/core";
 import ToggleButton from "../common/ToggleButton";
 
 const ArmorDetail = ({add, remove}) => {
@@ -12,6 +13,11 @@ const ArmorDetail = ({add, remove}) => {
     {title:"Quantity", field:"quantity", width:"10%"},
     {title:"Description", field:"description"},
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchArmorWhenMounted () {
     async function fetchArmor() {
@@ -56,18 +62,21 @@ const ArmorDetail = ({add, remove}) => {
       </div>
       {armor.materials.length > 0 ? 
         <div>
-          <MaterialTable
-            title="Crafting Materials"
-            columns={matColumns} 
-            data={armor.materials}
-            options={{
-              pageSize:5,
-              search:false,
-              filtering:false
-            }}
-          />
+          <ThemeProvider theme={theme}>
+            <MaterialTable
+              title="Crafting Materials"
+              columns={matColumns} 
+              data={armor.materials}
+              options={{
+                pageSize:5,
+                search:false,
+                filtering:false
+              }}
+            />
+          </ThemeProvider>
         </div> 
-      : null}  
+          : null} 
+      
     </div>
   )
 }

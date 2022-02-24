@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from "@material-table/core";
+import { ThemeProvider, createTheme } from "@material-ui/core";
 import PlusButton from "../common/PlusButton";
 import MinusButton from "../common/MinusButton";
 import DecoCounter from "../common/DecoCounter";
@@ -15,6 +16,11 @@ const DecorationDetail = ({plus, minus}) => {
     {title:"Level", field:"level", width:"10%"},
     {title:"Description", field:"description"}
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchDecoWhenMounted () {
     async function fetchDeco() {
@@ -41,20 +47,22 @@ const DecorationDetail = ({plus, minus}) => {
         <p className="d-inline-block mx-1">You currently have </p><DecoCounter id={id}/><p className="d-inline-block mx-1"> of this decoration.</p>
       </div>
       <div className="container my-5">
-        <MaterialTable
-          title="Skill(s)"
-          columns={skillColumns} 
-          data={decoration.skills}
-          onRowClick={(event, data) => {
-            nav(`/skills/${data.id}`)
-          }}
-          options={{
-            pageSize:3,
-            search:false,
-            filtering:false,
-            tableLayout:"fixed"
-          }}
-        />
+        <ThemeProvider theme={theme}>
+          <MaterialTable
+            title="Skill(s)"
+            columns={skillColumns} 
+            data={decoration.skills}
+            onRowClick={(event, data) => {
+              nav(`/skills/${data.id}`)
+            }}
+            options={{
+              pageSize:3,
+              search:false,
+              filtering:false,
+              tableLayout:"fixed"
+            }}
+          />
+        </ThemeProvider>
       </div>
     </div>
   )

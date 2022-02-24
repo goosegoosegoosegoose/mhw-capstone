@@ -18,16 +18,19 @@ const WeaponTypeList = () => {
     setWeaponTypes([...res])
   }
 
-  if (!weaponTypes) {
+  if (weaponTypes.length === 0) {
     return (
       <div className="container text-center">
-        <p>Loading</p>
+        <h1>Weapon Types</h1>
+        <SearchForm type="weapons" header="type" get={getWeaponTypes} />
+        <p>Sorry, no results were found! Please re-submit to refresh.</p>
       </div>
     )
   }
 
   return (
     <div className="container text-center">
+      <h1>Weapon Types</h1>
       <SearchForm type="weapons" header="type" get={getWeaponTypes} />
       <div className="row justify-content-center">
         {weaponTypes.map(t => 

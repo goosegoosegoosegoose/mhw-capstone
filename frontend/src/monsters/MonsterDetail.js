@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from "@material-table/core";
+import { ThemeProvider, createTheme } from "@material-ui/core";
 import ToggleButton from "../common/ToggleButton";
 
 const MonsterDetail = ({add, remove}) => {
@@ -45,6 +46,11 @@ const MonsterDetail = ({add, remove}) => {
       }
     }
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
   
   useEffect(() => {
     const fetchMonster = async () => {
@@ -95,33 +101,35 @@ const MonsterDetail = ({add, remove}) => {
           <img src={monster.img} className="img-fluid"/>
         </div>
       </div>
-      <div className="row m-1">
-        <MaterialTable 
-          title="Weak to"
-          columns={weakColumns} 
-          data={monster.weaknesses}
-          onRowClick={(event, data) => {
-            nav(`/elements/${data.element}`)
-          }}
-          options={{
-            pageSize:5,
-            search:false,
-            filtering:false
-          }}
-        />
-      </div>
-      <div className="row m-1 justify-content-center">
-        {monster.materials.length > 0 ? <MaterialTable 
-          title="Material rewards"
-          columns={matColumns} 
-          data={monster.materials}
-          options={{
-            pageSize:6,
-            search:true,
-            filtering:true
-          }}
-        /> : <h4 className="m-5">No material info provided</h4>}
-      </div>
+      <ThemeProvider theme={theme}>
+        <div className="row mx-2 mb-4">
+          <MaterialTable 
+            title="Weak to"
+            columns={weakColumns} 
+            data={monster.weaknesses}
+            onRowClick={(event, data) => {
+              nav(`/elements/${data.element}`)
+            }}
+            options={{
+              pageSize:5,
+              search:false,
+              filtering:false
+            }}
+          />
+        </div>
+        <div className="row mx-2 justify-content-center">
+          {monster.materials.length > 0 ? <MaterialTable 
+            title="Material rewards"
+            columns={matColumns} 
+            data={monster.materials}
+            options={{
+              pageSize:6,
+              search:true,
+              filtering:true
+            }}
+          /> : <h4 className="m-5">No material info provided</h4>}
+        </div>
+      </ThemeProvider>
     </div>
   )
 };
