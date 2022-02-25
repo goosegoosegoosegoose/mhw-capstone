@@ -33,7 +33,7 @@ const getSkills = async () => {
   const skills = res.data;
   skills.map(s => {
     s.ranks.map(r => {
-      Skill.create(r.id, `${s.name} ${r.level}`, r.level, r.description)
+      Skill.create(r.id, `${s.name} ${r.level}`, r.level, r.description, s.ranks[s.ranks.length-1].level)
     })
   })
 }

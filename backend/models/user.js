@@ -219,7 +219,8 @@ class User {
               ua.slots AS slots
        FROM user_armor AS ua
        INNER JOIN armor AS a ON ua.armor_id = a.id
-       WHERE ua.username = $1 AND a.type = 'head'`,
+       WHERE ua.username = $1 AND a.type = 'head'
+       ORDER BY id`,
     [username]);
     gear.head = headRes.rows;
 
@@ -232,7 +233,8 @@ class User {
               ua.slots AS slots
        FROM user_armor AS ua
        INNER JOIN armor AS a ON ua.armor_id = a.id
-       WHERE ua.username = $1 AND a.type = 'chest'`,
+       WHERE ua.username = $1 AND a.type = 'chest'
+       ORDER BY id`,
     [username]);
     gear.chest = chestRes.rows;
 
@@ -245,7 +247,8 @@ class User {
               ua.slots AS slots
        FROM user_armor AS ua
        INNER JOIN armor AS a ON ua.armor_id = a.id
-       WHERE ua.username = $1 AND a.type = 'gloves'`,
+       WHERE ua.username = $1 AND a.type = 'gloves'
+       ORDER BY id`,
     [username]);
     gear.gloves = glovesRes.rows;
 
@@ -258,7 +261,8 @@ class User {
               ua.slots AS slots
        FROM user_armor AS ua
        INNER JOIN armor AS a ON ua.armor_id = a.id
-       WHERE ua.username = $1 AND a.type = 'waist'`,
+       WHERE ua.username = $1 AND a.type = 'waist'
+       ORDER BY id`,
     [username]);
     gear.waist = waistRes.rows;
 
@@ -271,7 +275,8 @@ class User {
               ua.slots AS slots
        FROM user_armor AS ua
        INNER JOIN armor AS a ON ua.armor_id = a.id
-       WHERE ua.username = $1 AND a.type = 'legs'`,
+       WHERE ua.username = $1 AND a.type = 'legs'
+       ORDER BY id`,
     [username]);
     gear.legs = legsRes.rows;
 
@@ -306,13 +311,15 @@ class User {
        LEFT JOIN weapon_shelling AS wl ON uw.weapon_id = wl.weapon_id
        LEFT JOIN weapon_boosts AS wb ON uw.weapon_id = wb.weapon_id
        LEFT JOIN weapon_gunspecs AS wg ON uw.weapon_id = wg.weapon_id
-       WHERE uw.username = $1`,
+       WHERE uw.username = $1
+       ORDER BY id`,
     [username]);
     gear.weapons = weaponsRes.rows;
    
     const charmsRes = await db.query(
       `SELECT c.id AS id, c.name AS name,
-                          (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN charm_skills AS cs ON s.id = cs.skill_id WHERE cs.charm_id = uc.charm_id) AS skills
+                          (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN charm_skills AS cs ON s.id = cs.skill_id WHERE cs.charm_id = uc.charm_id) AS skills,
+                          (SELECT ARRAY_AGG(s.cap) FROM skills AS s INNER JOIN charm_skills AS cs ON s.id = cs.skill_id WHERE cs.charm_id = uc.charm_id) AS skill_caps
        FROM user_charms AS uc
        INNER JOIN charms AS c ON uc.charm_id = c.id
        WHERE uc.username = $1`,
@@ -323,7 +330,8 @@ class User {
       `SELECT d.id AS id, 
               d.name AS name, 
               d.slot AS slot,
-              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills
+              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills,
+              (SELECT ARRAY_AGG(s.cap) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skill_caps
        FROM user_decorations AS ud
        INNER JOIN decorations AS d ON ud.decoration_id = d.id
        WHERE ud.username = $1 AND d.slot = 1`,
@@ -334,7 +342,8 @@ class User {
       `SELECT d.id AS id, 
               d.name AS name, 
               d.slot AS slot,
-              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills
+              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills,
+              (SELECT ARRAY_AGG(s.cap) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skill_caps
        FROM user_decorations AS ud
        INNER JOIN decorations AS d ON ud.decoration_id = d.id
        WHERE ud.username = $1 AND d.slot = 2`,
@@ -345,7 +354,8 @@ class User {
       `SELECT d.id AS id, 
               d.name AS name, 
               d.slot AS slot,
-              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills
+              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills,
+              (SELECT ARRAY_AGG(s.cap) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skill_caps
        FROM user_decorations AS ud
        INNER JOIN decorations AS d ON ud.decoration_id = d.id
        WHERE ud.username = $1 AND d.slot = 3`,
@@ -356,7 +366,8 @@ class User {
       `SELECT d.id AS id, 
               d.name AS name, 
               d.slot AS slot,
-              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills
+              (SELECT ARRAY_AGG(s.name) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skills,
+              (SELECT ARRAY_AGG(s.cap) FROM skills AS s INNER JOIN decoration_skills AS ds ON s.id = ds.skill_id WHERE ds.decoration_id = ud.decoration_id) AS skill_caps
        FROM user_decorations AS ud
        INNER JOIN decorations AS d ON ud.decoration_id = d.id
        WHERE ud.username = $1 AND d.slot = 4`,

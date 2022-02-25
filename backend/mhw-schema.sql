@@ -36,7 +36,8 @@ CREATE TABLE skills (
   id INTEGER PRIMARY KEY,
   name TEXT NOT NULL,
   level INTEGER NOT NULL,
-  description TEXT
+  description TEXT,
+  cap INTEGER
 );
 
 CREATE TABLE ailments (

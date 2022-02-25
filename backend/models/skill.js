@@ -3,7 +3,7 @@
 const db = require("../db");
 
 class Skill {
-  static async create(id, name, level, description) {
+  static async create(id, name, level, description, cap) {
     const duplicateCheck = await db.query(
       `SELECT id
        FROM skills
@@ -13,9 +13,9 @@ class Skill {
 
     await db.query(
       `INSERT INTO skills
-       (id, name, level, description)
-       VALUES ($1, $2, $3, $4)`,
-    [id, name, level, description]);
+       (id, name, level, description, cap)
+       VALUES ($1, $2, $3, $4, $5)`,
+    [id, name, level, description, cap]);
   }
 
   static async findAll() {
