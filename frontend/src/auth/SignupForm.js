@@ -23,7 +23,7 @@ const SignupForm = ({signup}) => {
     evt.preventDefault();
     signup({...formData});
     setFormData(INITIAL_STATE);
-    nav(-1);
+    nav("/login");
   };
 
   return (
