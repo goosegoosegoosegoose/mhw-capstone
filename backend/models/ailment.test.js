@@ -9,24 +9,37 @@ const {
   commonAfterEach,
   commonAfterAll,
 } = require("./_testCommon");
+const { test, expect } = require("@jest/globals");
+const { fail } = require("yargs");
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
-describe("create", function () {
+describe("create", () => {
   let newAilment = {
-    id: 1,
-    name: "a1",
+    id: 3,
+    name: "a3",
     description: "test"
   };
 
-  test("works", async function () {
-    let ailment = await Ailment.create(newAilment);
+  test("works", async () => {
+    await Ailment.create(newAilment.id, newAilment.name, newAilment.description);
+    let res = await db.query(`SELECT * FROM ailments WHERE id = $1`, [newAilment.id]);
+    let ailment = res.rows[0];
     expect(ailment).toEqual({
-      ...newAilment,
-      // id: expect.any(Number),
+      ...newAilment
     });
+  });
+
+  test("duplicate ailment", async () => {
+    try {
+      await Ailment.create(newAilment.id, newAilment.name, newAilment.description);
+      await Ailment.create(newAilment.id, newAilment.name, newAilment.description);
+      fail();
+    } catch (e) {
+      expect(e instanceof BadRequestError).toBeTruthy();
+    }
   });
 });

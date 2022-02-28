@@ -84,8 +84,9 @@ class Armor {
        FROM armor
        WHERE id = $1`,
     [id]);
-
-    return res.rows[0];
+    const armor = res.rows[0];
+    if (!armor) throw new NotFoundError(`Armor with id ${id} found`)
+    return armor;
   }
 
   static async findArmorSet(id){
@@ -95,8 +96,10 @@ class Armor {
        INNER JOIN armor_sets AS s ON a.armor_set_id = s.id
        WHERE a.id = $1`,
     [id]);
+    const armorSet = res.rows[0];
+    if (!armorSet) throw new NotFoundError(`No armor sets of armor id ${id} found`);
 
-    return res.rows[0];
+    return armorSet;
   }
 
   static async findSkills(id) {
@@ -123,15 +126,6 @@ class Armor {
     return res.rows;
   }
 
-  static async userAll(){
-    let res = await db.query(
-      `SELECT armor_id
-       FROM user_armor
-       WHERE username = $1`
-    [username]);
-    return res.rows;    
-  }
-
   static async userAdd(username, armorId) {
     const preCheck = await db.query(
       `SELECT username
@@ -148,7 +142,7 @@ class Armor {
       username, 
       armorId
     ]);
-    if (duplicateCheck.rows[0]) throw new BadRequestError(`Duplicate armor`);
+    if (duplicateCheck.rows[0]) throw new BadRequestError(`Duplicate user armor`);
 
     const res = await db.query(
       `SELECT slots
@@ -165,6 +159,13 @@ class Armor {
   }
 
   static async userRemove(username, armorId) {
+    const preCheck = await db.query(
+      `SELECT username
+       FROM users
+       WHERE username = $1`, [username]);
+    const user = preCheck.rows[0];
+    if (!user) throw new NotFoundError(`No user ${username}`);
+
     const res = await db.query(
       `DELETE
        FROM user_armor

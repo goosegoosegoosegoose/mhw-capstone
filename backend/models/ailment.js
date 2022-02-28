@@ -11,12 +11,13 @@ class Ailment {
     [id]);
     if (duplicateCheck.rows[0]) return;
 
-    await db.query(
+    const ailment = await db.query(
       `INSERT INTO ailments
        (id, name, description)
-       VALUES ($1, $2, $3)
-       RETURNING id, name, description`,
+       VALUES ($1, $2, $3)`,
     [id, name, description]);
+
+    return ailment.rows[0];
   }
 }
 

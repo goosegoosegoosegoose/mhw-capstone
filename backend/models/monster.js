@@ -231,14 +231,6 @@ class Monster {
     return res.rows[0];
   }
 
-  static async userAll(){
-    let res = await db.query(
-      `SELECT id, name, type, species, description 
-       FROM user_monsters`);
-    
-    return res.rows;    
-  }
-
   static async userRemove(username, monId) {
     const res = await db.query(
       `DELETE

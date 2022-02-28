@@ -333,15 +333,6 @@ class Weapon {
     return res.rows;
   }
 
-  static async userAll(){
-    let res = await db.query(
-      `SELECT weapon_id
-       FROM user_weapons
-       WHERE username = $1`
-    [username]);
-    return res.rows;    
-  }
-
   static async userAdd(username, wepId) {
     const preCheck = await db.query(
       `SELECT username

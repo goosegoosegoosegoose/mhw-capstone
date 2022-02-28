@@ -1,6 +1,10 @@
 "use strict"
 
 const db = require("../db");
+const {
+  NotFoundError,
+  BadRequestError,
+} = require("../expressError");
 
 class ArmorSet {
   static async create(id, name, rank, setBonus) {

@@ -61,15 +61,6 @@ class Decoration {
     return res.rows;
   }
 
-  static async userAll(){
-    let res = await db.query(
-      `SELECT decoration_id
-       FROM user_decorations
-       WHERE username = $1`,
-    [username]);
-    return res.rows;    
-  }
-
   static async userAdd(username, decoId) {
     const preCheck = await db.query(
       `SELECT username

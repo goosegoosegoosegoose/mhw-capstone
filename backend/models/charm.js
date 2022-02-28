@@ -87,15 +87,6 @@ class Charm {
     return res.rows;
   }
 
-  static async userAll(){
-    let res = await db.query(
-      `SELECT charm_id
-       FROM user_charms
-       WHERE username = $1`,
-    [username]);
-    return res.rows;    
-  }
-
   static async userAdd(username, charmId) {
     const preCheck = await db.query(
       `SELECT username
