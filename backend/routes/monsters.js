@@ -62,7 +62,6 @@ router.delete("/:id", async (req, res, next) => {
 router.post("/:id/user/:username", ensureCorrectUserOrAdmin, async (req, res, next) => {
   const id = req.params.id;
   const username = req.params.username;
-  console.log("hit");
   try {
     await Monster.userAdd(username, id);
     return res.status(201).json({ id })

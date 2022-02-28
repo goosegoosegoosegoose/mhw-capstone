@@ -12,19 +12,6 @@ const userUpdateSchema = require("../schemas/userUpdate.json");
 
 const router = express.Router();
 
-
-/** POST / { user }  => { user, token }
- *
- * Adds a new user. This is not the registration endpoint --- instead, this is
- * only for admin users to add new users. The new user being added can be an
- * admin.
- *
- * This returns the newly created user and an authentication token for them:
- *  {user: { username, firstName, lastName, email, isAdmin }, token }
- *
- * Authorization required: admin
- **/
-
 router.post("/", ensureAdmin, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userNewSchema);
@@ -41,14 +28,6 @@ router.post("/", ensureAdmin, async function (req, res, next) {
   }
 });
 
-
-/** GET / => { users: [ {username, firstName, lastName, email }, ... ] }
- *
- * Returns list of all users.
- *
- * Authorization required: admin
- **/
-
 router.get("/", ensureAdmin, async function (req, res, next) {
   try {
     const users = await User.findAll();
@@ -58,15 +37,7 @@ router.get("/", ensureAdmin, async function (req, res, next) {
   }
 });
 
-
-/** GET /[username] => { user }
- *
- * Returns { username, firstName, lastName, isAdmin, jobs }
- *   where jobs is { id, title, companyHandle, companyName, state }
- *
- * Authorization required: admin or same user-as-:username
- **/
-
+// get currentUser info for state
 router.get("/:username", ensureCorrectUserOrAdmin, async function (req, res, next) {
   try {
     const user = await User.get(req.params.username);
@@ -76,6 +47,8 @@ router.get("/:username", ensureCorrectUserOrAdmin, async function (req, res, nex
   }
 });
 
+
+// get all user info for profile page
 router.get("/:username/all", async function (req, res, next) {
   try {
     const user = await User.getAll(req.params.username);
@@ -85,6 +58,8 @@ router.get("/:username/all", async function (req, res, next) {
   }
 });
 
+
+// get all user gear for gearing page
 router.get("/:username/gear", async function (req, res, next) {
   try {
     const gear = await User.getGear(req.params.username);
@@ -94,17 +69,6 @@ router.get("/:username/gear", async function (req, res, next) {
   }
 });
 
-
-/** PATCH /[username] { user } => { user }
- *
- * Data can include:
- *   { firstName, lastName, password, email }
- *
- * Returns { username, firstName, lastName, email, isAdmin }
- *
- * Authorization required: admin or same-user-as-:username
- **/
-
 router.patch("/:username", ensureCorrectUserOrAdmin, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userUpdateSchema);
@@ -112,19 +76,12 @@ router.patch("/:username", ensureCorrectUserOrAdmin, async function (req, res, n
       const errs = validator.errors.map(e => e.stack);
       throw new BadRequestError(errs);
     }
-
     const user = await User.update(req.params.username, req.body);
     return res.json({ user });
   } catch (err) {
     return next(err);
   }
 });
-
-
-/** DELETE /[username]  =>  { deleted: username }
- *
- * Authorization required: admin or same-user-as-:username
- **/
 
 router.delete("/:username", ensureCorrectUserOrAdmin, async function (req, res, next) {
   try {

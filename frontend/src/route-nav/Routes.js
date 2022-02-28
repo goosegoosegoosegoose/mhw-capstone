@@ -22,7 +22,7 @@ import DecorationDetail from "../decorations/DecorationDetail";
 import WeaponTypeList from "../weapons/WeaponTypesList";
 import WeaponList from "../weapons/WeaponList";
 import WeaponDetail from "../weapons/WeaponDetail";
-import ProfileForm from "../auth/ProfileForm";
+import EmailForm from "../auth/EmailForm";
 import ProfilePage from "../user/ProfilePage";
 import GearingPage from "../user/GearingPage";
 
@@ -66,7 +66,7 @@ const RoutesComp = ({login, signup, loggedIn, edit, add, remove, plus, minus, na
       <Route path="/skills/:id" element={<SkillDetail add={add} remove={remove}/>}/>
       <Route path="/elements" element={<ElementList />}/>
       <Route path="/elements/:ele" element={<ElementDetail add={add} remove={remove}/>}/>
-      <Route path="/users/edit" element={<ProfileForm edit={edit}/>}/>
+      <Route path="/email/edit" element={<EmailForm edit={edit}/>}/>
       <Route path="/profile/:username" element={<ProfilePage add={add} remove={remove} plus={plus} minus={minus} name={name}/>}/>
       <Route path="/gearing/:username" element={<GearingPage />} />
     </Routes>

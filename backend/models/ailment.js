@@ -14,7 +14,8 @@ class Ailment {
     await db.query(
       `INSERT INTO ailments
        (id, name, description)
-       VALUES ($1, $2, $3)`,
+       VALUES ($1, $2, $3)
+       RETURNING id, name, description`,
     [id, name, description]);
   }
 }

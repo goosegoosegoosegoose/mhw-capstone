@@ -23,8 +23,6 @@ const App = () => {
     }
     return;
   }, [token, username]);
-
-  console.log(currentUser);
   
   const login = async (data) => {
     const res = await MhwApi.login(data);

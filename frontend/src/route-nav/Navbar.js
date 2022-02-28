@@ -66,6 +66,9 @@ const NavbarComp = ({logout, loggedIn, name}) => {
         <Nav.Link href={`/profile/${name}`}>
           Profile
         </Nav.Link>
+        <Nav.Link href={`/email/edit`}>
+          Edit email
+        </Nav.Link>
         <Nav.Link className="mx-4" href="/" onClick={logout}>
           Log out {currentUser ? currentUser.username : null }
         </Nav.Link>
