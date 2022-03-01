@@ -10,17 +10,17 @@ const Homepage = () => {
   if (!user.username) {
     return (
       <div className="container justify-content-center text-center">
-        <div className="row">
-          <h1><b>MHW Wiki and Player Progression Tracker</b></h1>
-          <h3>Sign up or login to gain access</h3>
-        </div>
-        <div className="row">
-          <div className="col-lg-4" />
-          <div className="col-lg-4">
-            <a href="/login"><Button className="m-2" variant="primary" size="lg">Log in</Button></a>
-            <a href="/signup"><Button className="m-2" variant="primary" size="lg">Sign up</Button></a>
+        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '70vh'}}>
+          <div className="row">
+            <div>
+              <h1><b>MHW Wiki and Player Progression Tracker</b></h1>
+              <h3>Sign up or login to gain access</h3>
+            </div>
+            <div>
+              <a href="/login"><Button className="m-2" variant="primary" size="lg">Log in</Button></a>
+              <a href="/signup"><Button className="m-2" variant="primary" size="lg">Sign up</Button></a>
+            </div>
           </div>
-          <div className="col-lg-4" />
         </div>
       </div>
     )
