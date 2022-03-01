@@ -60,8 +60,9 @@ async function commonBeforeAll() {
            (2, 'a2', 'chest', 'testranka2', $2, 2, 2, 2, 2, 1, 'testa2m', 'testa2f'),
            (3, 'a3', 'gloves', 'testranka3', $3, 3, 3, 3, 3, 1, 'testa3m', 'testa3f'),
            (4, 'a4', 'waist', 'testranka4', $4, 4, 4, 4, 4, 1, 'testa4m', 'testa4f'),
-           (5, 'a5', 'legs', 'testranka5', $5, 5, 5, 5, 5, 1, 'testa5m', 'testa5f')`,
-    [{1:1, 2:1, 3:1, 4:1}, {1:1, 2:1, 3:1, 4:1}, {1:1, 2:1, 3:1, 4:1}, {1:1, 2:1, 3:1, 4:1}, {1:1, 2:1, 3:1, 4:1}]);
+           (5, 'a5', 'legs', 'testranka5', $5, 5, 5, 5, 5, 1, 'testa5m', 'testa5f'),
+           (7, 'a7', 'chest', 'testranka7', $6, 7, 7, 7, 7, 2, 'testa7m', 'testa7f')`,
+    [{1:1, 2:1, 3:1, 4:1}, {1:1, 2:1, 3:1, 4:1}, {1:1, 2:1, 3:1, 4:1}, {1:1, 2:1, 3:1, 4:1}, {1:1, 2:1, 3:1, 4:1}, {1:1, 2:1, 3:1, 4:1}]);
 
   await db.query(`
     INSERT INTO armor_skills (armor_id, skill_id)

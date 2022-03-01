@@ -1,6 +1,7 @@
 "use strict"
 
 const db = require("../db");
+const { NotFoundError, BadRequestError } = require("../expressError");
 
 class Charm {
   static async create(id, name, level, rarity) {
@@ -62,7 +63,10 @@ class Charm {
        FROM charms
        WHERE id = $1`,
     [id]);
-    return res.rows[0];
+    const charm = res.rows[0];
+    if (!charm) throw new NotFoundError(`No charm with id ${id} found`);
+
+    return charm;
   }
 
   static async findSkills(id) {
@@ -73,6 +77,7 @@ class Charm {
        INNER JOIN skills AS s ON cs.skill_id = s.id
        WHERE c.id = $1`,
     [id]);
+    
     return res.rows;
   }
 

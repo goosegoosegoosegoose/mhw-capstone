@@ -1,6 +1,6 @@
 "use strict";
 
-const { NotFoundError, BadRequestError } = require("../expressError");
+const { NotFoundError } = require("../expressError");
 const db = require("../db.js");
 const ArmorSet = require("./armorset");
 const {
@@ -33,15 +33,15 @@ describe("create", () => {
     });
   });
 
-  test("duplicate armor", async () => {
-    try {
-      await ArmorSet.create(newArmorSet.id, newArmorSet.name, newArmorSet.rank, newArmorSet.set_bonus);
-      await ArmorSet.create(newArmorSet.id, newArmorSet.name, newArmorSet.rank, newArmorSet.set_bonus);
-      fail();
-    } catch (e) {
-      expect(e instanceof BadRequestError).toBeTruthy();
-    }
-  });
+  // test("duplicate armor", async () => {
+  //   try {
+  //     await ArmorSet.create(newArmorSet.id, newArmorSet.name, newArmorSet.rank, newArmorSet.set_bonus);
+  //     await ArmorSet.create(newArmorSet.id, newArmorSet.name, newArmorSet.rank, newArmorSet.set_bonus);
+  //     fail();
+  //   } catch (e) {
+  //     expect(e instanceof BadRequestError).toBeTruthy();
+  //   }
+  // });
 });
 
 describe("createSkill", () => {
@@ -61,15 +61,15 @@ describe("createSkill", () => {
     });
   });
 
-  test("duplicate armor skill", async () => {
-    try {
-      await ArmorSet.createSkill(newSetSkill.armor_set_id, newSetSkill.skill_id, newSetSkill.pieces);
-      await ArmorSet.createSkill(newSetSkill.armor_set_id, newSetSkill.skill_id, newSetSkill.pieces);
-      fail();
-    } catch (e) {
-      expect(e instanceof BadRequestError).toBeTruthy();
-    }
-  });
+  // test("duplicate armor skill", async () => {
+  //   try {
+  //     await ArmorSet.createSkill(newSetSkill.armor_set_id, newSetSkill.skill_id, newSetSkill.pieces);
+  //     await ArmorSet.createSkill(newSetSkill.armor_set_id, newSetSkill.skill_id, newSetSkill.pieces);
+  //     fail();
+  //   } catch (e) {
+  //     expect(e instanceof BadRequestError).toBeTruthy();
+  //   }
+  // });
 });
 
 describe("findAll", () => {
@@ -81,160 +81,109 @@ describe("findAll", () => {
         name: "as1",
         rank: "testrank1",
         set_bonus: "testbonusas1",
-        defense_base: 5,
-        defense_max: 5,
-        defense_augmented: 5
+        total_base: "15",
+        total_max: "15",
+        total_augmented: "15"
       },
       {
         id: 2,
         name: "as2",
         rank: "testrank2",
         set_bonus: "testbonusas2",
-        defense_base: 0,
-        defense_max: 0,
-        defense_augmented: 0
+        total_augmented: "7",
+        total_base: "7",
+        total_max: "7"
       }
     ])
   });
 });
 
-// describe("findArmor", () => {
-//   test("works", async () => {
-//     const id = 1;
-//     let armor = await Armor.findArmor(id);
-//     expect(armor).toEqual({
-//       id: 1, 
-//       name: "a1",
-//       type: "head", 
-//       rank: "testranka1",
-//       slots: {1:1, 2:1, 3:1, 4:1},
-//       rarity: 1, 
-//       defense_base: 1, 
-//       defense_max: 1, 
-//       defense_augmented: 1, 
-//       armor_set_id: 1,
-//       m_img: "testa1m", 
-//       f_img: "testa1f"
-//     })
-//   });
+describe("findArmorSet", () => {
+  const id = 1;
 
-//   test("not found", async () => {
-//     try {
-//       await Armor.findArmor(9999999);
-//       fail();
-//     } catch (e) {
-//       expect(e instanceof NotFoundError).toBeTruthy();
-//     }
-//   });
-// });
+  test("works", async () => {
+    let armorSet = await ArmorSet.findArmorSet(id);
+    expect(armorSet).toEqual({
+        id: 1,
+        name: "as1",
+        rank: "testrank1",
+        set_bonus: "testbonusas1",
+        total_base: "15",
+        total_max: "15",
+        total_augmented: "15"
+      })
+  });
 
-// describe("findArmorSet", () => {
-//   test("works", async () => {
-//     const id = 1;
-//     let armorSet = await Armor.findArmorSet(id);
-//     expect(armorSet).toEqual({
-//       id: 1, 
-//       name: "as1"
-//     })
-//   });
+  test("not found", async () => {
+    try {
+      await ArmorSet.findArmorSet(9999999);
+      fail();
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy();
+    }
+  });
+});
 
-//   test("not found", async () => {
-//     try {
-//       await Armor.findArmorSet(9999999);
-//       fail();
-//     } catch (e) {
-//       expect(e instanceof NotFoundError).toBeTruthy();
-//     }
-//   });
-// });
+describe("findSkills", () => {
+  const id = 1;
 
-// describe("findArmorSkills", () => {
-//   test("works", async () => {
-//     const id = 1;
-//     let armorSkills = await Armor.findSkills(id);
-//     expect(armorSkills).toEqual([{
-//       id: 1, 
-//       name: "s1"
-//     }])
-//   });
+  test("works", async () => {
+    let setSkills = await ArmorSet.findSkills(id);
+    expect(setSkills).toEqual([{
+      id: 1, 
+      name: "s1",
+      level: 1,
+      description: "tests1"
+    }])
+  });
 
-//   test("not found", async () => {
-//     const armorSkills = await Armor.findSkills(9999999);
-//     expect(armorSkills).toEqual([]);
-//   });
-// });
+  test("not found", async () => {
+    let skills = await ArmorSet.findSkills(9999999);
+    expect(skills).toEqual([]);
+  });
+});
 
-// describe("findArmorMaterials", () => {
-//   test("works", async () => {
-//     const id = 1;
-//     let armorMaterials = await Armor.findMaterials(id);
-//     expect(armorMaterials).toEqual([{
-//       id: 1, 
-//       material: "i1",
-//       quantity: 1,
-//       description: "testi1"
-//     }])
-//   });
+describe("findArmor", () => {
+  const id = 1;
+  
+  test("works", async () => {
+    let setArmor = await ArmorSet.findArmor(id);
+    expect(setArmor).toEqual([
+      {
+        id: 1,
+        name: "a1",
+        m_img: "testa1m",
+        f_img: "testa1f"
+      },
+      {
+        id: 2,
+        name: "a2",
+        m_img: "testa2m",
+        f_img: "testa2f"
+      },
+      {
+        id: 3,
+        name: "a3",
+        m_img: "testa3m",
+        f_img: "testa3f"
+      },
+      {
+        id: 4,
+        name: "a4",
+        m_img: "testa4m",
+        f_img: "testa4f"
+      },
+      {
+        id: 5,
+        name: "a5",
+        m_img: "testa5m",
+        f_img: "testa5f"
+      }
+    ])
+  });
 
-//   test("not found", async () => {
-//     const armorMaterials = await Armor.findMaterials(9999999);
-//     expect(armorMaterials).toEqual([]);
-//   });
-// });
-
-// describe("userAdd", () => {
-//   let username = "u1"
-//   let armor_id = 5;
-
-//   test("works", async () => {
-//     await Armor.userAdd(username, armor_id);
-//     let res = await db.query(`SELECT * FROM user_armor WHERE username = $1 AND armor_id = $2`, [username, armor_id]);
-//     let armor = res.rows;
-//     expect(armor).toEqual([
-//       {
-//         id: expect.any(Number),
-//         username: username,
-//         armor_id: armor_id,
-//         slots: {1:1, 2:1, 3:1, 4:1}
-//       }
-//     ])
-//   });
-
-//   test("user not found", async () => {
-//     try {
-//       await Armor.userAdd("nope", armor_id);
-//       fail()
-//     } catch (e) {
-//       expect(e instanceof NotFoundError).toBeTruthy()
-//     }
-//   });
-
-//   test("duplicate user armor", async () => {
-//     try {
-//       await Armor.userAdd(username, 1);
-//       fail()
-//     } catch (e) {
-//       expect(e instanceof BadRequestError).toBeTruthy()
-//     }
-//   })
-// })
-
-// describe("userRemove", () => {
-//   let username = "u1"
-//   let armor_id = 1;
-
-//   test("works", async () => {
-//     await Armor.userRemove(username, armor_id);
-//     let res = await db.query(`SELECT * FROM user_armor WHERE username = $1 AND armor_id = $2`, [username, armor_id]);
-//     expect(res.rows.length).toEqual(0);
-//   });
-
-//   test("user not found", async () => {
-//     try {
-//       await Armor.userRemove("nope", armor_id);
-//       fail()
-//     } catch (e) {
-//       expect(e instanceof NotFoundError).toBeTruthy()
-//     }
-//   });
-// })
+  test("not found", async () => {
+    let armor = await ArmorSet.findArmor(9999999);
+    expect(armor).toEqual([]);
+  });
+});

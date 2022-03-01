@@ -1,6 +1,6 @@
 "use strict";
 
-const { NotFoundError, BadRequestError } = require("../expressError");
+const { BadRequestError, NotFoundError } = require("../expressError");
 const db = require("../db.js");
 const Armor = require("./armor");
 const {
@@ -41,7 +41,6 @@ describe("create", () => {
       // id: expect.any(Number),
     });
   });
-
 });
 
 describe("createSkill", () => {
@@ -78,15 +77,14 @@ describe("createMaterial", () => {
     });
   });
 
-  test("duplicate armor material", async () => {
-    try {
-      await Armor.createMaterial(newArmorMaterial.armor_id, newArmorMaterial.item_id, newArmorMaterial.quantity);
-      await Armor.createMaterial(newArmorMaterial.armor_id, newArmorMaterial.item_id, newArmorMaterial.quantity);
-      fail();
-    } catch (e) {
-      expect(e instanceof BadRequestError).toBeTruthy();
-    }
-  });
+  // test("duplicate armor material", async () => {
+  //   await Armor.createMaterial(newArmorMaterial.armor_id, newArmorMaterial.item_id, newArmorMaterial.quantity);
+  //   expect(() => {
+  //     await Armor.createMaterial(newArmorMaterial.armor_id, newArmorMaterial.item_id, newArmorMaterial.quantity)
+  //   }).rejects.toThrow()
+    
+
+  // });
 });
 
 
@@ -123,6 +121,12 @@ describe("findAll", () => {
         name: "a5",
         m_img: "testa5m",
         f_img: "testa5f"
+      },
+      {
+        id: 7,
+        name: "a7",
+        m_img: "testa7m",
+        f_img: "testa7f"
       }
     ])
   });
@@ -181,8 +185,9 @@ describe("findAll", () => {
 });
 
 describe("findArmor", () => {
+  const id = 1;
+
   test("works", async () => {
-    const id = 1;
     let armor = await Armor.findArmor(id);
     expect(armor).toEqual({
       id: 1, 
@@ -211,8 +216,9 @@ describe("findArmor", () => {
 });
 
 describe("findArmorSet", () => {
+  const id = 1;
+
   test("works", async () => {
-    const id = 1;
     let armorSet = await Armor.findArmorSet(id);
     expect(armorSet).toEqual({
       id: 1, 
@@ -230,9 +236,10 @@ describe("findArmorSet", () => {
   });
 });
 
-describe("findArmorSkills", () => {
+describe("findSkills", () => {
+  const id = 1;
+
   test("works", async () => {
-    const id = 1;
     let armorSkills = await Armor.findSkills(id);
     expect(armorSkills).toEqual([{
       id: 1, 
@@ -246,9 +253,10 @@ describe("findArmorSkills", () => {
   });
 });
 
-describe("findArmorMaterials", () => {
+describe("findMaterials", () => {
+  const id = 1;
+
   test("works", async () => {
-    const id = 1;
     let armorMaterials = await Armor.findMaterials(id);
     expect(armorMaterials).toEqual([{
       id: 1, 
@@ -299,7 +307,7 @@ describe("userAdd", () => {
       expect(e instanceof BadRequestError).toBeTruthy()
     }
   })
-})
+});
 
 describe("userRemove", () => {
   let username = "u1"

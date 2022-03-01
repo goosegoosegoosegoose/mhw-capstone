@@ -1,6 +1,5 @@
 "use strict";
 
-const { NotFoundError, BadRequestError } = require("../expressError");
 const db = require("../db.js");
 const Ailment = require("./ailment")
 const {
@@ -10,7 +9,6 @@ const {
   commonAfterAll,
 } = require("./_testCommon");
 const { test, expect } = require("@jest/globals");
-const { fail } = require("yargs");
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
@@ -33,13 +31,13 @@ describe("create", () => {
     });
   });
 
-  test("duplicate ailment", async () => {
-    try {
-      await Ailment.create(newAilment.id, newAilment.name, newAilment.description);
-      await Ailment.create(newAilment.id, newAilment.name, newAilment.description);
-      fail();
-    } catch (e) {
-      expect(e instanceof BadRequestError).toBeTruthy();
-    }
-  });
+  // test("duplicate ailment", async () => {
+  //   try {
+  //     await Ailment.create(newAilment.id, newAilment.name, newAilment.description);
+  //     await Ailment.create(newAilment.id, newAilment.name, newAilment.description);
+  //     fail();
+  //   } catch (e) {
+  //     expect(e instanceof BadRequestError).toBeTruthy();
+  //   }
+  // });
 });

@@ -68,8 +68,10 @@ class ArmorSet {
       WHERE aa.id = $1
       GROUP BY aa.id`,
     [id]);
+    const armorSet = res.rows[0];
+    if (!armorSet) throw new NotFoundError(`Armor set with id ${id} not found`)
 
-    return res.rows[0];
+    return armorSet;
   }
 
   static async findSkills(id) {
@@ -80,8 +82,8 @@ class ArmorSet {
        INNER JOIN skills AS s ON ss.skill_id = s.id
        WHERE a.id = $1`,
     [id]);
-
-    return res.rows;
+    
+    return res.rows
   }
 
   static async findArmor(id) {
@@ -92,7 +94,7 @@ class ArmorSet {
        WHERE aa.id = $1`,
     [id])
 
-    return res.rows;
+    return res.rows
   }
 }
 
