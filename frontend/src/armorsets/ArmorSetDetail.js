@@ -55,9 +55,8 @@ const ArmorSetDetail = ({add, remove}) => {
             />
           )}
         </div>
-
           {armorSet.skills.length > 0 ? 
-            <div className="container my-2">
+            <div className="m-4">
               <ThemeProvider theme={theme}>
                 <MaterialTable
                   title="Skills"
@@ -67,7 +66,7 @@ const ArmorSetDetail = ({add, remove}) => {
                     nav(`/skills/${data.id}`)
                   }}
                   options={{
-                    pageSize:3,
+                    paging: false,
                     search:false,
                     filtering:false,
                     tableLayout:"fixed"

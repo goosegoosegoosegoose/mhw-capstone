@@ -1,6 +1,7 @@
 "use strict"
 
 const db = require("../db");
+const { NotFoundError, BadRequestError } = require("../expressError");
 
 class Decoration {
   static async create(id, name, rarity, slot) {
@@ -47,7 +48,10 @@ class Decoration {
        FROM decorations
        WHERE id = $1`,
     [id]);
-    return res.rows[0];
+    const deco = res.rows[0];
+    if (!deco) throw new NotFoundError(`No decoration with id ${id} found`)
+
+    return deco;
   }
 
   static async findSkills(id) {
@@ -69,6 +73,13 @@ class Decoration {
     [username]);
     const user = preCheck.rows[0];
     if (!user) throw new NotFoundError(`No user ${username}`);
+
+    const duplicateCheck = await db.query(
+      `SELECT id
+       FROM user_decorations
+       WHERE username = $1 AND decoration_id = $2`,
+    [username, decoId]);
+    if (duplicateCheck.rows[0]) throw new BadRequestError(`Duplicate user decoration`);
 
     await db.query(
       `INSERT INTO user_decorations

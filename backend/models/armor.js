@@ -70,7 +70,7 @@ class Armor {
       [`%${value}%`]);
       return res.rows;
     };
-
+ 
     const res = await db.query(
       query +
       ` WHERE ${filter} = $1`,

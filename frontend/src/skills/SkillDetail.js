@@ -52,7 +52,7 @@ const SkillDetail = ({add, remove}) => {
       {skill.armor.length > 0 ? 
         <div className="text-center my-4">
           <div className="row justify-content-center">
-            <h4>Pieces</h4>
+            <h4>Armor Pieces with Skill</h4>
             {skill.armor.map(a => 
               <ArmorCard
                 key={a.id}
@@ -66,10 +66,9 @@ const SkillDetail = ({add, remove}) => {
             )}
           </div>
         </div>
-      : <h4 className="m-5">No armor with skill</h4>}
-      <div className="row justify-content-center">
+      : null}
         <ThemeProvider theme={theme}>
-          <div className="my-4 col-sm-4">
+          <div className="my-4">
             {skill.armorSets.length > 0 ?
               <MaterialTable
                 title="Armor with skill"
@@ -79,15 +78,15 @@ const SkillDetail = ({add, remove}) => {
                   nav(`/armor-sets/${data.id}`)
                 }}
                 options={{
-                  pageSize:2,
+                  paging:false,
                   search:false,
                   filtering:false,
                   tableLayout:"fixed"
                 }}
               />
-            : <h4 className="m-5">No armor sets with skill</h4>}
+            : null}
           </div>
-          <div className="my-4 col-sm-4">
+          <div className="my-4">
             {skill.decorations.length > 0 ?
               <MaterialTable
                 title="Charms with skill"
@@ -97,7 +96,7 @@ const SkillDetail = ({add, remove}) => {
                   nav(`/charms/${data.id}`)
                 }}
                 options={{
-                  pageSize:2,
+                  paging:false,
                   search:false,
                   filtering:false,
                   tableLayout:"fixed"
@@ -105,7 +104,7 @@ const SkillDetail = ({add, remove}) => {
               />
             : <h4 className="m-5">No charms with skill</h4>}
           </div>
-          <div className="my-4 col-sm-4">
+          <div className="my-4">
             {skill.decorations.length > 0 ?
               <MaterialTable
                 title="Decorations with skill"
@@ -115,16 +114,15 @@ const SkillDetail = ({add, remove}) => {
                   nav(`/decorations/${data.id}`)
                 }}
                 options={{
-                  pageSize:2,
+                  paging:false,
                   search:false,
                   filtering:false,
                   tableLayout:"fixed"
                 }}
               />
-            : <h4 className="m-5">No decorations with skill</h4>}
+            : null}
           </div>
         </ThemeProvider>
-      </div>
     </div>
   )
 }

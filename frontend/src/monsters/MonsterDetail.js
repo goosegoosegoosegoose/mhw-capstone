@@ -111,9 +111,9 @@ const MonsterDetail = ({add, remove}) => {
               nav(`/elements/${data.element}`)
             }}
             options={{
-              pageSize:5,
               search:false,
-              filtering:false
+              filtering:false,
+              paging: false
             }}
           />
         </div>

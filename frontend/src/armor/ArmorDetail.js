@@ -61,22 +61,21 @@ const ArmorDetail = ({add, remove}) => {
         </div>     
       </div>
       {armor.materials.length > 0 ? 
-        <div>
+        <div className="m-4">
           <ThemeProvider theme={theme}>
             <MaterialTable
               title="Crafting Materials"
               columns={matColumns} 
               data={armor.materials}
               options={{
-                pageSize:5,
+                paging: false,
                 search:false,
                 filtering:false
               }}
             />
           </ThemeProvider>
         </div> 
-          : null} 
-      
+      : <h4 className="m-5">No crafting materials provided</h4>} 
     </div>
   )
 }

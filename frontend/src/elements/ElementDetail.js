@@ -66,7 +66,7 @@ const ElementDetail = ({add, remove}) => {
 
   return (
     <div className="container">
-      <h1 className="m-4">{element.element.toUpperCase()} element</h1>
+      <h1 className="m-4">{element.element} element</h1>
       <div className="container">
         <ThemeProvider theme={theme}>
           <MaterialTable 

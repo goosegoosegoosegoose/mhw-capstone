@@ -4,7 +4,7 @@ const db = require("../db");
 
 class Element {
   static async findAll(search={}) {
-    if (!search.element){
+    if (!search.element) {
       const res = await db.query(
         `SELECT *
         FROM elements`

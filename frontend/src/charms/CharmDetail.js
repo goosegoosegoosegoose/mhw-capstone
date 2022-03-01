@@ -40,14 +40,13 @@ const CharmDetail = ({add, remove}) => {
   }
 
   return (
-    <div className="container">
+    <div className="container align-items-center">
       <div className="col-sm-12 d-flex">
         <h1 className="m-3">{charm.name}</h1>
         <ToggleButton id={Number(id)} type="charms" spacing="mx-1 my-4" add={add} remove={remove} label1="Sell?" label2="Craft?"/>
       </div>
       <ThemeProvider theme={theme}>
-        <div className="container my-5">
-          <div className="mb-4">
+        <div className="m-4">
           <MaterialTable
             title="Skills"
             columns={skillColumns} 
@@ -56,25 +55,28 @@ const CharmDetail = ({add, remove}) => {
               nav(`/skills/${data.id}`)
             }}
             options={{
-              pageSize:3,
-              search:false,
-              filtering:false,
-              tableLayout:"fixed"
-            }}
-          />
-          </div>
-          <MaterialTable
-            title="Materials needed to craft"
-            columns={matColumns} 
-            data={charm.materials}
-            options={{
-              pageSize:5,
+              paging:false,
               search:false,
               filtering:false,
               tableLayout:"fixed"
             }}
           />
         </div>
+        {charm.materials.length > 0 ?
+          <div className="m-4">
+            <MaterialTable
+              title="Materials needed to craft"
+              columns={matColumns} 
+              data={charm.materials}
+              options={{
+                paging:false,
+                search:false,
+                filtering:false,
+                tableLayout:"fixed"
+              }}
+            />
+          </div>
+        : <h4 className="m-5">No crafting materials provided</h4>}
       </ThemeProvider>
     </div>
   )

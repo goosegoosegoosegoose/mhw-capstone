@@ -110,14 +110,14 @@ const WeaponDetail = ({add, remove}) => {
       : null}
       <ThemeProvider theme={theme}>
         {weapon.white_sharpness ? 
-          <div className="row m-1">
+          <div className="row m-4">
             <p><b>*Sharpness is influenced by the <a href="/skills/142">Handicraft</a> skill up to level 5.</b></p>
             <MaterialTable
               title = "White Sharpness"
               columns={sharpColumns} 
               data={a.sharpness}
               options={{
-                pageSize:6,
+                paging:false,
                 search:false,
                 filtering:false
               }}
@@ -125,28 +125,28 @@ const WeaponDetail = ({add, remove}) => {
           </div> 
         : null}
         {weapon.ammo ? 
-          <div className="row m-1">
+          <div className="row m-4">
             <p><b>*Capacities are influenced by the <a href="/skills/187">Capacity Boost</a> skill.</b></p>
             <MaterialTable
               title = "Ammo Types"
               columns={ammoColumns} 
               data={weapon.ammo}
               options={{
-                pageSize:5,
-                search:true,
+                paging:false,
+                search:false,
                 filtering:false
               }}
             />
           </div> 
         : null}
         {weapon.materials.length > 0 ? 
-          <div className="row m-1">
+          <div className="row m-4">
             <MaterialTable
               title="Crafting Materials"
               columns={matColumns} 
               data={weapon.materials}
               options={{
-                pageSize:5,
+                paging:false,
                 search:false,
                 filtering:false
               }}

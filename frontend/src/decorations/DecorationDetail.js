@@ -46,7 +46,7 @@ const DecorationDetail = ({plus, minus}) => {
       <div className="d-flex">
         <p className="d-inline-block mx-1">You currently have </p><DecoCounter id={id}/><p className="d-inline-block mx-1"> of this decoration.</p>
       </div>
-      <div className="container my-5">
+      <div className="m-4">
         <ThemeProvider theme={theme}>
           <MaterialTable
             title="Skill(s)"
@@ -56,7 +56,7 @@ const DecorationDetail = ({plus, minus}) => {
               nav(`/skills/${data.id}`)
             }}
             options={{
-              pageSize:3,
+              paging:false,
               search:false,
               filtering:false,
               tableLayout:"fixed"

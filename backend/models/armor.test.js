@@ -37,8 +37,7 @@ describe("create", () => {
     let res = await db.query(`SELECT * FROM armor WHERE id = $1`, [newArmor.id]);
     let armor = res.rows[0];
     expect(armor).toEqual({
-      ...newArmor,
-      // id: expect.any(Number),
+      ...newArmor
     });
   });
 });
@@ -134,14 +133,12 @@ describe("findAll", () => {
   test("filter name", async () => {
     const name = "a2"
     const armor = await Armor.findAll({name: name});
-    expect(armor).toEqual([
-      {
+    expect(armor).toEqual([{
         id: 2,
         name: "a2",
         m_img: "testa2m",
         f_img: "testa2f"
-      }
-    ])
+    }])
   });
 
   test("filter type", async () => {
@@ -273,21 +270,19 @@ describe("findMaterials", () => {
 });
 
 describe("userAdd", () => {
-  let username = "u1"
+  let username = "u1";
   let armor_id = 5;
 
   test("works", async () => {
     await Armor.userAdd(username, armor_id);
     let res = await db.query(`SELECT * FROM user_armor WHERE username = $1 AND armor_id = $2`, [username, armor_id]);
     let armor = res.rows;
-    expect(armor).toEqual([
-      {
+    expect(armor).toEqual([{
         id: expect.any(Number),
         username: username,
         armor_id: armor_id,
         slots: {1:1, 2:1, 3:1, 4:1}
-      }
-    ])
+    }])
   });
 
   test("user not found", async () => {
