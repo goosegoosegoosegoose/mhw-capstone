@@ -1,6 +1,7 @@
 "use strict"
 
 const db = require("../db");
+const { NotFoundError, BadRequestError } = require("../expressError");
 
 class Weapon {
   static async create(id, name, type, attack, affinity, defense, damageType, slots, rarity, elderseal, img) {
@@ -18,12 +19,27 @@ class Weapon {
     [id, name, type, attack, affinity, defense, damageType, slots, rarity, elderseal, img]);
   }
 
+  static async updateAsset(id, img) {
+    const duplicateCheck = await db.query(
+      `SELECT id
+       from weapons
+       WHERE id = $1 AND img = $2`,
+    [id, img]);
+    if (duplicateCheck.rows[0]) return;
+
+    await db.query(
+      `UPDATE weapons
+       SET img = $1
+       WHERE id = $2`,
+    [img, id])
+  }
+
   static async createSharpness(wepId, sharp) {
     const duplicateCheck = await db.query(
       `SELECT weapon_id, white_sharpness
        FROM weapon_sharpness
-       WHERE weapon_id = $1 AND white_sharpness = $2`,
-    [wepId, sharp]);
+       WHERE weapon_id = $1`,
+    [wepId]);
     if (duplicateCheck.rows[0]) return;
 
     await db.query(
@@ -37,8 +53,8 @@ class Weapon {
     const duplicateCheck = await db.query(
       `SELECT weapon_id, coatings
        FROM weapon_coatings
-       WHERE weapon_id = $1 AND coatings = $2`,
-    [wepId, coatings]);
+       WHERE weapon_id = $1`,
+    [wepId]);
     if (duplicateCheck.rows[0]) return;
 
     await db.query(
@@ -52,8 +68,8 @@ class Weapon {
     const duplicateCheck = await db.query(
       `SELECT weapon_id, phial_type
        FROM weapon_phials
-       WHERE weapon_id = $1 AND phial_type = $2`,
-    [wepId, type]);
+       WHERE weapon_id = $1`,
+    [wepId]);
     if (duplicateCheck.rows[0]) return;
 
     await db.query(
@@ -67,8 +83,8 @@ class Weapon {
     const duplicateCheck = await db.query(
       `SELECT weapon_id, shelling_type
        FROM weapon_shelling
-       WHERE weapon_id = $1 AND shelling_type = $2`,
-    [wepId, type]);
+       WHERE weapon_id = $1`,
+    [wepId]);
     if (duplicateCheck.rows[0]) return;
 
     await db.query(
@@ -82,8 +98,8 @@ class Weapon {
     const duplicateCheck = await db.query(
       `SELECT weapon_id, boost_type
        FROM weapon_boosts
-       WHERE weapon_id = $1 AND boost_type = $2`,
-    [wepId, type]);
+       WHERE weapon_id = $1`,
+    [wepId]);
     if (duplicateCheck.rows[0]) return;
 
     await db.query(
@@ -97,8 +113,8 @@ class Weapon {
     const duplicateCheck = await db.query(
       `SELECT weapon_id, special_ammo
        FROM weapon_gunspecs
-       WHERE weapon_id = $1 AND deviation = $2`,
-    [wepId, deviation]);
+       WHERE weapon_id = $1`,
+    [wepId]);
     if (duplicateCheck.rows[0]) return;
 
     await db.query(
@@ -151,21 +167,6 @@ class Weapon {
        (weapon_id, item_id, craft_or_upgrade, quantity)
        VALUES ($1, $2, $3, $4)`,
     [wepId, itemId, craftOrUpgrade, quantity])
-  }
-
-  static async updateAsset(id, img) {
-    const duplicateCheck = await db.query(
-      `SELECT id
-       from weapons
-       WHERE id = $1 AND img = $2`,
-    [id, img]);
-    if (duplicateCheck.rows[0]) return;
-
-    await db.query(
-      `UPDATE weapons
-       SET img = $1
-       WHERE id = $2`,
-    [img, id])
   }
 
   static async findTypes(search={}) {
@@ -260,6 +261,8 @@ class Weapon {
        FROM weapons
        WHERE id = $1`,
     [id]);
+    if (!findType.rows[0]) throw new NotFoundError(`Weapon with id ${id} not found`);
+
     const type = findType.rows[0].type;
     const select = `SELECT w.*`;
     let sharp1 = `, s.white_sharpness AS white_sharpness`

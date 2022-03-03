@@ -17,7 +17,7 @@ afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
 describe("create", () => {
-  let newArmor = {
+  const newArmor = {
     id: 6, 
     name: "a6", 
     type: "head",
@@ -34,8 +34,8 @@ describe("create", () => {
 
   test("works", async () => {
     await Armor.create(newArmor.id, newArmor.name, newArmor.type, newArmor.rank, newArmor.slots, newArmor.rarity, newArmor.defense_base, newArmor.defense_max, newArmor.defense_augmented, newArmor.armor_set_id, newArmor.m_img, newArmor.f_img);
-    let res = await db.query(`SELECT * FROM armor WHERE id = $1`, [newArmor.id]);
-    let armor = res.rows[0];
+    const res = await db.query(`SELECT * FROM armor WHERE id = $1`, [newArmor.id]);
+    const armor = res.rows[0];
     expect(armor).toEqual({
       ...newArmor
     });
@@ -43,15 +43,15 @@ describe("create", () => {
 });
 
 describe("createSkill", () => {
-  let newArmorSkill = {
+  const newArmorSkill = {
     armor_id: 3,
     skill_id: 2
   };
 
   test("works", async () => {
     await Armor.createSkill(newArmorSkill.armor_id, newArmorSkill.skill_id);
-    let res = await db.query(`SELECT * FROM armor_skills WHERE armor_id = $1 AND skill_id = $2`, [newArmorSkill.armor_id, newArmorSkill.skill_id]);
-    let armorSkill = res.rows[0];
+    const res = await db.query(`SELECT * FROM armor_skills WHERE armor_id = $1 AND skill_id = $2`, [newArmorSkill.armor_id, newArmorSkill.skill_id]);
+    const armorSkill = res.rows[0];
     expect(armorSkill).toEqual({
       ...newArmorSkill,
       id: expect.any(Number)
@@ -60,7 +60,7 @@ describe("createSkill", () => {
 });
 
 describe("createMaterial", () => {
-  let newArmorMaterial = {
+  const newArmorMaterial = {
     armor_id: 3,
     item_id: 2,
     quantity: 3
@@ -68,22 +68,13 @@ describe("createMaterial", () => {
 
   test("works", async () => {
     await Armor.createMaterial(newArmorMaterial.armor_id, newArmorMaterial.item_id, newArmorMaterial.quantity);
-    let res = await db.query(`SELECT * FROM armor_materials WHERE armor_id = $1 AND item_id = $2`, [newArmorMaterial.armor_id, newArmorMaterial.item_id]);
-    let armorMaterial = res.rows[0];
+    const res = await db.query(`SELECT * FROM armor_materials WHERE armor_id = $1 AND item_id = $2`, [newArmorMaterial.armor_id, newArmorMaterial.item_id]);
+    const armorMaterial = res.rows[0];
     expect(armorMaterial).toEqual({
       ...newArmorMaterial,
       id: expect.any(Number),
     });
   });
-
-  // test("duplicate armor material", async () => {
-  //   await Armor.createMaterial(newArmorMaterial.armor_id, newArmorMaterial.item_id, newArmorMaterial.quantity);
-  //   expect(() => {
-  //     await Armor.createMaterial(newArmorMaterial.armor_id, newArmorMaterial.item_id, newArmorMaterial.quantity)
-  //   }).rejects.toThrow()
-    
-
-  // });
 });
 
 
@@ -134,24 +125,22 @@ describe("findAll", () => {
     const name = "a2"
     const armor = await Armor.findAll({name: name});
     expect(armor).toEqual([{
-        id: 2,
-        name: "a2",
-        m_img: "testa2m",
-        f_img: "testa2f"
+      id: 2,
+      name: "a2",
+      m_img: "testa2m",
+      f_img: "testa2f"
     }])
   });
 
   test("filter type", async () => {
     const type = "head"
     const armor = await Armor.findAll({type: type});
-    expect(armor).toEqual([
-      {
-        id: 1,
-        name: "a1",
-        m_img: "testa1m",
-        f_img: "testa1f"
-      }
-    ])
+    expect(armor).toEqual([{
+      id: 1,
+      name: "a1",
+      m_img: "testa1m",
+      f_img: "testa1f"
+    }])
   });
 
   test("filter rank", async () => {
@@ -185,7 +174,7 @@ describe("findArmor", () => {
   const id = 1;
 
   test("works", async () => {
-    let armor = await Armor.findArmor(id);
+    const armor = await Armor.findArmor(id);
     expect(armor).toEqual({
       id: 1, 
       name: "a1",
@@ -216,7 +205,7 @@ describe("findArmorSet", () => {
   const id = 1;
 
   test("works", async () => {
-    let armorSet = await Armor.findArmorSet(id);
+    const armorSet = await Armor.findArmorSet(id);
     expect(armorSet).toEqual({
       id: 1, 
       name: "as1"
@@ -237,7 +226,7 @@ describe("findSkills", () => {
   const id = 1;
 
   test("works", async () => {
-    let armorSkills = await Armor.findSkills(id);
+    const armorSkills = await Armor.findSkills(id);
     expect(armorSkills).toEqual([{
       id: 1, 
       name: "s1"
@@ -254,7 +243,7 @@ describe("findMaterials", () => {
   const id = 1;
 
   test("works", async () => {
-    let armorMaterials = await Armor.findMaterials(id);
+    const armorMaterials = await Armor.findMaterials(id);
     expect(armorMaterials).toEqual([{
       id: 1, 
       material: "i1",
@@ -270,18 +259,18 @@ describe("findMaterials", () => {
 });
 
 describe("userAdd", () => {
-  let username = "u1";
-  let armor_id = 5;
+  const username = "u1";
+  const armor_id = 5;
 
   test("works", async () => {
     await Armor.userAdd(username, armor_id);
-    let res = await db.query(`SELECT * FROM user_armor WHERE username = $1 AND armor_id = $2`, [username, armor_id]);
-    let armor = res.rows;
+    const res = await db.query(`SELECT * FROM user_armor WHERE username = $1 AND armor_id = $2`, [username, armor_id]);
+    const armor = res.rows;
     expect(armor).toEqual([{
-        id: expect.any(Number),
-        username: username,
-        armor_id: armor_id,
-        slots: {1:1, 2:1, 3:1, 4:1}
+      id: expect.any(Number),
+      username: username,
+      armor_id: armor_id,
+      slots: {1:1, 2:1, 3:1, 4:1}
     }])
   });
 
@@ -305,12 +294,12 @@ describe("userAdd", () => {
 });
 
 describe("userRemove", () => {
-  let username = "u1"
-  let armor_id = 1;
+  const username = "u1"
+  const armor_id = 1;
 
   test("works", async () => {
     await Armor.userRemove(username, armor_id);
-    let res = await db.query(`SELECT * FROM user_armor WHERE username = $1 AND armor_id = $2`, [username, armor_id]);
+    const res = await db.query(`SELECT * FROM user_armor WHERE username = $1 AND armor_id = $2`, [username, armor_id]);
     expect(res.rows.length).toEqual(0);
   });
 

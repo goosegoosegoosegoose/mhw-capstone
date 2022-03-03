@@ -26,7 +26,7 @@ import EmailForm from "../auth/EmailForm";
 import ProfilePage from "../user/ProfilePage";
 import GearingPage from "../user/GearingPage";
 
-const RoutesComp = ({login, signup, loggedIn, edit, add, remove, plus, minus, name}) => {
+const RoutesComp = ({login, signup, loggedIn, edit, add, remove, plus, minus, name, error}) => {
 
   if (!loggedIn) {
     return (
@@ -34,11 +34,11 @@ const RoutesComp = ({login, signup, loggedIn, edit, add, remove, plus, minus, na
         <Route path="/" element={<Homepage />} />
         <Route 
           path="/login" 
-          element={<LoginForm login={login}/>}
+          element={<LoginForm login={login} error={error}/>}
         />
         <Route 
           path="/signup"
-          element={<SignupForm signup={signup}/>} 
+          element={<SignupForm signup={signup} error={error}/>} 
         />
       </Routes>
     )

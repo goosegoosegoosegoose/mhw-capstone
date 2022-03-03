@@ -131,6 +131,25 @@ describe("findSkills", () => {
   });
 });
 
+describe("findMaterials", () => {
+  const id = 1;
+
+  test("works", async () => {
+    let charmMaterials = await Charm.findMaterials(id);
+    expect(charmMaterials).toEqual([{
+      id: 1, 
+      name: "i1",
+      quantity: 1,
+      description: "testi1"
+    }])
+  });
+
+  test("not found", async () => {
+    const charmMaterials = await Charm.findMaterials(9999999);
+    expect(charmMaterials).toEqual([]);
+  });
+});
+
 describe("userAdd", () => {
   let username = "u1"
   let charm_id = 2;

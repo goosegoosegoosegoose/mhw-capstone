@@ -12,7 +12,8 @@ const MinusButton = ({id, spacing, minus}) => {
     }
   }, [currentUser.decorations])
 
-  const handleMinus = () => {
+  const handleMinus = (event) => {
+    event.stopPropagation();
     minus(id)
   }
   
@@ -23,10 +24,8 @@ const MinusButton = ({id, spacing, minus}) => {
   }
 
   return (
-    <>
-      {exists ? <Button className={spacing} variant="light" size="sm" onClick={handleMinus}>-1</Button>
-      : <Button className={spacing} variant="light" size="sm" onClick={handleMinus} disabled>-1</Button>}
-    </>
+    <Button className={spacing} variant="light" size="sm" onClick={handleMinus} disabled={!exists}>{exists ? "-1" : "-x"}</Button>
+
   )
 }
 

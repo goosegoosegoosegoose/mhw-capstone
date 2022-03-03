@@ -22,6 +22,21 @@ class Monster {
     [id, name, type, species, description]);
   }
 
+  static async updateAsset(id, icon, img) {
+    const preCheck = await db.query(
+      `SELECT icon
+       FROM monsters
+       WHERE icon = $1`,
+    [icon]);
+    if (preCheck.rows[0]) return;
+
+    await db.query(
+      `UPDATE monsters
+       SET icon = $1, img = $2
+       WHERE id = $3`,
+    [icon, img, id])
+  }
+
   static async createLocation(monId, locId) {
     const duplicateCheck = await db.query(
       `SELECT id
@@ -97,22 +112,6 @@ class Monster {
     [mmId, type, rank, quant, chance, subtype])
   }
 
-  static async updateAsset(id, icon, img) {
-    const preCheck = await db.query(
-      `SELECT icon
-       FROM monsters
-       WHERE icon = $1`,
-    [icon]);
-    if (preCheck.rows[0]) return;
-
-    await db.query(
-      `UPDATE monsters
-       SET icon = $1, img = $2
-       WHERE id = $3`,
-    [icon, img, id])
-  }
-
-
   static async findAll(search = {}) {
     const query = `SELECT * FROM monsters`;
     const filter = Object.keys(search)[0];
@@ -147,8 +146,10 @@ class Monster {
        WHERE id = $1
        ORDER BY id`,
     [id]);
+    const monster = res.rows[0];
+    if (!monster) throw new NotFoundError(`Monster with id ${id} not found`)
 
-    return res.rows[0];
+    return monster;
   }
 
   static async findLocations(id){

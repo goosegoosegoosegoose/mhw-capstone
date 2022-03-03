@@ -74,13 +74,6 @@ class Decoration {
     const user = preCheck.rows[0];
     if (!user) throw new NotFoundError(`No user ${username}`);
 
-    const duplicateCheck = await db.query(
-      `SELECT id
-       FROM user_decorations
-       WHERE username = $1 AND decoration_id = $2`,
-    [username, decoId]);
-    if (duplicateCheck.rows[0]) throw new BadRequestError(`Duplicate user decoration`);
-
     await db.query(
       `INSERT INTO user_decorations
        (username, decoration_id)

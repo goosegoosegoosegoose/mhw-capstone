@@ -12,7 +12,6 @@ const GearingPage = () => {
   const [skills, setSkills] = useState({});
   const [lastCharm, setLastCharm] = useState({skills: [null, null], levels: [0, 0], length:0});
 
-
   useEffect(function fetchGearWhenMounted() {
     async function fetchGear() {
       const res = await MhwApi.getGear(username);
@@ -62,6 +61,8 @@ const GearingPage = () => {
       }
     }
   }, [decoSlots]);
+
+  console.log("hit");
 
   const handleChange = evt => {
     const { name, value } = evt.target;

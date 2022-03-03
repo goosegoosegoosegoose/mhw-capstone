@@ -184,8 +184,7 @@ CREATE TABLE weapons (
   slots JSON,
   rarity INTEGER NOT NULL,
   elderseal TEXT,
-  img TEXT,
-  icon TEXT
+  img TEXT
 );
 
 CREATE TABLE weapon_sharpness (

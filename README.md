@@ -9,7 +9,7 @@ This app is for current Monster Hunter: World players to keep track of their pro
 - For frontend I used React for the UI and material-ui for the tables
   - react-router-dom for routing
   - react-bootstrap for most of the styling
-- I populated the local database with multiple get calls to the API and parsing abd inserting the data
+- I populated the local database with multiple get calls to the API, then parsing and inserting/updating the data
 
 ## Challenges:
 - Figuring out how to structure the database/how to populate it accordingly

@@ -18,3 +18,15 @@ a:link {
 a:visited {
   color: white
 }
+
+.MuiIconButton-label:disabled {
+  cursor: not-allowed !important
+}
+
+.form-check-input:disabled {
+  cursor: not-allowed
+}
+
+button:disabled:hover {
+  cursor: not-allowed
+}

@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Form, Button } from "react-bootstrap"
+import { Form, Button, Alert } from "react-bootstrap"
 
-const LoginForm = ({login}) => {
+const LoginForm = ({login, error}) => {
   const INITIAL_STATE = {
     username: "",
     password: ""
   };
-
   const [formData, setFormData] = useState(INITIAL_STATE);
-  const navigate = useNavigate();
+
 
   const handleChange = evt => {
     const { name, value } = evt.target;
@@ -23,12 +21,12 @@ const LoginForm = ({login}) => {
     evt.preventDefault();
     login({...formData});
     setFormData(INITIAL_STATE);
-    navigate("/");
   };
 
   return (
     <div className="container">
       <div className="my-2 mx-2">
+        {error ? <div className="text-center"><Alert className="m-3" variant="warning">{error}</Alert></div> : null} 
         <h2 className="my-2">Log In</h2>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="my-4">

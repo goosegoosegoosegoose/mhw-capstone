@@ -1,6 +1,7 @@
 "use strict"
 
 const db = require("../db");
+const { NotFoundError } = require("../expressError");
 
 class Location {
   static async create(id, name, zoneCount, camps) {
@@ -56,8 +57,10 @@ class Location {
        FROM locations
        WHERE id = $1`,
     [id]);
+    const location = res.rows[0];
+    if (!location) throw new NotFoundError(`Location with id ${id} not found`);
 
-    return res.rows[0];
+    return location;
   }
 
   static async findMonsters(id) {

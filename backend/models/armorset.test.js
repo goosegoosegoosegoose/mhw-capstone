@@ -30,18 +30,8 @@ describe("create", () => {
     let armorSet = res.rows[0];
     expect(armorSet).toEqual({
       ...newArmorSet
-    });
-  });
-
-  // test("duplicate armor", async () => {
-  //   try {
-  //     await ArmorSet.create(newArmorSet.id, newArmorSet.name, newArmorSet.rank, newArmorSet.set_bonus);
-  //     await ArmorSet.create(newArmorSet.id, newArmorSet.name, newArmorSet.rank, newArmorSet.set_bonus);
-  //     fail();
-  //   } catch (e) {
-  //     expect(e instanceof BadRequestError).toBeTruthy();
-  //   }
-  // });
+    })
+  })
 });
 
 describe("createSkill", () => {
@@ -58,18 +48,8 @@ describe("createSkill", () => {
     expect(setSkill).toEqual({
       ...newSetSkill,
       id: expect.any(Number)
-    });
-  });
-
-  // test("duplicate armor skill", async () => {
-  //   try {
-  //     await ArmorSet.createSkill(newSetSkill.armor_set_id, newSetSkill.skill_id, newSetSkill.pieces);
-  //     await ArmorSet.createSkill(newSetSkill.armor_set_id, newSetSkill.skill_id, newSetSkill.pieces);
-  //     fail();
-  //   } catch (e) {
-  //     expect(e instanceof BadRequestError).toBeTruthy();
-  //   }
-  // });
+    })
+  })
 });
 
 describe("findAll", () => {

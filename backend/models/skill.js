@@ -1,6 +1,7 @@
 "use strict"
 
 const db = require("../db");
+const { NotFoundError } = require("../expressError");
 
 class Skill {
   static async create(id, name, level, description, cap) {
@@ -32,7 +33,10 @@ class Skill {
        FROM skills
        WHERE id = $1`,
     [id]);
-    return res.rows[0];
+    const skill =  res.rows[0];
+    if (!skill) throw new NotFoundError(`Skill with id ${id} not found`);
+
+    return skill;
   }
 
   static async findArmorSets(id) {

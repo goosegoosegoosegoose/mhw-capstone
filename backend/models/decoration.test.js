@@ -128,21 +128,29 @@ describe("userAdd", () => {
     }])
   });
 
+  test("works: duplicate user decoration", async () => {
+    await Decoration.userAdd(username, 1);
+    let res = await db.query(`SELECT * FROM user_decorations WHERE username = $1`, [username]);
+    expect(decos).toEqual([
+      {
+        id: expect.any(Number),
+        username: username,
+        decoration_id: decoration_id
+      },
+      {
+        id: expect.any(Number),
+        username: username,
+        decoration_id: decoration_id
+      }
+    ])
+  });
+
   test("user not found", async () => {
     try {
       await Decoration.userAdd("nope", decoration_id);
       fail()
     } catch (e) {
       expect(e instanceof NotFoundError).toBeTruthy()
-    }
-  });
-
-  test("duplicate user decoration", async () => {
-    try {
-      await Decoration.userAdd(username, 1);
-      fail()
-    } catch (e) {
-      expect(e instanceof BadRequestError).toBeTruthy()
     }
   })
 });

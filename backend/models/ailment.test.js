@@ -28,16 +28,6 @@ describe("create", () => {
     let ailment = res.rows[0];
     expect(ailment).toEqual({
       ...newAilment
-    });
-  });
-
-  // test("duplicate ailment", async () => {
-  //   try {
-  //     await Ailment.create(newAilment.id, newAilment.name, newAilment.description);
-  //     await Ailment.create(newAilment.id, newAilment.name, newAilment.description);
-  //     fail();
-  //   } catch (e) {
-  //     expect(e instanceof BadRequestError).toBeTruthy();
-  //   }
-  // });
+    })
+  })
 });

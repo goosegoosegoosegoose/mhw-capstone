@@ -28,6 +28,7 @@ app.use(express.json());
 app.use(morgan("tiny"));
 app.use(authenticateJWT);
 
+if (process.env.NODE_ENV !== "test") getData();
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
 app.use("/monsters", monsterRoutes);
@@ -39,7 +40,6 @@ app.use("/charms", charmRoutes);
 app.use("/decorations", decorationRoutes);
 app.use("/skills", skillRoutes);
 app.use("/elements", elementRoutes);
-getData();
 
 app.use(function (req, res, next) {
   return next(new NotFoundError());

@@ -1,5 +1,6 @@
 "use strict";
 
+const { NotFoundError } = require("../expressError");
 const Element = require("./element")
 const {
   commonBeforeAll,
@@ -40,6 +41,27 @@ describe("findAll", () => {
     }])
   })
 });
+
+describe("findElement", () => {
+  const e = "fire";
+
+  test("works", async () => {
+    const element = await Element.findElement(e);
+    expect(element).toEqual({
+      element: 'fire',
+      img: 'https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/mhw-fire-damage.png'
+    })
+  });
+
+  test("not found", async () => {
+    try {
+      await Element.findElement("nope");
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  })
+})
 
 describe("findWeapons", () => {
   const element = "fire";

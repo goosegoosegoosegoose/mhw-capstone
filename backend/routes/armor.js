@@ -1,13 +1,12 @@
 "use strict";
 
-const jsonschema = require("jsonschema");
 const express = require("express");
 const Armor = require("../models/armor");
-const { ensureCorrectUserOrAdmin } = require("../middleware/auth");
+const { ensureLoggedIn, ensureCorrectUserOrAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", ensureLoggedIn, async (req, res, next) => {
   const q = req.query;
   try {
     const armor = await Armor.findAll(q);
@@ -17,7 +16,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", ensureLoggedIn, async (req, res, next) => {
   const id = req.params.id;
   try {
     const result = await Promise.all([

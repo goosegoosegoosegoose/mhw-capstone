@@ -1,11 +1,12 @@
 "use strict";
 
 const express = require("express");
+const { ensureLoggedIn } = require("../middleware/auth");
 const ArmorSet = require("../models/armorset");
 
 const router = new express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", ensureLoggedIn, async (req, res, next) => {
   try {
     const armorSets = await ArmorSet.findAll();
     return res.json(armorSets);
@@ -14,7 +15,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", ensureLoggedIn, async (req, res, next) => {
   const id = req.params.id;
   try {
     const result = await Promise.all([

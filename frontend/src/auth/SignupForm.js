@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Form, Button } from "react-bootstrap"
+import { Form, Button, Alert } from "react-bootstrap"
 
-const SignupForm = ({signup}) => {
+const SignupForm = ({signup, error}) => {
   const INITIAL_STATE = {
     username: "",
     password: "",
     email: ""
   };
   const [formData, setFormData] = useState(INITIAL_STATE);
-  const nav = useNavigate();
 
   const handleChange = evt => {
     const { name, value } = evt.target;
@@ -23,12 +21,12 @@ const SignupForm = ({signup}) => {
     evt.preventDefault();
     signup({...formData});
     setFormData(INITIAL_STATE);
-    nav("/login");
   };
 
   return (
     <div className="container">
       <div className="my-2 mx-2">
+        {error ? <div className="text-center"><Alert className="m-3" variant="warning">{error}</Alert></div> : null}
         <h2 className="my-2">Sign Up</h2>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="my-4">
@@ -46,6 +44,7 @@ const SignupForm = ({signup}) => {
           <Button type="submit" variant="primary">Submit</Button>
         </Form>
       </div>
+      
     </div>
   )
 }

@@ -1,6 +1,7 @@
 "use strict"
 
 const db = require("../db");
+const { NotFoundError } = require("../expressError");
 
 class Element {
   static async findAll(search={}) {
@@ -26,7 +27,10 @@ class Element {
        FROM elements
        WHERE element = $1`,
     [element])
-    return res.rows[0];
+    const ele = res.rows[0];
+    if (!ele) throw new NotFoundError(`Element ${element} not found`);
+
+    return ele;
   }
 
   static async findWeapons(element) {

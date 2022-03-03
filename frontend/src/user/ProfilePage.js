@@ -13,8 +13,7 @@ import WeaponCard from "../weapons/WeaponCard";
 
 const ProfilePage = ({add, remove, plus, minus}) => {
   const [user, setUser] = useState({});
-  // const [username, setUsername] = useState(name => name);
-  const { username } = useParams()
+  const { username } = useParams();
   const nav = useNavigate();
   const charm_col = [
     {title:"Name", field:"name", filtering:false},

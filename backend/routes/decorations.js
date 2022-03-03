@@ -3,11 +3,11 @@
 const jsonschema = require("jsonschema");
 const express = require("express");
 const Decoration = require("../models/decoration");
-const { ensureCorrectUserOrAdmin } = require("../middleware/auth");
+const { ensureLoggedIn, ensureCorrectUserOrAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", ensureLoggedIn, async (req, res, next) => {
   try {
     const decorations = await Decoration.findAll();
     return res.json(decorations)
@@ -16,7 +16,7 @@ router.get("/", async (req, res, next) => {
   }
 })
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", ensureLoggedIn, async (req, res, next) => {
   const id = req.params.id;
   try {
     const result = await Promise.all([

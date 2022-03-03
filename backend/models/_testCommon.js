@@ -101,8 +101,8 @@ async function commonBeforeAll() {
 
   await db.query(`
       INSERT INTO monster_material_conditions (monster_material_id, type, rank, quantity, chance, subtype)
-      VALUES (1, 'testtypec1', 1, 1, 10, 'test'),
-             (2, 'testtypec2', 2, 2, 20, $1)`, [null]);
+      VALUES (1, 'testtypec1', 'testrank1', 1, 10, 'test'),
+             (2, 'testtypec2', 'testrank2', 2, 20, $1)`, [null]);
 
   await db.query(`
       INSERT INTO charms (id, name, level, rarity)
@@ -133,7 +133,7 @@ async function commonBeforeAll() {
       INSERT INTO weapon_types (type, img)
       VALUES ('great-sword', 'http://t1.img'),
              ('bow', 'http://t2.img'),
-             ('charge-blade', 'http://t3.img'),
+             ('switch-axe', 'http://t3.img'),
              ('gunlance', 'http://t4.img'),
              ('insect-glaive', 'http://t5.img'),
              ('light-bowgun', 'http://t6.img')`);      
@@ -142,21 +142,26 @@ async function commonBeforeAll() {
       INSERT INTO weapons (id, name, type, attack, affinity, defense, damage_type, slots, rarity, elderseal, img)
       VALUES (1, 'w1', 'great-sword', 1, 1, 1, 'testdmg1', $1, 1, 'testseal1', 'http://w1.img'),
              (2, 'w2', 'bow', 2, 2, 2, 'testdmg2', $2, 2, 'testseal2', 'http://w2.img'),
-             (3, 'w3', 'charge-blade', 3, 3, 3, 'testdmg3', $3, 3, 'testseal3', 'http://w3.img'),
+             (3, 'w3', 'switch-axe', 3, 3, 3, 'testdmg3', $3, 3, 'testseal3', 'http://w3.img'),
              (4, 'w4', 'gunlance', 4, 4, 4, 'testdmg4', $4, 4, 'testseal4', 'http://w4.img'),
              (5, 'w5', 'insect-glaive', 5, 5, 5, 'testdmg5', $5, 5, 'testseal5', 'http://w5.img'),
-             (6, 'w6', 'light-bowgun', 6, 6, 6, 'testdmg6', $6, 6, 'testseal6', 'http://w6.img')`,
-      [{1:1}, {1:1}, {1:1}, {1:1}, {1:1}, {1:1}]);
+             (6, 'w6', 'light-bowgun', 6, 6, 6, 'testdmg6', $6, 6, 'testseal6', 'http://w6.img'),
+             (7, 'w7', 'great-sword', 7, 7, 7, 'testdmg7', $7, 7, 'testseal7', 'http://w7.img')`,
+      [{1:1}, {1:1}, {1:1}, {1:1}, {1:1}, {1:1}, {1:1}]);
 
   await db.query(`
       INSERT INTO weapon_sharpness (weapon_id, white_sharpness)
-      VALUES (1, $1)`,
-      [[1]]);
+      VALUES (1, $1),
+             (3, $2),
+             (4, $3),
+             (5, $4),
+             (7, $5)`,
+      [[1], [1], [1], [1], [1]]);
 
   await db.query(`
       INSERT INTO weapon_coatings (weapon_id, coatings)
       VALUES (2, $1)`,
-      [[1]]);
+      [["test1"]]);
 
   await db.query(`
       INSERT INTO weapon_phials (weapon_id, phial_type, phial_damage)
@@ -198,7 +203,7 @@ async function commonBeforeAll() {
       RETURNING username`,
   [
     await bcrypt.hash("password1", BCRYPT_WORK_FACTOR),
-    await bcrypt.hash("password2", BCRYPT_WORK_FACTOR),
+    await bcrypt.hash("password2", BCRYPT_WORK_FACTOR)
   ]);
 
   await db.query(`
@@ -239,7 +244,6 @@ async function commonAfterEach() {
 async function commonAfterAll() {
   await db.end();
 }
-
 
 module.exports = {
   commonBeforeAll,

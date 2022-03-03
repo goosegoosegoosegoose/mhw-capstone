@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { BrowserRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Routes from "./route-nav/Routes";
 import Navbar from "./route-nav/Navbar";
 import MhwApi from "./api";
@@ -12,26 +12,33 @@ const App = () => {
   const [username, setUsername] = useState(localStorage.getItem("username"));
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(token !== "null" ? true : false);
+  const [error, setError] = useState(null);
+  const nav = useNavigate();
 
   useEffect(() => {
     const getNewUserInfo = async () => {
       const res = await MhwApi.getCurrentUser(username);
       setCurrentUser({...currentUser, ...res.user});
     };
-    if (username !== null) {
-      getNewUserInfo();
-    }
-    return;
+    if (username === "null" || username === "") {
+      return;
+    };
+    getNewUserInfo();
   }, [token, username]);
   
   const login = async (data) => {
-    const res = await MhwApi.login(data);
-    localStorage.setItem("username", data.username);
-    localStorage.setItem("token", res.token);
-    MhwApi.refreshToken();
-    setToken(res.token);
-    setUsername(data.username);
-    setLoggedIn(true);
+    try {
+      const res = await MhwApi.login(data);
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("token", res.token);
+      MhwApi.refreshToken();
+      setToken(res.token);
+      setUsername(data.username);
+      setLoggedIn(true);
+      nav("/");
+    } catch (e) {
+      setError("Login failed. Please try again.")
+    }
   };
   
   const logout = () => {
@@ -42,16 +49,22 @@ const App = () => {
     setCurrentUser({});
     setUsername(null);
     setLoggedIn(false);
+    nav("/");
   };
 
   const signup = async (data) => {
-    const res = await MhwApi.register(data);
-    localStorage.setItem("username", data.username);
-    localStorage.setItem("token", res.token);
-    MhwApi.refreshToken();
-    setToken(res.token);
-    setUsername(data.username);
-    setLoggedIn(true);
+    try {
+      const res = await MhwApi.register(data);
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("token", res.token);
+      MhwApi.refreshToken();
+      setToken(res.token);
+      setUsername(data.username);
+      setLoggedIn(true);
+      nav("/");
+    } catch (e) {
+      setError("Sign up failed. Check info and try again. Probably wrong email syntax.")
+    }
   };
 
   const edit = async (edit) => {
@@ -90,30 +103,29 @@ const App = () => {
   }
 
   return (
-    <BrowserRouter>
-      <UserContext.Provider value={currentUser}>
-        <Navbar 
+    <UserContext.Provider value={currentUser}>
+      <Navbar 
+        login={login}
+        logout={logout}
+        signup={signup}
+        loggedIn={loggedIn}
+        edit={edit}
+        name={currentUser.username}
+      />
+      <div>
+        <Routes 
           login={login}
-          logout={logout}
           signup={signup}
           loggedIn={loggedIn}
           edit={edit}
-          name={currentUser.username}
+          add={add}
+          remove={remove}
+          plus={plus}
+          minus={minus}
+          error={error}
         />
-        <div>
-          <Routes 
-            login={login}
-            signup={signup}
-            loggedIn={loggedIn}
-            edit={edit}
-            add={add}
-            remove={remove}
-            plus={plus}
-            minus={minus}
-          />
-        </div>
-      </UserContext.Provider>
-    </BrowserRouter>
+      </div>
+    </UserContext.Provider>
   )
 }
 

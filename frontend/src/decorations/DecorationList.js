@@ -66,19 +66,18 @@ const DecorationList = ({plus, minus}) => {
             nav(`/decorations/${data.id}`)
           }}
           actions={[
-            rowData => ({
-              icon:()=><DecoCounter id={rowData.id} c="mb-1"/>,
-              onClick:()=>{}
-            }),
-            rowData => ({
-              icon:()=><PlusButton id={rowData.id} spacing="my-1 mt-auto" plus={plus} />,
-              onClick:()=>{}
-            }),
-            rowData => ({
-              icon:()=><MinusButton id={rowData.id} spacing="my-1 mt-auto" minus={minus} />,
-              onClick:()=>{}
-            })
+            {
+              icon: "DecoActions"
+            }
           ]}
+          components ={{
+            Action: rowData =>
+              <div className="d-flex justify-content-center">
+                <DecoCounter id={rowData.data.id}  c="mx-2 my-auto"/>
+                <PlusButton id={rowData.data.id}  spacing="mx-1 me-auto" plus={plus} />
+                <MinusButton id={rowData.data.id} spacing="mx-1 me-auto" minus={minus} />
+              </div>
+          }}
           options={{
             pageSize:10,
             search:true,
@@ -91,6 +90,8 @@ const DecorationList = ({plus, minus}) => {
           }}
         />
       </ThemeProvider>
+
+      <button disabled> bongo</button>
     </div>
   )
 }

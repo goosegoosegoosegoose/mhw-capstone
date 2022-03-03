@@ -3,10 +3,11 @@
 const jsonschema = require("jsonschema");
 const express = require("express");
 const Skill = require("../models/skill");
+const { ensureLoggedIn } = require("../middleware/auth")
 
 const router = new express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", ensureLoggedIn, async (req, res, next) => {
   try {
     const skills = await Skill.findAll();
     return res.json(skills)
@@ -15,7 +16,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", ensureLoggedIn, async (req, res, next) => {
   const id = req.params.id;
   try {
     const result = await Promise.all([

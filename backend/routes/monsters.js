@@ -3,11 +3,11 @@
 const jsonschema = require("jsonschema");
 const express = require("express");
 const Monster = require("../models/monster");
-const { ensureCorrectUserOrAdmin } = require("../middleware/auth");
+const { ensureLoggedIn, ensureCorrectUserOrAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", ensureLoggedIn, async (req, res, next) => {
   const q = req.query;
   try {
     const monsters = await Monster.findAll(q);
@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", ensureLoggedIn, async (req, res, next) => {
   const id = req.params.id;
   try {
     const result = await Promise.all([
@@ -35,27 +35,6 @@ router.get("/:id", async (req, res, next) => {
     return res.json(monster)
   } catch (err) {
     return next(err)
-  }
-});
-
-router.post("/:id/user/:username", async (req, res, next) => {
-  const id = req.params.id;
-  const username = req.params.username;
-  try {
-    await Monster.userAdd(username, id);
-    return res.json({ id });
-  } catch (err) {
-    return next(err);
-  }
-});
-
-router.delete("/:id", async (req, res, next) => {
-  const id = req.params.id;
-  try {
-    await Monster.userRemove(id);
-    return res.status(200).json({ deleted: `monster ${id}`})
-  } catch (err) {
-    return next(err);
   }
 });
 
