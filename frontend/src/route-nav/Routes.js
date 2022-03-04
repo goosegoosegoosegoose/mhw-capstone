@@ -63,7 +63,7 @@ const RoutesComp = ({login, signup, loggedIn, edit, add, remove, plus, minus, na
       <Route path="/decorations" element= {<DecorationList plus={plus} minus={minus}/>}/>
       <Route path="/decorations/:id" element= {<DecorationDetail plus={plus} minus={minus}/>}/>
       <Route path="/skills" element={<SkillList />}/>
-      <Route path="/skills/:id" element={<SkillDetail add={add} remove={remove}/>}/>
+      <Route path="/skills/:id" element={<SkillDetail add={add} remove={remove} plus={plus} minus={minus}/>}/>
       <Route path="/elements" element={<ElementList />}/>
       <Route path="/elements/:ele" element={<ElementDetail add={add} remove={remove}/>}/>
       <Route path="/email/edit" element={<EmailForm edit={edit}/>}/>

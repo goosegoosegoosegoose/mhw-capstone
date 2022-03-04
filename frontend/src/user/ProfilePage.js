@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "react-bootstrap";
 import MhwApi from "../api";
 import MaterialTable from '@material-table/core';
 import { ThemeProvider, createTheme } from "@material-ui/core";
@@ -91,24 +92,29 @@ const ProfilePage = ({add, remove, plus, minus}) => {
     <div className="container text-center">
       <div className="row d-flex align-items-center my-4">
         <h1>{user.username}</h1>
-        <h4>{user.email}</h4>
+        <div className="d-inline-flex justify-content-center">
+          <h4>{user.email}</h4>
+          <Button className="ms-3" size="sm" variant="dark" onClick={()=> nav("/email/edit")}>edit email</Button>
+        </div>
       </div>
       <div className="row justify-content-center my-4">
         <ThemeProvider theme={theme}>
           <div className="col-sm-6">
+            <Button className="m-1" variant="dark" size="sm" onClick={()=> nav("/charms")}>craft charms</Button>
             <MaterialTable
               title="Charms"
               columns={charm_col} 
               data={user.charms}
-              onRowClick={(event, data) => {
-                nav(`/charms/${data.id}`)
+              actions={[{
+                icon: "ToggleButton"
+              }]}
+              components ={{
+                Action: props => (
+                  <div className="d-flex justify-content-center">
+                    <ToggleButton id={props.data.id} type="charms" spacing="mx-3" add={add} remove={remove} label1="Crafted" label2="Craft"/>
+                  </div>
+                )
               }}
-              actions={[
-                rowData => ({
-                  icon:()=><ToggleButton id={rowData.id} type="charms" spacing="my-1 mt-auto" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
-                  onClick:()=>{}
-                })
-              ]}
               options={{
                 pageSize:10,
                 search:true,
@@ -116,12 +122,13 @@ const ProfilePage = ({add, remove, plus, minus}) => {
               }}
               localization={{
                 header: {
-                  actions: 'Have?'
+                  actions: 'Crafted?'
                 }
               }}
             />
           </div>
           <div className="col-sm-6">
+          <Button className="m-1" variant="dark" size="sm" onClick={()=> nav("/decorations")}>loot decorations</Button>
             <MaterialTable
               title="Decorations"
               columns={deco_col} 
@@ -129,20 +136,17 @@ const ProfilePage = ({add, remove, plus, minus}) => {
               onRowClick={(event, data) => {
                 nav(`/decorations/${data.id}`)
               }}
-              actions={[
-                rowData => ({
-                  icon:()=><DecoCounter id={rowData.id} c="mb-1"/>,
-                  onClick:()=>{}
-                }),
-                rowData => ({
-                  icon:()=><PlusButton id={rowData.id} spacing="my-1 mt-auto" plus={plus} />,
-                  onClick:()=>{}
-                }),
-                rowData => ({
-                  icon:()=><MinusButton id={rowData.id} spacing="my-1 mt-auto" minus={minus} />,
-                  onClick:()=>{}
-                })
-              ]}
+              actions={[{
+                icon: "DecoActions"
+              }]}
+              components ={{
+                Action: rowData =>
+                  <div className="d-flex justify-content-center">
+                    <DecoCounter id={rowData.data.id}  c="mx-2 my-auto"/>
+                    <PlusButton id={rowData.data.id}  spacing="mx-1 me-auto" plus={plus} />
+                    <MinusButton id={rowData.data.id} spacing="mx-1 me-auto" minus={minus} />
+                  </div>
+              }}
               options={{
                 pageSize:10,
                 search:true,
@@ -157,7 +161,10 @@ const ProfilePage = ({add, remove, plus, minus}) => {
           </div>
         </ThemeProvider>
         <div className="row d-flex justify-content-center my-3">
-          <h4 className="mt-4">Weapons</h4>
+          <div className="d-inline-flex justify-content-center mt-4">
+            <h4>Weapons</h4>
+            <Button className="ms-3" variant="dark" size="sm" onClick={()=> nav("/weapons")}>craft weapons</Button>
+          </div>
           {user.weapons.map(w => 
             <WeaponCard
               key={w.id}
@@ -170,7 +177,10 @@ const ProfilePage = ({add, remove, plus, minus}) => {
           )}
         </div>
         <div className="row d-flex justify-content-center my-3">
-          <h4 className="mt-4">Armor</h4>
+          <div className="d-inline-flex justify-content-center mt-4">
+            <h4>Armor</h4>
+            <Button className="ms-3" variant="dark" size="sm" onClick={()=> nav("/armor")}>craft armor</Button>
+          </div>
           {user.armor.map(a => 
             <ArmorCard
               key={a.id}
@@ -184,7 +194,10 @@ const ProfilePage = ({add, remove, plus, minus}) => {
           )}
         </div>
         <div className="row d-flex justify-content-center my-3">
-          <h4 className="mt-4">Monsters</h4>
+          <div className="d-inline-flex justify-content-center mt-4">
+            <h4>Monsters</h4>
+            <Button className="ms-3" variant="dark" size="sm" onClick={()=> nav("/monsters")}>hunt monsters</Button>
+          </div>
           {user.monsters.map(m => 
             <MonsterCard
               key={m.id}

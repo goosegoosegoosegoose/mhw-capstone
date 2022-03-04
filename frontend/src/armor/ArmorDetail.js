@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from '@material-table/core';
 import { ThemeProvider, createTheme } from "@material-ui/core";
@@ -39,12 +39,12 @@ const ArmorDetail = ({add, remove}) => {
         <div className="col-sm-6">
           <div className="d-flex my-3">
             <h1 className="my-1">{armor.name}</h1>
-            <ToggleButton id={Number(id)} type="armor" spacing="mx-3 my-3" add={add} remove={remove} label1="Sell?" label2="Craft?"/>
+            <ToggleButton id={Number(id)} type="armor" spacing="mx-3 my-3" add={add} remove={remove} label1="Crafted" label2="Craft"/>
           </div>
           <p>Base defense value is {armor.defense_base}.</p>
           <p>Max upgraded defense value is {armor.defense_max}.</p>
           <p>Augmented defense value is {armor.defense_augmented}.</p>
-          <p>Part of the <a href={`/armor-sets/${armor.set.id}`}>{armor.set.name}</a> Set.</p>
+          <p>Part of the <Link to={`/armor-sets/${armor.set.id}`}>{armor.set.name}</Link> Set.</p>
           <p>Rank: {armor.rank}</p>
           <p>Rarity: {armor.rarity}</p>
           {Object.keys(armor.slots).length > 0 ?

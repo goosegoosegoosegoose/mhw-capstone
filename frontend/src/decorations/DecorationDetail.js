@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MhwApi from "../api";
-import MaterialTable from "@material-table/core";
+import MaterialTable, { MTableBodyRow } from "@material-table/core";
 import { ThemeProvider, createTheme } from "@material-ui/core";
 import PlusButton from "../common/PlusButton";
 import MinusButton from "../common/MinusButton";
@@ -44,7 +44,7 @@ const DecorationDetail = ({plus, minus}) => {
         <MinusButton id={id} spacing="mx-1 px-2 my-4" minus={minus}/>
       </div>
       <div className="d-flex">
-        <p className="d-inline-block mx-1">You currently have </p><DecoCounter id={id}/><p className="d-inline-block mx-1"> of this decoration.</p>
+        <h5 className="my-2 ms-3">You currently have <DecoCounter id={id}/> of this decoration.</h5>
       </div>
       <div className="m-4">
         <ThemeProvider theme={theme}>
@@ -54,6 +54,9 @@ const DecorationDetail = ({plus, minus}) => {
             data={decoration.skills}
             onRowClick={(event, data) => {
               nav(`/skills/${data.id}`)
+            }}
+            components={{
+              Row: props => <MTableBodyRow id={props.data.element} {...props} />
             }}
             options={{
               paging:false,

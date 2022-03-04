@@ -4,19 +4,19 @@ import { Button } from "react-bootstrap";
 
 const MinusButton = ({id, spacing, minus}) => {
   const currentUser = useContext(UserContext);
-  const [exists, setExists] = useState(null);
+  const [exists, setExists] = useState((currentUser.decorations ? currentUser.decorations.hasOwnProperty(id) : false));
 
   useEffect(() => {
     if (currentUser.decorations) {
       setExists(currentUser.decorations.hasOwnProperty(id));
     }
-  }, [currentUser.decorations])
+  }, [currentUser.decorations]);
 
-  const handleMinus = (event) => {
-    event.stopPropagation();
-    minus(id)
+  const handleMinus = (evt) => {
+    evt.stopPropagation();
+    minus(id);
   }
-  
+
   if (!currentUser) {
     return (
       <Button className={spacing} variant="danger" size="sm" onClick={handleMinus} disabled>-1</Button>
@@ -24,8 +24,7 @@ const MinusButton = ({id, spacing, minus}) => {
   }
 
   return (
-    <Button className={spacing} variant="light" size="sm" onClick={handleMinus} disabled={!exists}>{exists ? "-1" : "-x"}</Button>
-
+    <Button className={spacing} variant={exists ? "light" : "dark"} size="sm" onClick={handleMinus} disabled={!exists}>{exists ? "-1" : null}</Button>
   )
 }
 

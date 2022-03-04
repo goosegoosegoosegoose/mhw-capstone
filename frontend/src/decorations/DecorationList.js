@@ -65,11 +65,9 @@ const DecorationList = ({plus, minus}) => {
           onRowClick={(event, data) => {
             nav(`/decorations/${data.id}`)
           }}
-          actions={[
-            {
-              icon: "DecoActions"
-            }
-          ]}
+          actions={[{
+            icon: "DecoActions"
+          }]}
           components ={{
             Action: rowData =>
               <div className="d-flex justify-content-center">
@@ -90,8 +88,6 @@ const DecorationList = ({plus, minus}) => {
           }}
         />
       </ThemeProvider>
-
-      <button disabled> bongo</button>
     </div>
   )
 }

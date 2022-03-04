@@ -77,11 +77,16 @@ const ElementDetail = ({add, remove}) => {
               nav(`/weapons/w/${data.id}`)
             }}
             actions={[
-              rowData => ({
-                icon:()=><ToggleButton id={Number(rowData.id)} type="weapons" spacing="mx-3 my-3" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
-                onClick:()=>{}
-              })
+              {
+                icon: "ToggleButton"
+              }
             ]}
+            components ={{
+              Action: rowData =>
+                <div className="d-flex justify-content-center">
+                  <ToggleButton id={rowData.data.id} type="weapons" spacing="mx-3" add={add} remove={remove} label1="Crafted" label2="Craft"/>
+                </div>
+            }}
             options={{
               pageSize:10,
               search:true,
@@ -89,7 +94,7 @@ const ElementDetail = ({add, remove}) => {
             }}
             localization={{
               header: {
-                actions: 'Have?'
+                actions: 'Crafted?'
               }
             }}
           />

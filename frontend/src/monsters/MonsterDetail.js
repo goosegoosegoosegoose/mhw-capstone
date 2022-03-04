@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import MhwApi from "../api";
-import MaterialTable from "@material-table/core";
+import MaterialTable, { MTableBodyRow } from "@material-table/core";
 import { ThemeProvider, createTheme } from "@material-ui/core";
 import ToggleButton from "../common/ToggleButton";
 
@@ -72,7 +72,7 @@ const MonsterDetail = ({add, remove}) => {
         <div className="col-sm-6">
           <div className="d-flex">
             <h1 className="m-1">{monster.name}</h1>
-            <ToggleButton id={Number(id)} type="weapons" spacing="m-3" add={add} remove={remove} label1="Un-hunt?" label2="Hunted?"/>
+            <ToggleButton id={Number(id)} type="weapons" spacing="m-3" add={add} remove={remove} label1="Hunted" label2="Hunt"/>
           </div>
           <div className="m-3">
             <p>Species: {monster.species}</p>
@@ -80,9 +80,9 @@ const MonsterDetail = ({add, remove}) => {
             <p>Spawns in {monster.locations.map(l => {
               locationCount++;
               if (locationCount === monster.locations.length) {
-                return <span key={l.id}><a href={`/locations/${l.id}`}>{l.location}</a>.</span>
+                return <span key={l.id}><Link to={`/locations/${l.id}`}>{l.location}</Link>.</span>
               }
-              return <span key={l.id}><a href={`/locations/${l.id}`}>{l.location}</a>, </span>
+              return <span key={l.id}><Link to={`/locations/${l.id}`}>{l.location}</Link>, </span>
             })} </p>
             <p>{monster.description}</p>
             <div className="row">
@@ -110,6 +110,9 @@ const MonsterDetail = ({add, remove}) => {
             onRowClick={(event, data) => {
               nav(`/elements/${data.element}`)
             }}
+            components={{
+              Row: props => <MTableBodyRow id={props.data.element} {...props} />
+            }}
             options={{
               search:false,
               filtering:false,
@@ -122,8 +125,11 @@ const MonsterDetail = ({add, remove}) => {
             title="Material rewards"
             columns={matColumns} 
             data={monster.materials}
+            // components={{
+            //   Row: props => <MTableBodyRow id={props.data.element} {...props} />
+            // }}
             options={{
-              pageSize:6,
+              pageSize:5,
               search:true,
               filtering:true
             }}

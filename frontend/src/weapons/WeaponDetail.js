@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import MhwApi from "../api";
 import MaterialTable from '@material-table/core';
 import { ThemeProvider, createTheme } from "@material-ui/core";
@@ -56,7 +56,7 @@ const WeaponDetail = ({add, remove}) => {
       <div className="row">
         <div className="col-sm-12 d-flex">
           <h1 className="my-1">{weapon.name}</h1>
-          <ToggleButton id={Number(id)} type="weapons" spacing="m-3" add={add} remove={remove} label1="Sell?" label2="Craft?"/>
+          <ToggleButton id={Number(id)} type="weapons" spacing="m-3" add={add} remove={remove} label1="Crafted" label2="Craft"/>
         </div>
       </div>
       <p>{weapon.attack} attack.</p>
@@ -66,9 +66,9 @@ const WeaponDetail = ({add, remove}) => {
           <p>Does {weapon.elements.map(e => {
             count++;
             if (count === weapon.elements.length) {
-              return <span key={e.element}>{e.damage} <a href={`/elements/${e.element}`}>{e.element}</a> damage.</span>
+              return <span key={e.element}>{e.damage} <Link to={`/elements/${e.element}`}>{e.element}</Link> damage.</span>
             }
-            return <span key={e.element}>{e.damage} <a href={`/elements/${e.element}`}>{e.element}</a> damage and </span>
+            return <span key={e.element}>{e.damage} <Link to={`/elements/${e.element}`}>{e.element}</Link> damage and </span>
           })}</p>
         :null
       : null}
@@ -111,7 +111,7 @@ const WeaponDetail = ({add, remove}) => {
       <ThemeProvider theme={theme}>
         {weapon.white_sharpness ? 
           <div className="row m-4">
-            <p><b>*Sharpness is influenced by the <a href="/skills/142">Handicraft</a> skill up to level 5.</b></p>
+            <p><b>*Sharpness is influenced by the <Link to="/skills/142">Handicraft</Link> skill up to level 5.</b></p>
             <MaterialTable
               title = "White Sharpness"
               columns={sharpColumns} 
@@ -126,7 +126,7 @@ const WeaponDetail = ({add, remove}) => {
         : null}
         {weapon.ammo ? 
           <div className="row m-4">
-            <p><b>*Capacities are influenced by the <a href="/skills/187">Capacity Boost</a> skill.</b></p>
+            <p><b>*Capacities are influenced by the <Link to="/skills/187">Capacity Boost</Link> skill.</b></p>
             <MaterialTable
               title = "Ammo Types"
               columns={ammoColumns} 

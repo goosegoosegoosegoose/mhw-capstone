@@ -68,12 +68,15 @@ const CharmList = ({add, remove}) =>{
           onRowClick={(event, data) => {
             nav(`/charms/${data.id}`)
           }}
-          actions={[
-            rowData => ({
-              icon:()=><ToggleButton id={rowData.id} type="charms" spacing="my-1 mt-auto" add={add} remove={remove} label1="Sell?" label2="Craft?"/>,
-              onClick:()=>{}
-            })
-          ]}
+          actions={[{
+            icon: "ToggleButton"
+          }]}
+          components ={{
+            Action: rowData =>
+              <div className="d-flex justify-content-center">
+                <ToggleButton id={rowData.data.id} type="charms" spacing="mx-3" add={add} remove={remove} label1="Crafted" label2="Craft"/>
+              </div>
+          }}
           options={{
             pageSize:10,
             search:true,
@@ -81,7 +84,7 @@ const CharmList = ({add, remove}) =>{
           }}
           localization={{
             header: {
-              actions: 'Have?'
+              actions: 'Crafted?'
             }
           }}
         />

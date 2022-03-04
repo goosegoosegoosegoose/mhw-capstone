@@ -20,7 +20,7 @@ const MonsterCard = ({id, name, icon, add, remove}) => {
       </div>
       <Card.Body className="d-flex flex-column">
         <Card.Title onClick={handleClick}>{name}</Card.Title>
-        <ToggleButton id={Number(id)} type="monsters" spacing="my-1 mx-5 mt-auto" add={add} remove={remove} label1="Un-hunt?" label2="Hunted?"/>
+        <ToggleButton id={Number(id)} type="monsters" spacing="my-1 mx-5 mt-auto" add={add} remove={remove} label1="Hunted" label2="Hunt"/>
       </Card.Body>
     </Card>
   )

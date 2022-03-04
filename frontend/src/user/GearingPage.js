@@ -62,8 +62,6 @@ const GearingPage = () => {
     }
   }, [decoSlots]);
 
-  console.log("hit");
-
   const handleChange = evt => {
     const { name, value } = evt.target;
     const val = JSON.parse(value);
@@ -88,7 +86,6 @@ const GearingPage = () => {
               for (let k=0;k<lastCharm.length;k++){
                 setSkills(a => ({...a, [lastCharm.skills[k]]: {...a[lastCharm.skills[k]], level: skills[lastCharm.skills[k]].level - lastCharm.levels[k]}}))
               }
-              // setSkills(a => ({...a, [skill]: level}))
             }
           }
           setSkills(a => ({...a, [skill]: {level: level, cap: c[i]}}))
@@ -155,6 +152,9 @@ const GearingPage = () => {
   return (
     <div className="container">
       <h1 className="my-2">Mock Gearing Page</h1>
+      <h6>1. Please make sure you have crafted at least one weapon, one charm, and one head, chest, glove, waist, and leg armor piece before attempting to use.</h6>
+      <h6>2. Fill out every dropdown menu on the left. Options are from your inventory.</h6>
+      <h6>3. The decorations you've accumlated from the decorations page will appear after all forms have been filled. (except charms because they don't have decoration slots)</h6>
       <div className="row mt-5">
         <div className="col-sm-6">
           <Form>
@@ -253,7 +253,7 @@ const GearingPage = () => {
               <div><p><b>Element</b>: {equipped.weapon.element[0]}({equipped.weapon.hidden[0] ? "hidden" : "visible"})</p><p><b>Elemental Damage</b>: {equipped.weapon.element_damage[0]}</p></div> : 
               <div><p><b>Elements</b>: {equipped.weapon.element[0]}({equipped.weapon.hidden[0] ? "hidden" : "visible"}) & {equipped.weapon.element[1]}({equipped.weapon.hidden[1] ? "hidden" : "visible"})</p><p><b>Elemental Damage</b>: {equipped.weapon.element_damage[0]} & {equipped.weapon.element_damage[1]}</p></div>) : null) : null}
             {equipped.weapon ? (equipped.weapon.damage_type ? <p><b>Damage type</b>: {equipped.weapon.damage_type}</p> : null) : null}
-            {equipped.weapon ? (equipped.weapon.white_sharpness ? <div><b>White Sharpness Values</b>: <ul>{equipped.weapon.white_sharpness.map((s,i) => <li key={i}>{s}</li>)}</ul> By handicraft level top to bottom ascending</div> : null) : null}
+            {equipped.weapon ? (equipped.weapon.white_sharpness ? <div><b>*White Sharpness Values</b>: <ul>{equipped.weapon.white_sharpness.map((s,i) => <li key={i}>{s}</li>)}</ul> <b>*By handicraft level top to bottom descending</b></div> : null) : null}
             {equipped.weapon ? (equipped.weapon.coatings ? <p><b>Arrow Coatings</b>: |{equipped.weapon.coatings.map((c,i) => <span key={i}>|  {c}  |</span>)}|</p> : null) : null}
             {equipped.weapon ? (equipped.weapon.phials ? <div><p><b>Phial Type</b>: {equipped.weapon.phial_type}</p><p><b>Phial Damage</b>: {equipped.weapon.phial_damage}</p></div> : null) : null}
             {equipped.weapon ? (equipped.weapon.boost_type ? <p><b>Kinsect Boost Type</b>: {equipped.weapon.boost_type}</p> : null) : null}

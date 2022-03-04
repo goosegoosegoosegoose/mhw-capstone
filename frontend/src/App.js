@@ -37,7 +37,7 @@ const App = () => {
       setLoggedIn(true);
       nav("/");
     } catch (e) {
-      setError("Login failed. Please try again.")
+      setError(`Login failed. Error: ${e[0]}`)
     }
   };
   
@@ -63,7 +63,7 @@ const App = () => {
       setLoggedIn(true);
       nav("/");
     } catch (e) {
-      setError("Sign up failed. Check info and try again. Probably wrong email syntax.")
+      setError(`Sign up failed. Error: ${e[0]}`)
     }
   };
 

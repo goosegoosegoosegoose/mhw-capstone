@@ -5,8 +5,8 @@ import UserContext from "../auth/userContext";
 const PlusButton = ({id, spacing, plus}) => {
   const currentUser = useContext(UserContext);
 
-  const handlePlus = (event) => {
-    event.stopPropagation();
+  const handlePlus = (evt) => {
+    evt.stopPropagation();
     plus(id)
   }
 

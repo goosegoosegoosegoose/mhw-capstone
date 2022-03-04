@@ -4,8 +4,11 @@ import MhwApi from "../api";
 import ArmorCard from "../armor/ArmorCard";
 import MaterialTable from "@material-table/core";
 import { ThemeProvider, createTheme } from "@material-ui/core";
+import DecoCounter from "../common/DecoCounter";
+import PlusButton from "../common/PlusButton";
+import MinusButton from "../common/MinusButton";
 
-const SkillDetail = ({add, remove}) => {
+const SkillDetail = ({add, remove, plus, minus}) => {
   const [skill, setSkill] = useState({});
   const { id } = useParams();
   const nav = useNavigate();
@@ -47,8 +50,10 @@ const SkillDetail = ({add, remove}) => {
   return(
     <div className="container">
       <h1 className="m-1">{skill.name}</h1>
-      <p className="m-1 mt-3">Skill level {skill.level}.</p>
-      <p className="m-1 mt-3">{skill.description}</p>
+      <div className="m-3 mt-4">
+        <h5 className="m-1 mt-3">Skill level {skill.level}.</h5>
+        <h5 className="m-1 mt-3">Effect : {skill.description}</h5>
+      </div>
       {skill.armor.length > 0 ? 
         <div className="text-center my-4">
           <div className="row justify-content-center">
@@ -113,11 +118,26 @@ const SkillDetail = ({add, remove}) => {
                 onRowClick={(event, data) => {
                   nav(`/decorations/${data.id}`)
                 }}
+                actions={[{
+                  icon: "DecoActions"
+                }]}
+                components ={{
+                  Action: rowData =>
+                    <div className="d-flex">
+                      <DecoCounter id={rowData.data.id}  c="mx-2 my-auto"/>
+                      <PlusButton id={rowData.data.id}  spacing="mx-2 my-2" plus={plus} />
+                      <MinusButton id={rowData.data.id} spacing="mx-2 my-2" minus={minus} />
+                    </div>
+                }}
                 options={{
                   paging:false,
                   search:false,
-                  filtering:false,
-                  tableLayout:"fixed"
+                  filtering:false
+                }}
+                localization={{
+                  header: {
+                    actions: 'Amount in Inventory'
+                  }
                 }}
               />
             : null}

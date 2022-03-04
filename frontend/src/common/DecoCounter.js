@@ -3,7 +3,7 @@ import UserContext from "../auth/userContext";
 
 const DecoCounter = ({id, c}) => {
   const currentUser = useContext(UserContext);
-  const [counter, setCounter] = useState(null);
+  const [counter, setCounter] = useState((currentUser.decorations ? (currentUser.decorations[id] ? currentUser.decorations[id] : 0) : 0));
 
   useEffect(() => {
     if (currentUser.decorations) {
@@ -13,7 +13,7 @@ const DecoCounter = ({id, c}) => {
         setCounter(currentUser.decorations[id])
       }
     }
-  }, [currentUser.decorations])
+  }, [currentUser.decorations]);
 
   return (
     <>

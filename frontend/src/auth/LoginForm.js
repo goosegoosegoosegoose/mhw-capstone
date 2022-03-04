@@ -26,7 +26,7 @@ const LoginForm = ({login, error}) => {
   return (
     <div className="container">
       <div className="my-2 mx-2">
-        {error ? <div className="text-center"><Alert className="m-3" variant="warning">{error}</Alert></div> : null} 
+        {error ? <div className="text-center"><Alert className="m-3" variant="danger">{error}</Alert></div> : null} 
         <h2 className="my-2">Log In</h2>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="my-4">
@@ -35,7 +35,7 @@ const LoginForm = ({login, error}) => {
           </Form.Group>
           <Form.Group className="my-4">
             <Form.Label htmlFor="password">Password</Form.Label>
-            <Form.Control type="password" name="password" value={formData.password} onChange={handleChange}></Form.Control>
+            <Form.Control type="password" name="password" autoComplete="on" value={formData.password} onChange={handleChange}></Form.Control>
           </Form.Group>
           <Button type="submit" variant="primary">Submit</Button>
         </Form>
