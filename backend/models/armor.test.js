@@ -283,6 +283,15 @@ describe("userAdd", () => {
     }
   });
 
+  test("armor not found", async () => {
+    try {
+      await Armor.userAdd(username, 999999);
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  });
+
   test("duplicate user armor", async () => {
     try {
       await Armor.userAdd(username, 1);
@@ -290,7 +299,7 @@ describe("userAdd", () => {
     } catch (e) {
       expect(e instanceof BadRequestError).toBeTruthy()
     }
-  })
+  });
 });
 
 describe("userRemove", () => {
@@ -306,6 +315,15 @@ describe("userRemove", () => {
   test("user not found", async () => {
     try {
       await Armor.userRemove("nope", armor_id);
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  });
+
+  test("armor not found", async () => {
+    try {
+      await Armor.userRemove(username, 999999);
       fail()
     } catch (e) {
       expect(e instanceof NotFoundError).toBeTruthy()

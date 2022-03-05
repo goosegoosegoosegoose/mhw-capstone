@@ -78,7 +78,7 @@ const ProfilePage = ({add, remove, plus, minus}) => {
       setUser(res);
     }
     fetchUser()
-  }, []);
+  }, [username]);
 
   if (!user.armor) {
     return (
@@ -94,17 +94,20 @@ const ProfilePage = ({add, remove, plus, minus}) => {
         <h1>{user.username}</h1>
         <div className="d-inline-flex justify-content-center">
           <h4>{user.email}</h4>
-          <Button className="ms-3" size="sm" variant="dark" onClick={()=> nav("/email/edit")}>edit email</Button>
+          <Button className="ms-3" size="sm" variant="dark" onClick={()=> nav("/email/edit")}>Edit Email</Button>
         </div>
       </div>
       <div className="row justify-content-center my-4">
         <ThemeProvider theme={theme}>
           <div className="col-sm-6">
-            <Button className="m-1" variant="dark" size="sm" onClick={()=> nav("/charms")}>craft charms</Button>
+            <Button className="m-1" variant="dark" size="sm" onClick={()=> nav("/charms")}>Craft Charms</Button>
             <MaterialTable
               title="Charms"
               columns={charm_col} 
               data={user.charms}
+              onRowClick={(event, data) => {
+                nav(`/charms/${data.id}`)
+              }}
               actions={[{
                 icon: "ToggleButton"
               }]}
@@ -128,7 +131,7 @@ const ProfilePage = ({add, remove, plus, minus}) => {
             />
           </div>
           <div className="col-sm-6">
-          <Button className="m-1" variant="dark" size="sm" onClick={()=> nav("/decorations")}>loot decorations</Button>
+          <Button className="m-1" variant="dark" size="sm" onClick={()=> nav("/decorations")}>Loot Decorations</Button>
             <MaterialTable
               title="Decorations"
               columns={deco_col} 
@@ -163,7 +166,7 @@ const ProfilePage = ({add, remove, plus, minus}) => {
         <div className="row d-flex justify-content-center my-3">
           <div className="d-inline-flex justify-content-center mt-4">
             <h4>Weapons</h4>
-            <Button className="ms-3" variant="dark" size="sm" onClick={()=> nav("/weapons")}>craft weapons</Button>
+            <Button className="ms-3" variant="dark" size="sm" onClick={()=> nav("/weapons")}>Craft Weapons</Button>
           </div>
           {user.weapons.map(w => 
             <WeaponCard
@@ -179,7 +182,7 @@ const ProfilePage = ({add, remove, plus, minus}) => {
         <div className="row d-flex justify-content-center my-3">
           <div className="d-inline-flex justify-content-center mt-4">
             <h4>Armor</h4>
-            <Button className="ms-3" variant="dark" size="sm" onClick={()=> nav("/armor")}>craft armor</Button>
+            <Button className="ms-3" variant="dark" size="sm" onClick={()=> nav("/armor")}>Craft Armor</Button>
           </div>
           {user.armor.map(a => 
             <ArmorCard
@@ -196,7 +199,7 @@ const ProfilePage = ({add, remove, plus, minus}) => {
         <div className="row d-flex justify-content-center my-3">
           <div className="d-inline-flex justify-content-center mt-4">
             <h4>Monsters</h4>
-            <Button className="ms-3" variant="dark" size="sm" onClick={()=> nav("/monsters")}>hunt monsters</Button>
+            <Button className="ms-3" variant="dark" size="sm" onClick={()=> nav("/monsters")}>Hunt Monsters</Button>
           </div>
           {user.monsters.map(m => 
             <MonsterCard

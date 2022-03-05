@@ -3,11 +3,11 @@
 const jsonschema = require("jsonschema");
 const express = require("express");
 const Weapon = require("../models/weapon");
-const { ensureCorrectUserOrAdmin } = require("../middleware/auth");
+const { ensureLoggedIn, ensureCorrectUserOrAdmin } = require("../middleware/auth");
 
 const router = new express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", ensureLoggedIn, async (req, res, next) => {
   const q = req.query;
   try {
     const types = await Weapon.findTypes(q);
@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:type", async (req, res, next) => {
+router.get("/:type", ensureLoggedIn, async (req, res, next) => {
   const type = req.params.type;
   const q = req.query;
   try {
@@ -28,7 +28,7 @@ router.get("/:type", async (req, res, next) => {
   }
 });
 
-router.get("/w/:id", async (req, res, next) => {
+router.get("/w/:id", ensureLoggedIn, async (req, res, next) => {
   const id = req.params.id;
   try {
     const result = await Promise.all([

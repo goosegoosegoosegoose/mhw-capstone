@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="container"
+  >
+    <div
+      class="my-2 mx-2"
+    >
+      <h2>
+        Edit Email
+      </h2>
+      <h4>
+        Current Email: 
+      </h4>
+      <form
+        class=""
+      >
+        <div
+          class="my-4"
+        >
+          <label
+            class="form-label"
+            for="email"
+          >
+            Enter desired email:
+          </label>
+          <input
+            class="form-control"
+            name="email"
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          class="my-4"
+        >
+          <label
+            class="form-label"
+            for="password"
+          >
+            Confirm password to make changes:
+          </label>
+          <input
+            autocomplete="on"
+            class="form-control"
+            name="password"
+            type="password"
+            value=""
+          />
+        </div>
+        <button
+          class="btn btn-primary"
+          type="submit"
+        >
+          Save New Email
+        </button>
+      </form>
+    </div>
+  </div>
+</DocumentFragment>
+`;

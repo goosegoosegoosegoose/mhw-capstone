@@ -113,8 +113,6 @@ describe("POST /users", function () {
   });
 });
 
-
-
 describe("GET /users", function () {
   test("works for admins", async function () {
     const resp = await request(app)
@@ -162,8 +160,6 @@ describe("GET /users", function () {
     expect(resp.statusCode).toEqual(500);
   });
 });
-
-
 
 describe("GET /users/:username", function () {
   test("works for admin", async function () {
@@ -223,6 +219,190 @@ describe("GET /users/:username", function () {
   });
 });
 
+describe("GET /users/:username/all", () => {
+  const userAll = {
+    username: "u1",
+    email: "user1@user.com",
+    armor: [
+      {
+        id: 1,
+        name: "a1",
+        f_img: "testa1f",
+        m_img: "testa1m"
+      },
+      {
+        id: 2,
+        name: "a2",
+        f_img: "testa2f",
+        m_img: "testa2m"
+      },
+      {
+        id: 3,
+        name: "a3",
+        f_img: "testa3f",
+        m_img: "testa3m"
+      },
+      {
+        id: 4,
+        name: "a4",
+        f_img: "testa4f",
+        m_img: "testa4m"
+      }
+    ],
+    weapons: [{
+      id: 1,
+      name: "w1",
+      img: "http://w1.img"
+    }],
+    charms: [{
+      id: 1,
+      name: "c1",
+      level: 1,
+      rarity: 1
+    }],
+    decorations: [{
+      id: 1,
+      name: "d1",
+      rarity: 1,
+      slot: 1,
+      count: "1"
+    }],
+    monsters: [{
+      id: 1,
+      name: "m1",
+      icon: "http://m1.icon"
+    }]
+  };
+
+  test("ok for correct user", async () => {
+    const res = await request(app).get(`/users/${userAll.username}/all`).set("authorization", `Bearer ${u1Token}`);
+    expect(res.body).toEqual({
+      ...userAll
+    })
+  });
+
+  test("ok for admin", async () => {
+    const res = await request(app).get(`/users/${userAll.username}/all`).set("authorization", `Bearer ${adminToken}`);
+    expect(res.body).toEqual({
+      ...userAll
+    })
+  });
+
+  test("unauth for incorrect user", async () => {
+    const res = await request(app).get(`/users/${userAll.username}/all`).set("authorization", `Bearer ${u2Token}`);
+    expect(res.statusCode).toEqual(401);
+  });
+
+  test("bad request with invalid username", async () => {
+    const res = await request(app).get("/users/nope/all").set("authorization", `Bearer ${adminToken}`);
+    expect(res.statusCode).toEqual(404);
+  });
+})
+
+describe("GET /users/:username/gear", () => {
+  const username = "u1";
+  const userGear = {
+    head: [{
+      id: 1,
+      name: "a1",
+      defense_base: 1,
+      defense_max: 1,
+      defense_augmented: 1,
+      slots: {1:1, 2:1, 3:1, 4:1}
+    }],
+    chest: [{
+      id: 2,
+      name: "a2",
+      defense_base: 2,
+      defense_max: 2,
+      defense_augmented: 2,
+      slots: {1:1, 2:1, 3:1, 4:1}
+    }],
+    gloves: [{
+      id: 3,
+      name: "a3",
+      defense_base: 3,
+      defense_max: 3,
+      defense_augmented: 3,
+      slots: {1:1, 2:1, 3:1, 4:1}
+    }],
+    waist: [{
+      id: 4,
+      name: "a4",
+      defense_base: 4,
+      defense_max: 4,
+      defense_augmented: 4,
+      slots: {1:1, 2:1, 3:1, 4:1}
+    }],
+    legs: [],
+    weapons: [{
+      id: 1,
+      name: "w1",
+      type: "great-sword",
+      attack: 1,
+      affinity: 1,
+      defense: 1,
+      damage_type: "testdmg1",
+      elderseal: "testseal1",
+      white_sharpness: [1],
+      coatings: null,
+      phial_type: null,
+      phial_damage: null,
+      shelling_type: null,
+      shelling_level:null,
+      boost_type: null,
+      special_ammo: null,
+      deviation: null,
+      element: ["fire"],
+      element_damage: [1],
+      hidden: [true],
+      ammo_types: null,
+      slots: {1:1}
+    }],
+    charms: [{
+      id: 1,
+      name: "c1",
+      skill_caps: [1],
+      skills: ["s1"]
+    }],
+    decorations: {
+      1: [{
+        id: 1,
+        name: "d1",
+        skill_caps: [1],
+        skills: ["s1"],
+        slot: 1
+      }],
+      2: [],
+      3: [],
+      4: []
+    }
+  };
+
+  test("ok for correct user", async () => {
+    const res = await request(app).get(`/users/${username}/gear`).set("authorization", `Bearer ${u1Token}`);
+    expect(res.body).toEqual({
+      ...userGear
+    })
+  });
+
+  test("ok for admin", async () => {
+    const res = await request(app).get(`/users/${username}/gear`).set("authorization", `Bearer ${adminToken}`);
+    expect(res.body).toEqual({
+      ...userGear
+    })
+  });
+
+  test("unauth for incorrect user", async () => {
+    const res = await request(app).get(`/users/${username}/gear`).set("authorization", `Bearer ${u2Token}`);
+    expect(res.statusCode).toEqual(401);
+  });
+
+  test("bad request with invalid username", async () => {
+    const res = await request(app).get("/users/nope/gear").set("authorization", `Bearer ${adminToken}`);
+    expect(res.statusCode).toEqual(404);
+  });
+})
 
 
 describe("PATCH /users/:username", () => {

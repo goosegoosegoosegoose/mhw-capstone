@@ -17,7 +17,7 @@ afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
 describe("create", () => {
-  let newDeco = {
+  const newDeco = {
     id: 3,
     name: "test",
     rarity: 3,
@@ -26,8 +26,8 @@ describe("create", () => {
 
   test("works", async () => {
     await Decoration.create(newDeco.id, newDeco.name, newDeco.rarity, newDeco.slot);
-    let res = await db.query(`SELECT * FROM decorations WHERE id = $1`, [newDeco.id])
-    let decoration = res.rows[0];
+    const res = await db.query(`SELECT * FROM decorations WHERE id = $1`, [newDeco.id])
+    const decoration = res.rows[0];
     expect(decoration).toEqual( {
       ...newDeco
     });
@@ -35,15 +35,15 @@ describe("create", () => {
 });
 
 describe("createSkill", () => {
-  let newDecoSkill = {
+  const newDecoSkill = {
     decoration_id: 1,
     skill_id: 2
   };
 
   test("works", async () => {
     await Decoration.createSkill(newDecoSkill.decoration_id, newDecoSkill.skill_id);
-    let res = await db.query(`SELECT * FROM decoration_skills WHERE decoration_id = $1 AND skill_id = $2`, [newDecoSkill.decoration_id, newDecoSkill.skill_id])
-    let decoSkill = res.rows[0];
+    const res = await db.query(`SELECT * FROM decoration_skills WHERE decoration_id = $1 AND skill_id = $2`, [newDecoSkill.decoration_id, newDecoSkill.skill_id])
+    const decoSkill = res.rows[0];
     expect(decoSkill).toEqual({
       ...newDecoSkill,
       id: expect.any(Number)
@@ -75,7 +75,7 @@ describe("findDecoration", () => {
   const id = 1;
 
   test("works", async () => {
-    let deco = await Decoration.findDecoration(id);
+    const deco = await Decoration.findDecoration(id);
     expect(deco).toEqual({
       id: 1,
       name: "d1",
@@ -98,7 +98,7 @@ describe("findSkills", () => {
   const id = 1;
 
   test("works", async () => {
-    let decoSkills = await Decoration.findSkills(id);
+    const decoSkills = await Decoration.findSkills(id);
     expect(decoSkills).toEqual([{
       id: 1,
       name: "s1",
@@ -114,13 +114,13 @@ describe("findSkills", () => {
 });
 
 describe("userAdd", () => {
-  let username = "u1";
-  let decoration_id = 2;
+  const username = "u1";
+  const decoration_id = 2;
 
   test("works", async () => {
     await Decoration.userAdd(username, decoration_id);
-    let res = await db.query(`SELECT * FROM user_decorations WHERE username = $1 AND decoration_id = $2`, [username, decoration_id]);
-    let decos = res.rows;
+    const res = await db.query(`SELECT * FROM user_decorations WHERE username = $1 AND decoration_id = $2`, [username, decoration_id]);
+    const decos = res.rows;
     expect(decos).toEqual([{
       id: expect.any(Number),
       username: username,
@@ -130,17 +130,18 @@ describe("userAdd", () => {
 
   test("works: duplicate user decoration", async () => {
     await Decoration.userAdd(username, 1);
-    let res = await db.query(`SELECT * FROM user_decorations WHERE username = $1`, [username]);
+    const res = await db.query(`SELECT * FROM user_decorations WHERE username = $1`, [username]);
+    const decos = res.rows;
     expect(decos).toEqual([
       {
         id: expect.any(Number),
         username: username,
-        decoration_id: decoration_id
+        decoration_id: 1
       },
       {
         id: expect.any(Number),
         username: username,
-        decoration_id: decoration_id
+        decoration_id: 1
       }
     ])
   });
@@ -152,22 +153,40 @@ describe("userAdd", () => {
     } catch (e) {
       expect(e instanceof NotFoundError).toBeTruthy()
     }
-  })
+  });
+
+  test("decoration not found", async () => {
+    try {
+      await Decoration.userAdd(username, 999999);
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  });
 });
 
 describe("userRemove", () => {
-  let username = "u1"
-  let decoration_id = 1;
+  const username = "u1"
+  const decoration_id = 1;
 
   test("works", async () => {
     await Decoration.userRemove(username, decoration_id);
-    let res = await db.query(`SELECT * FROM user_decorations WHERE username = $1 AND decoration_id = $2`, [username, decoration_id]);
+    const res = await db.query(`SELECT * FROM user_decorations WHERE username = $1 AND decoration_id = $2`, [username, decoration_id]);
     expect(res.rows.length).toEqual(0);
   });
 
   test("user not found", async () => {
     try {
       await Decoration.userRemove("nope", decoration_id);
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  });
+
+  test("decoration not found", async () => {
+    try {
+      await Decoration.userRemove(username, 999999);
       fail()
     } catch (e) {
       expect(e instanceof NotFoundError).toBeTruthy()

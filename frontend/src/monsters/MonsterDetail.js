@@ -98,7 +98,7 @@ const MonsterDetail = ({add, remove}) => {
           </div>
         </div>
         <div className="col-sm-6">
-          <img src={monster.img} className="img-fluid"/>
+          <img className="img-fluid" src={monster.img} alt="monster" />
         </div>
       </div>
       <ThemeProvider theme={theme}>
@@ -125,9 +125,6 @@ const MonsterDetail = ({add, remove}) => {
             title="Material rewards"
             columns={matColumns} 
             data={monster.materials}
-            // components={{
-            //   Row: props => <MTableBodyRow id={props.data.element} {...props} />
-            // }}
             options={{
               pageSize:5,
               search:true,

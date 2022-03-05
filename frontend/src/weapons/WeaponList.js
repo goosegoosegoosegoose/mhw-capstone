@@ -15,7 +15,7 @@ const WeaponList = ({add, remove}) => {
       setWeapons(res)
     }
     fetchWeapons()
-  }, []);
+  }, [type]);
 
   const handleClick = async (evt) => {
     const res = await MhwApi.search(`weapons/${type}`, evt.target.dataset.header, evt.target.dataset.handle);

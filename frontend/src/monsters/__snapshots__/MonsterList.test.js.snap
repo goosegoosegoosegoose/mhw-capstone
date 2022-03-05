@@ -1,0 +1,157 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="container text-center"
+  >
+    <h1>
+      Monsters
+    </h1>
+    <form>
+      <div
+        class="my-3 row"
+      >
+        <div
+          class="input-group col-2"
+        >
+          <input
+            class="form-control"
+            placeholder="Enter search"
+            value=""
+          />
+          <button
+            class="mx-1 btn btn-dark btn-sm"
+            type="submit"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+    <div>
+      <div>
+        Size:
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="small"
+          data-header="type"
+          type="button"
+        >
+          Small
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="large"
+          data-header="type"
+          type="button"
+        >
+          Large
+        </button>
+      </div>
+      <div>
+        Species:
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="bird wyvern"
+          data-header="species"
+          type="button"
+        >
+          Bird Wyverns
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="brute wyvern"
+          data-header="species"
+          type="button"
+        >
+          Brute Wyverns
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="fanged wyvern"
+          data-header="species"
+          type="button"
+        >
+          Fanged Wyverns
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="flying wyvern"
+          data-header="species"
+          type="button"
+        >
+          Flying Wyverns
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="piscine wyvern"
+          data-header="species"
+          type="button"
+        >
+          Piscine Wyverns
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="fanged beast"
+          data-header="species"
+          type="button"
+        >
+          Fanged Beast
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="elder dragon"
+          data-header="species"
+          type="button"
+        >
+          Elder Dragons
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="relict"
+          data-header="species"
+          type="button"
+        >
+          Relicts
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="herbivore"
+          data-header="species"
+          type="button"
+        >
+          Herbivores
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="wingdrake"
+          data-header="species"
+          type="button"
+        >
+          Wingdrakes
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="neopteron"
+          data-header="species"
+          type="button"
+        >
+          Neopterons
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="fish"
+          data-header="species"
+          type="button"
+        >
+          Fish
+        </button>
+      </div>
+    </div>
+    <p>
+      Sorry, no results were found! Please re-submit to refresh.
+    </p>
+  </div>
+</DocumentFragment>
+`;

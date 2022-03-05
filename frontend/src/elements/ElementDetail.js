@@ -56,7 +56,7 @@ const ElementDetail = ({add, remove}) => {
       setElement(res)
     }
     fetchElement()
-  }, []);
+  }, [ele]);
 
   if (!element.weapons) {
     return (

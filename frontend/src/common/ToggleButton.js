@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 
 const ToggleButton = ({id, type, spacing, add, remove, label1, label2}) => {
   const currentUser = useContext(UserContext);
-  const [exists, setExists] = useState((currentUser[type] ? currentUser[type].includes(id) : false));
+  const [exists, setExists] = useState((currentUser ? (currentUser[type] ? currentUser[type].includes(id) : false): false));
 
   const handleAdd = (evt) => {
     evt.stopPropagation();

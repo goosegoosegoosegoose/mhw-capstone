@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import MhwApi from "../api";
-import SearchForm from "../common/SearchForm";
 import ElementCard from "./ElementCard";
 
 const ElementList = () => {

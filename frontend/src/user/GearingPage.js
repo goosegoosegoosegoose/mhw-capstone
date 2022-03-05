@@ -18,7 +18,7 @@ const GearingPage = () => {
       setGear(res)
     }
     fetchGear()
-  }, []);
+  }, [username]);
 
   useEffect(() => {
     if (equipped.weapon.id) {

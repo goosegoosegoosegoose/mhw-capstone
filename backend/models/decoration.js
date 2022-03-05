@@ -66,13 +66,20 @@ class Decoration {
   }
 
   static async userAdd(username, decoId) {
-    const preCheck = await db.query(
+    const userCheck = await db.query(
       `SELECT username
        FROM users
        WHERE username = $1`, 
     [username]);
-    const user = preCheck.rows[0];
+    const user = userCheck.rows[0];
     if (!user) throw new NotFoundError(`No user ${username}`);
+
+    const preCheck = await db.query(
+      `SELECT id
+       FROM decorations
+       WHERE id = $1`,
+    [decoId]);
+    if (!preCheck.rows[0]) throw new NotFoundError();
 
     await db.query(
       `INSERT INTO user_decorations

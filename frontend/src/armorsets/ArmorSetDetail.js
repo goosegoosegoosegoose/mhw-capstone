@@ -26,7 +26,7 @@ const ArmorSetDetail = ({add, remove}) => {
       setArmorSet(res);
     }
     fetchArmorSet();
-  }, []);
+  }, [id]);
 
   if (!armorSet.armor) {
     return (

@@ -166,7 +166,7 @@ class Monster {
 
   static async findWeaknesses(id){
     const res = await db.query(
-      `SELECT e.element AS element, mw.condition AS condition, mw.stars AS stars
+      `SELECT e.element AS id, e.element AS element, mw.condition AS condition, mw.stars AS stars
        FROM monsters AS m 
        INNER JOIN monster_weaknesses AS mw ON m.id = mw.monster_id 
        INNER JOIN elements AS e ON mw.element = e.element 
@@ -209,12 +209,19 @@ class Monster {
   }
 
   static async userAdd(username, monId) {
-    const preCheck = await db.query(
+    const userCheck = await db.query(
       `SELECT username
        FROM users
        WHERE username = $1`, [username]);
-    const user = preCheck.rows[0];
+    const user = userCheck.rows[0];
     if (!user) throw new NotFoundError(`No user ${username}`);
+
+    const preCheck = await db.query(
+      `SELECT id
+       FROM monsters
+       WHERE id = $1`,
+    [monId])
+    if (!preCheck.rows[0]) throw new NotFoundError();
 
     const duplicateCheck = await db.query(
       `SELECT monster_id

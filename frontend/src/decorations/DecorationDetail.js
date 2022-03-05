@@ -28,7 +28,7 @@ const DecorationDetail = ({plus, minus}) => {
       setDecoration(res);
     }
     fetchDeco();
-  }, []);
+  }, [id]);
 
   if (!decoration.skills) {
     return (

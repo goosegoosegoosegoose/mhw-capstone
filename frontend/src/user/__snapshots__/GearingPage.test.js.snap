@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot 1`] = `
+<DocumentFragment>
+  <h1>
+    Loading.. please refresh
+  </h1>
+</DocumentFragment>
+`;

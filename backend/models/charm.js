@@ -93,13 +93,20 @@ class Charm {
   }
 
   static async userAdd(username, charmId) {
-    const preCheck = await db.query(
+    const userCheck = await db.query(
       `SELECT username
        FROM users
        WHERE username = $1`, 
     [username]);
-    const user = preCheck.rows[0];
+    const user = userCheck.rows[0];
     if (!user) throw new NotFoundError(`No user ${username}`);
+
+    const preCheck = await db.query(
+      `SELECT id
+       FROM charms
+       WHERE id = $1`,
+    [charmId]);
+    if (!preCheck.rows[0]) throw new NotFoundError();
 
     const duplicateCheck = await db.query(
       `SELECT id

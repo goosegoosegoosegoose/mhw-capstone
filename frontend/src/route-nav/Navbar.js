@@ -31,29 +31,29 @@ const NavbarComp = ({logout, loggedIn, name}) => {
       </Navbar.Brand>
       <Nav className="me-auto">
         <NavDropdown title="World">
-          <Nav.Link className="mx-1" as={Link} to="/monsters">
+          <NavDropdown.Item className="ps-4 py-2" as={Link} style={{color: "#666666"}} to="/monsters">
             Monsters
-          </Nav.Link>
-          <Nav.Link className="mx-1" as={Link} to="/locations">
+          </NavDropdown.Item>
+          <NavDropdown.Item className="ps-4 py-2" as={Link} style={{color: "#666666"}} to="/locations">
             Locations
-          </Nav.Link>
+          </NavDropdown.Item>
         </NavDropdown>
         <NavDropdown title="Equipment">
-          <Nav.Link className="mx-1" as={Link} to="/armor-sets">
+          <NavDropdown.Item className="ps-4 py-2" as={Link} style={{color: "#666666"}} to="/armor-sets">
             Armor Sets
-          </Nav.Link>
-          <Nav.Link className="mx-1" as={Link} to="/armor">
+          </NavDropdown.Item>
+          <NavDropdown.Item className="ps-4 py-2" as={Link} style={{color: "#666666"}} to="/armor">
             Armor
-          </Nav.Link>
-          <Nav.Link className="mx-1" as={Link} to="/weapons">
+          </NavDropdown.Item>
+          <NavDropdown.Item className="ps-4 py-2" as={Link} style={{color: "#666666"}} to="/weapons">
             Weapons
-          </Nav.Link>
-          <Nav.Link className="mx-1" as={Link} to="/charms">
+          </NavDropdown.Item>
+          <NavDropdown.Item className="ps-4 py-2" as={Link} style={{color: "#666666"}} to="/charms">
             Charms
-          </Nav.Link>
-          <Nav.Link className="mx-1" as={Link} to="/decorations">
+          </NavDropdown.Item>
+          <NavDropdown.Item className="ps-4 py-2" as={Link} style={{color: "#666666"}} to="/decorations">
             Decorations
-          </Nav.Link>
+          </NavDropdown.Item>
         </NavDropdown>
         <Nav.Link className="mx-1" as={Link} to="/skills">
           Skills
@@ -63,19 +63,19 @@ const NavbarComp = ({logout, loggedIn, name}) => {
         </Nav.Link>
       </Nav>
       <Nav className="ms-auto">
-          <Nav.Link  as={Link} to={`/gearing/${name}`}>
-            Gearing
-          </Nav.Link>
+        <Nav.Link  as={Link} to={`/gearing/${name}`}>
+          Gearing
+        </Nav.Link>
         <NavDropdown className="me-5" title={currentUser.username}>
-          <Nav.Link  as={Link} to={`/profile/${name}`}>
+          <NavDropdown.Item className="ps-4 py-2" as={Link} style={{color: "#666666"}} to={`/profile/${name}`}>
             Profile
-          </Nav.Link>
-          <Nav.Link  as={Link} to={`/email/edit`}>
-            Edit email
-          </Nav.Link>
-          <Nav.Link  as={Link} to="/" onClick={logout}>
-            Log out
-          </Nav.Link>
+          </NavDropdown.Item>
+          <NavDropdown.Item className="ps-4 py-2" as={Link} style={{color: "#666666"}} to={`/email/edit`}>
+            Edit Email
+          </NavDropdown.Item>
+          <NavDropdown.Item className="ps-4 py-2" as={Link} style={{color: "#666666"}} to={"/"} onClick={logout}>
+            Logout
+          </NavDropdown.Item>
         </NavDropdown>
       </Nav>
     </Navbar>

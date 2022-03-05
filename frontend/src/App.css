@@ -1,3 +1,11 @@
+.dropdown-menu.a:link {
+  color: black
+}
+
+.dropdown-menu.a:visited {
+  color: black
+}
+
 div.container {
   background-color: #000000e5;
   color: #ffffffb4;

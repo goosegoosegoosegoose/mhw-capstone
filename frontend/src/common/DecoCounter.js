@@ -3,17 +3,23 @@ import UserContext from "../auth/userContext";
 
 const DecoCounter = ({id, c}) => {
   const currentUser = useContext(UserContext);
-  const [counter, setCounter] = useState((currentUser.decorations ? (currentUser.decorations[id] ? currentUser.decorations[id] : 0) : 0));
+  const [counter, setCounter] = useState((currentUser ? (currentUser.decorations ? (currentUser.decorations[id] ? currentUser.decorations[id] : 0) : 0) : 0));
+  let change = (currentUser ? currentUser.decorations : null)
 
   useEffect(() => {
-    if (currentUser.decorations) {
-      if (!currentUser.decorations[id]) {
-        setCounter(0)
-      } else {
-        setCounter(currentUser.decorations[id])
+    const updateCount = () => {
+      if (currentUser) {
+        if (currentUser.decorations) {
+          if (!currentUser.decorations[id]) {
+            setCounter(0)
+          } else {
+            setCounter(currentUser.decorations[id])
+          }
+        }
       }
     }
-  }, [currentUser.decorations]);
+    updateCount();
+  }, [change]);
 
   return (
     <>

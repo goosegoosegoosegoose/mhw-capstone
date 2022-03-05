@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot 1`] = `
+<DocumentFragment>
+  <button
+    class="btn btn-info btn-sm"
+    style="color: rgb(255, 255, 255);"
+    type="button"
+  >
+    +1
+    <span
+      class="MuiTouchRipple-root"
+    />
+  </button>
+</DocumentFragment>
+`;

@@ -19,6 +19,11 @@ const CharmDetail = ({add, remove}) => {
     {title:"Quantity", field:"quantity", width:"10%"},
     {title:"Description", field:"description"},
   ];
+  const theme = createTheme({
+    palette:{
+      type:'dark'
+    }
+  });
 
   useEffect(function fetchCharmWhenMounted () {
     async function fetchCharm() {
@@ -26,12 +31,8 @@ const CharmDetail = ({add, remove}) => {
       setCharm(res);
     }
     fetchCharm();
-  }, []);
-  const theme = createTheme({
-    palette:{
-      type:'dark'
-    }
-  });
+  }, [id]);
+
 
   if (!charm.materials) {
     return (

@@ -25,7 +25,7 @@ const ArmorDetail = ({add, remove}) => {
       setArmor(res);
     }
     fetchArmor();
-  }, []);
+  }, [id]);
 
   if (!armor.set) {
     return (
@@ -56,8 +56,8 @@ const ArmorDetail = ({add, remove}) => {
           : null}
         </div>
         <div className="col-sm-6">
-          <img src={armor.m_img} className="img-fluid" />
-          <img src={armor.f_img} className="img-fluid" />
+          <img className="img-fluid" src={armor.f_img} alt="male armor" />
+          <img className="img-fluid" src={armor.f_img} alt="female armor" />
         </div>     
       </div>
       {armor.materials.length > 0 ? 

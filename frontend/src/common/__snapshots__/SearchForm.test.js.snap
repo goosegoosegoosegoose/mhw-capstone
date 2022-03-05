@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot 1`] = `
+<DocumentFragment>
+  <form>
+    <div
+      class="my-3 row"
+    >
+      <div
+        class="input-group col-2"
+      >
+        <input
+          class="form-control"
+          placeholder="Enter search"
+          value=""
+        />
+        <button
+          class="mx-1 btn btn-dark btn-sm"
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </form>
+</DocumentFragment>
+`;

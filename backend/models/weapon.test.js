@@ -240,8 +240,6 @@ describe("createMaterial", () => {
 });
 
 describe("findTypes", () => {
-
-
   test("works", async () => {
     const types = await Weapon.findTypes();
     expect(types).toEqual([
@@ -584,6 +582,15 @@ describe("userAdd", () => {
     }
   });
 
+  test("weapon not found", async () => {
+    try {
+      await Weapon.userAdd(username, 999999);
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  });
+
   test("duplicate user weapon", async () => {
     try {
       await Weapon.userAdd(username, 1);
@@ -612,4 +619,13 @@ describe("userRemove", () => {
       expect(e instanceof NotFoundError).toBeTruthy()
     }
   });
+
+  test("weapon not found", async () => {
+    try {
+      await Weapon.userRemove(username, 999999);
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  })
 })

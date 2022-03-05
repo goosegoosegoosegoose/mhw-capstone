@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="container text-center"
+  >
+    <h1>
+      Elements
+    </h1>
+    <div
+      class="row justify-content-center"
+    />
+  </div>
+</DocumentFragment>
+`;

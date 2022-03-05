@@ -265,6 +265,7 @@ describe("findWeaknesses", () => {
   test("works", async () => {
     const weaknesses = await Monster.findWeaknesses(id);
     expect(weaknesses).toEqual([{
+      id: "fire",
       element: "fire",
       condition: "testcond1",
       stars: 1
@@ -341,6 +342,15 @@ describe("userAdd", () => {
     }
   });
 
+  test("monster not found", async () => {
+    try {
+      await Monster.userAdd(username, 999999);
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  });
+
   test("duplicate user monster", async () => {
     try {
       await Monster.userAdd(username, 1);
@@ -364,6 +374,15 @@ describe("userRemove", () => {
   test("user not found", async () => {
     try {
       await Monster.userRemove("nope", monster_id);
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  });
+
+  test("monster not found", async () => {
+    try {
+      await Monster.userRemove(username, 999999);
       fail()
     } catch (e) {
       expect(e instanceof NotFoundError).toBeTruthy()

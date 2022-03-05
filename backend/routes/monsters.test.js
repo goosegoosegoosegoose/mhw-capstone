@@ -111,6 +111,7 @@ describe("GET /monsters/:id", () => {
       location: "L1"
     }],
     weaknesses: [{
+      id: "fire",
       element: "fire",
       condition: "testcond1",
       stars: 1

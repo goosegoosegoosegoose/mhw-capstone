@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="my-3 mx-3 col-lg-2 card bg-dark"
+    style="cursor: pointer;"
+  >
+    <div
+      class="row justify-content-center"
+    >
+      <div
+        class="col-sm-8 pt-2 mt-2"
+      />
+    </div>
+    <div
+      class="card-body"
+    >
+      <div
+        class="card-title h5"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

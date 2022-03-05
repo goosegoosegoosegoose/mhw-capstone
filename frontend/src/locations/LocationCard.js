@@ -13,7 +13,7 @@ const LocationCard = ({id, name, icon}) => {
     <Card className="my-3 mx-3" onClick={handleClick} style={{width: '30vw', cursor: "pointer"}} bg="dark">
       <div className="row justify-content-center">
         <div className="col-sm-11 pt-2 mt-2">
-          {icon ? <Card.Img style={{cursor: "pointer"}} onClick={handleClick} variant="top" src={icon} /> : <></>}
+          {icon ? <Card.Img style={{cursor: "pointer"}} onClick={handleClick} variant="top" src={icon} alt="location icon" /> : <></>}
         </div>
       </div>
       <Card.Body>

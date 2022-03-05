@@ -38,7 +38,7 @@ const SkillDetail = ({add, remove, plus, minus}) => {
       setSkill(res)
     }
     fetchSkill()
-  }, []);
+  }, [id]);
 
 
   if (!skill.decorations) {

@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="container text-center"
+  >
+    <h1>
+      Weapons
+    </h1>
+    <form>
+      <div
+        class="my-3 row"
+      >
+        <div
+          class="input-group col-2"
+        >
+          <input
+            class="form-control"
+            placeholder="Enter search"
+            value=""
+          />
+          <button
+            class="mx-1 btn btn-dark btn-sm"
+            type="submit"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+    <div>
+      <div>
+        Elderseal:
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="low"
+          data-header="elderseal"
+          type="button"
+        >
+          Low
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="high"
+          data-header="elderseal"
+          type="button"
+        >
+          High
+        </button>
+      </div>
+      <div>
+        Rarity:
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="1"
+          data-header="rarity"
+          type="button"
+        >
+          1
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="2"
+          data-header="rarity"
+          type="button"
+        >
+          2
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="3"
+          data-header="rarity"
+          type="button"
+        >
+          3
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="4"
+          data-header="rarity"
+          type="button"
+        >
+          4
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="5"
+          data-header="rarity"
+          type="button"
+        >
+          5
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="6"
+          data-header="rarity"
+          type="button"
+        >
+          6
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="7"
+          data-header="rarity"
+          type="button"
+        >
+          7
+        </button>
+        <button
+          class="m-1 btn btn-dark btn-sm"
+          data-handle="8"
+          data-header="rarity"
+          type="button"
+        >
+          8
+        </button>
+      </div>
+    </div>
+    <p
+      class="mt-5"
+    >
+      Sorry, no results were found! Please re-submit to refresh.
+    </p>
+  </div>
+</DocumentFragment>
+`;

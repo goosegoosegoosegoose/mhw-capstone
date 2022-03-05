@@ -13,7 +13,7 @@ const LocationDetail = ({add, remove}) => {
       setLocation(res);
     }
     fetchLocation();
-  }, []);
+  }, [id]);
 
   if (!location.monsters) {
     return (
@@ -52,7 +52,7 @@ const LocationDetail = ({add, remove}) => {
       <div className="row justify-content-center mt-5">
         {location.imgs.map((i,j) => 
           <div key={j} className="col-sm-6">
-            <img src={i} className="img-responsive img-fluid my-2"/>
+            <img className="img-responsive img-fluid my-2" src={i} alt="location"/>
           </div>
         )}
       </div>

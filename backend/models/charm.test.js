@@ -176,6 +176,15 @@ describe("userAdd", () => {
     }
   });
 
+  test("charm not found", async () => {
+    try {
+      await Charm.userAdd(username, 99999);
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  });
+
   test("duplicate user charm", async () => {
     try {
       await Charm.userAdd(username, 1);
@@ -199,6 +208,15 @@ describe("userRemove", () => {
   test("user not found", async () => {
     try {
       await Charm.userRemove("nope", charm_id);
+      fail()
+    } catch (e) {
+      expect(e instanceof NotFoundError).toBeTruthy()
+    }
+  });
+
+  test("charm not found", async () => {
+    try {
+      await Charm.userRemove(username, 999999);
       fail()
     } catch (e) {
       expect(e instanceof NotFoundError).toBeTruthy()

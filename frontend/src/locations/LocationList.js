@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import MhwApi from "../api";
 import LocationCard from "./LocationCard";
 import SearchForm from "../common/SearchForm";
-import { Container, Button } from "react-bootstrap"
 
 const LocationList = () => {
   const [locations, setLocations] = useState([]);

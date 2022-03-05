@@ -49,7 +49,7 @@ router.get("/:username", ensureCorrectUserOrAdmin, async function (req, res, nex
 
 
 // get all user info for profile page
-router.get("/:username/all", async function (req, res, next) {
+router.get("/:username/all", ensureCorrectUserOrAdmin, async function (req, res, next) {
   try {
     const user = await User.getAll(req.params.username);
     return res.json(user)
@@ -60,7 +60,7 @@ router.get("/:username/all", async function (req, res, next) {
 
 
 // get all user gear for gearing page
-router.get("/:username/gear", async function (req, res, next) {
+router.get("/:username/gear", ensureCorrectUserOrAdmin, async function (req, res, next) {
   try {
     const gear = await User.getGear(req.params.username);
     return res.json(gear)

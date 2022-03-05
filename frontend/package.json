@@ -41,5 +41,8 @@
     ]
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@testing-library/react": "^12.1.3"
+  }
 }

@@ -12,7 +12,7 @@ const WeaponDetail = ({add, remove}) => {
   let a = {sharpness: []};
   if (weapon.white_sharpness) {
     weapon.white_sharpness.map((s,i) => {
-      a.sharpness.push({"handicraft": i, "sharpness": s})
+      return a.sharpness.push({id: i, handicraft: i, sharpness: s});
     })
   };
   const sharpColumns = [
@@ -42,7 +42,7 @@ const WeaponDetail = ({add, remove}) => {
       setWeapon(res);
     }
     fetchWeapon();
-  }, []);
+  }, [id]);
 
   if (!weapon.elements) {
     return (
@@ -52,7 +52,7 @@ const WeaponDetail = ({add, remove}) => {
 
   return (
     <div className="container">
-      <img src={weapon.img} />
+      <img src={weapon.img} alt="weapon" />
       <div className="row">
         <div className="col-sm-12 d-flex">
           <h1 className="my-1">{weapon.name}</h1>

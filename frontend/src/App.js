@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     const getNewUserInfo = async () => {
       const res = await MhwApi.getCurrentUser(username);
-      setCurrentUser({...currentUser, ...res.user});
+      setCurrentUser(c => ({...currentUser, ...res.user}));
     };
     if (username === "null" || username === "") {
       return;
