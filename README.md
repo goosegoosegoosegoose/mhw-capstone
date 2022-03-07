@@ -43,8 +43,8 @@ This app is for current Monster Hunter: World players to keep track of their pro
 8. Webpage should open in browser and app should work
 
 ## How to test:
-- Run "jest -i" to run backend tests; without -i addon, tests break
+- Run "npm test" to run all backend tests
 - Run "npm test a" to run all frontend jest tests
 
 ## Conclusion:
-Pretty fun project to try to recreate MHW's gearing system with my current skills and API limitations. Not pretty but funtional. Please enjoy.
+Pretty fun project to try to recreate MHW's gearing system with the API's limitations. This was good Node Express and React practice, and it has made me much more confident in their implementation. Hope to do another soon. Thank you for checking this app out. Have a nice day.
