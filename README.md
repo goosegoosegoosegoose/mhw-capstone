@@ -42,7 +42,7 @@ This app is for current Monster Hunter: World players to keep track of their pro
 7. Run npm start
 8. Webpage should open in browser and app should work
 
-## How to test
+## How to test:
 - Run "jest -i" to run backend tests; without -i addon, tests break
 - Run "npm test a" to run all frontend jest tests
 
